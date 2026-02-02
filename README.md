@@ -3,76 +3,69 @@
 ## 👥 Miembros del Equipo
 | Nombre y Apellidos | Correo URJC | Usuario GitHub |
 |:--- |:--- |:--- |
-| [Nombre 1] | [email1]@alumnos.urjc.es | [User1] |
+| David Paul Limaylla Ticlavilca | dp.limaylla.2021@alumnos.urjc.es | DavidPaul-LT |
 | [Nombre 2] | [email2]@alumnos.urjc.es | [User2] |
 | [Nombre 3] | [email3]@alumnos.urjc.es | [User3] |
 | [Nombre 4] | [email4]@alumnos.urjc.es | [User4] |
 
 ---
 
-## 🎭 **Preparación 1: Definición del Proyecto**
+## 🎭 **Preparation 1: Project Description**
 
 ### **Descripción del Tema**
-[Escribe aquí una descripción breve y concisa de qué trata tu aplicación, el sector al que pertenece y qué valor aporta al usuario].
+This project consists of a web-based social network focused on user interaction through posts and comments, allowing users to express their ideas and communicate with others on the platform.
 
-### **Entidades**
-Indicar las entidades principales que gestionará la aplicación y las relaciones entre ellas:
+Users can create text-based posts with optional images, comment on posts, and interact through likes. Content is organized into fixed categories managed by the administrator and dynamic tags created by users, providing structured yet flexible navigation.
+A general feed prioritizes posts based on user interaction and recency, improving content visibility and engagement.
 
-1. **[Entidad 1]**: [Ej: Usuario]
-2. **[Entidad 2]**: [Ej: Producto]
-3. **[Entidad 3]**: [Ej: Pedido]
-4. **[Entidad 4]**: [Ej: Categoría]
+### **Entities**
+
+1. **[Entidad 1]**: User
+1. **[Entidad 3]**: Post
+1. **[Entidad 4]**: Comment
+1. **[Entidad 5]**: Category
+
 
 **Relaciones entre entidades:**
-- [Ej: Usuario - Pedido: Un usuario puede tener múltiples pedidos (1:N)]
-- [Ej: Pedido - Producto: Un pedido puede contener múltiples productos y un producto puede estar en múltiples pedidos (N:M)]
-- [Ej: Producto - Categoría: Un producto pertenece a una categoría (N:1)]
-- [Descripción de otras relaciones relevantes]
+- [User – Post] A user can create 0..n posts, and each post belongs to a single user (1:N).
+- [User – Comment] A user can create 0..n comments, and each comment belongs to a single user (1:N).
+- [Post – Comment] A post can have 0..n comments, and each comment belongs to a single post (1:N).
+- [Category – Post] A category can contain 0..n posts, and each post belongs to a single category (1:N).
 
-### **Permisos de los Usuarios**
-Describir los permisos de cada tipo de usuario e indicar de qué entidades es dueño:
+### **User Permissions**
 
-* **Usuario Anónimo**: 
-  - Permisos: [Ej: Visualización de catálogo, búsqueda de productos, registro]
-  - No es dueño de ninguna entidad
+* **Anonymous User**: 
+  - Permissions: View posts and comments, register in the application, 
+  - Owns no entities
 
-* **Usuario Registrado**: 
-  - Permisos: [Ej: Gestión de perfil, realizar pedidos, crear valoraciones]
-  - Es dueño de: [Ej: Sus propios Pedidos, su Perfil de Usuario, sus Valoraciones]
+* **Registered User**: 
+  - Permissions: Create posts, Comment on posts, Edit their profile (image, name, and biography, password), Edit their own comments, Delete their own posts and comments, Give and remove likes from posts
+  - Owns: Their profile, Their posts, Their comments, Their likes
 
-* **Administrador**: 
-  - Permisos: [Ej: Gestión completa de productos (CRUD), visualización de estadísticas, moderación de contenido]
-  - Es dueño de: [Ej: Productos, Categorías, puede gestionar todos los Pedidos y Usuarios]
+* **Admins**: 
+  - Permissions: Block and unblock users, Delete any post, Delete any comment, View global application statistics. Inherits the functions of the registered user, create, delete, and modify category
+  - Owns: Inherits the owns of the registered user
 
-### **Imágenes**
-Indicar qué entidades tendrán asociadas una o varias imágenes:
+### **Images**
 
-- **[Entidad con imágenes 1]**: [Ej: Usuario - Una imagen de avatar por usuario]
-- **[Entidad con imágenes 2]**: [Ej: Producto - Múltiples imágenes por producto (galería)]
-- **[Entidad con imágenes 3]**: [Ej: Categoría - Una imagen representativa por categoría]
+- **[Entidad con imágenes 1]**: User
+- **[Entidad con imágenes 2]**: Post
+- **[Entidad con imágenes 3]**: Comment
+- **[Entidad con imágenes 4]**: Category
 
-### **Gráficos**
-Indicar qué información se mostrará usando gráficos y de qué tipo serán:
+### **Charts**
 
-- **Gráfico 1**: [Ej: Ventas mensuales - Gráfico de barras]
-- **Gráfico 2**: [Ej: Productos más vendidos - Gráfico de tarta/circular]
-- **Gráfico 3**: [Ej: Evolución de usuarios registrados - Gráfico de líneas]
-- **Gráfico 4**: [Ej: Distribución de pedidos por categoría - Gráfico de barras horizontales]
+- **Chart 1**: Posts with the most likes — Bar chart
 
-### **Tecnología Complementaria**
-Indicar qué tecnología complementaria se empleará:
+### **Complementary Technology**
+- Automatic email sending (e.g., registration confirmation or user block notification) using JavaMailSender
 
-- [Ej: Envío de correos electrónicos automáticos mediante JavaMailSender]
-- [Ej: Generación de PDFs de facturas usando iText o similar]
-- [Ej: Sistema de autenticación OAuth2 o JWT]
-- [Otras tecnologías externas que se integrarán]
+### **Algorithm or Advanced Query**
 
-### **Algoritmo o Consulta Avanzada**
-Indicar cuál será el algoritmo o consulta avanzada que se implementará:
+- **Post Ranking Algorithm**: The general feed and category feeds are generated using a scoring algorithm based on user interaction and time. Score = (Likes × 3) + (Comments × 2) − (Hours since creation × 0.1)
 
-- **Algoritmo/Consulta**: [Ej: Sistema de recomendaciones basado en el historial de compras del usuario]
-- **Descripción**: [Ej: Analiza los productos comprados previamente y sugiere productos similares o complementarios utilizando filtrado colaborativo]
-- **Alternativa**: [Ej: Consulta compleja que agrupe ventas por categoría, mes y región, con cálculo de tendencias]
+- **Description**: This algorithm prioritizes posts with higher interaction (likes and comments) while still considering recency. As a result, relevant and active posts gain visibility without excluding newly created content. Deleted posts are excluded from the feed.
+
 
 ---
 
