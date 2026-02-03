@@ -5,7 +5,7 @@
 |:--- |:--- |:--- |
 | David Paul Limaylla Ticlavilca | dp.limaylla.2021@alumnos.urjc.es | DavidPaul-LT |
 | Elena Ceinos Abeijón  | e.ceinos@alumnos.urjc.es | elenacabe |
-| [Nombre 3] | [email3]@alumnos.urjc.es | [User3] |
+| Sergio Rodríguez Gil | s.rodriguezgi.2021@alumnos.urjc.es | NeoDaru |
 | [Nombre 4] | [email4]@alumnos.urjc.es | [User4] |
 
 ---
