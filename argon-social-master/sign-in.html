@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="icon" type="image/png" href="assets/images/logo-16x16.png" />
+  <title>eQuis · Iniciar sesión</title>
+
+  <!-- Fonts + Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+  <!-- Styles -->
+  <link href="assets/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/css/style.css" rel="stylesheet">
+  <link href="assets/css/components.css" rel="stylesheet">
+  <link href="assets/css/auth.css" rel="stylesheet">
+  <link href="assets/css/forms.css" rel="stylesheet">
+  <link href="assets/css/media.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --brand: #0b76ff;
+      --ink: #0f172a;
+      --muted: rgba(15,23,42,.65);
+      --card: rgba(255,255,255,.76);
+      --border: rgba(255,255,255,.55);
+    }
+    html, body { height: 100%; }
+    body{ font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+
+    .auth-wrap { position: relative; overflow: hidden; }
+
+    /* Left hero */
+    .auth-hero{
+      position: relative;
+      background:
+        radial-gradient(1200px 700px at 30% 20%, rgba(124, 58, 237, .25), transparent 60%),
+        radial-gradient(1000px 600px at 70% 30%, rgba(14, 165, 233, .22), transparent 55%),
+        linear-gradient(135deg, #050b2a 0%, #060f3c 40%, #050824 100%);
+      color: #fff;
+      overflow: hidden;
+      min-height: 100vh;
+    }
+    .auth-hero::before{
+      content:""; position:absolute; inset:-20%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.08), transparent 45%),
+        radial-gradient(circle at 80% 60%, rgba(255,255,255,.06), transparent 50%);
+      filter: blur(8px);
+      transform: rotate(-10deg);
+      pointer-events:none;
+    }
+    .hero-lines{
+      position:absolute; inset:0; pointer-events:none;
+      background: linear-gradient(110deg, transparent 30%, rgba(167,139,250,.25) 50%, transparent 72%);
+      opacity:.7;
+      mask-image: radial-gradient(circle at 70% 30%, #000 0 55%, transparent 70%);
+    }
+    .hero-inner{
+      position: relative; z-index: 1;
+      display:flex; align-items:center; justify-content:center;
+      height:100%;
+      padding: clamp(24px, 5vw, 64px);
+      text-align:center;
+    }
+    .hero-title{
+      font-size: clamp(34px, 3.4vw, 56px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 0 0 10px;
+    }
+    .hero-sub{
+      max-width: 520px;
+      margin: 0 auto;
+      opacity: .88;
+    }
+
+    /* Right side */
+    .auth-side{
+      min-height: 100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: #f8fafc;
+    }
+    .auth-card{
+      width: min(520px, 92%);
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 18px 55px rgba(0,0,0,.10);
+      padding: 28px 26px;
+      animation: pop .55s ease both;
+    }
+    @keyframes pop { from {opacity:0; transform: translateY(10px) scale(.99);} to {opacity:1; transform:none;} }
+
+    .brand-row{
+      display:flex; align-items:center; gap:12px;
+      margin-bottom: 18px;
+    }
+    .brand-mark{
+      width:44px; height:44px; border-radius: 14px;
+      display:grid; place-items:center;
+      background: rgba(11,118,255,.10);
+      border: 1px solid rgba(11,118,255,.18);
+      color: var(--brand);
+      font-size: 22px;
+      flex: 0 0 auto;
+    }
+    .brand-name{ font-weight: 800; color: var(--ink); margin:0; }
+    .brand-tag{ color: var(--muted); margin:0; font-size: 13px; }
+
+    .headline{
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      margin: 10px 0 6px;
+    }
+    .subline{ color: var(--muted); margin: 0 0 18px; }
+
+    /* Inputs */
+    .input-icon { position: relative; }
+    .input-icon i{
+      position:absolute; left: 12px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px; opacity: .65;
+      pointer-events:none;
+    }
+    .input-icon .form-control{
+      padding-left: 40px;
+      height: 44px;
+      border-radius: 12px;
+    }
+
+    /* Password eye button: ensure it sits inside and doesn't overlap text */
+    .input-icon.has-toggle .form-control{ padding-right: 44px; }
+    .pw-toggle{
+      position:absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      display:grid;
+      place-items:center;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      opacity: .75;
+      cursor: pointer;
+    }
+    .pw-toggle:hover{ background: rgba(15,23,42,.06); opacity: 1; }
+    .pw-toggle i{ font-size: 18px; }
+
+    .btn-primary{
+      background: var(--brand);
+      border-color: var(--brand);
+      border-radius: 999px;
+      height: 44px;
+      font-weight: 700;
+      letter-spacing: .01em;
+    }
+    .btn-primary:hover{ filter: brightness(.96); }
+    .tiny-link{ font-size: 13px; }
+
+    @media (max-width: 767px){
+      .auth-hero{ min-height: 44vh; }
+      .auth-side{ min-height: 56vh; }
+      .hero-sub{ max-width: 320px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="row no-gutters auth-wrap">
+    <!-- Left hero -->
+    <div class="col-md-6 auth-hero">
+      <div class="hero-lines"></div>
+      <div class="hero-inner">
+        <div>
+          <h1 class="hero-title">Bienvenido a <span style="color:rgba(255,255,255,.92)">eQuis</span></h1>
+          <p class="hero-sub">
+            La red social donde tus ideas pesan. Publica, comenta, debate y descubre gente con tus mismos gustos.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right form -->
+    <div class="col-md-6 auth-side">
+      <div class="auth-card">
+        <div class="brand-row">
+          <div class="brand-mark" aria-hidden="true"><i class='bx bx-message-rounded-dots'></i></div>
+          <div>
+            <p class="brand-name">Red Social eQuis</p>
+            <p class="brand-tag">Comparte lo que te apasiona</p>
+          </div>
+        </div>
+
+        <h2 class="headline">Empieza a compartir tus gustos</h2>
+        <p class="subline">Entra con tu cuenta y únete a la conversación.</p>
+
+        <form action="" method="" autocomplete="on">
+          <div class="form-group input-icon">
+            <i class='bx bx-envelope'></i>
+            <input type="email" class="form-control" name="email" placeholder="Correo electrónico" required>
+          </div>
+
+          <div class="form-group input-icon has-toggle">
+            <i class='bx bx-lock-alt'></i>
+            <input id="password" type="password" class="form-control" name="password" placeholder="Contraseña" required>
+            <button class="pw-toggle" type="button" aria-label="Mostrar contraseña" onclick="togglePassword('password', this)">
+              <i class='bx bx-show'></i>
+            </button>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <label class="custom-control material-checkbox mb-0 tiny-link">
+              <input type="checkbox" class="material-control-input">
+              <span class="material-control-indicator"></span>
+              <span class="material-control-description">Recuérdame</span>
+            </label>
+            <a class="tiny-link" href="forgot-password.html">¿Olvidaste la contraseña?</a>
+          </div>
+
+          <button type="button" class="btn btn-primary btn-block">
+            Iniciar sesión
+          </button>
+
+          <div class="text-center mt-4 tiny-link">
+            ¿No tienes usuario? <a href="sign-up.html" style="font-weight:700;">Regístrate</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core -->
+  <script src="assets/js/jquery/jquery-3.3.1.min.js"></script>
+  <script src="assets/js/popper/popper.min.js"></script>
+  <script src="assets/js/bootstrap/bootstrap.min.js"></script>
+  <script src="assets/js/app.js"></script>
+
+  <script>
+    function togglePassword(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector('i');
+      const isHidden = input.type === 'password';
+      input.type = isHidden ? 'text' : 'password';
+      icon.className = isHidden ? 'bx bx-hide' : 'bx bx-show';
+      btn.setAttribute('aria-label', isHidden ? 'Ocultar contraseña' : 'Mostrar contraseña');
+    }
+  </script>
+</body>
+</html>
