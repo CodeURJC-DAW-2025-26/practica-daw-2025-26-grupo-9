@@ -194,7 +194,10 @@ button:focus {
     height: 100%;
     background-color: #F2F4F5
 }
+.tamaño {
 
+    font-size: 18px;
+}
 .newsfeed-size {
     margin: 0;
 }
