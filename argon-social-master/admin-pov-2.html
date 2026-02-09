@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/png" href="assets/images/logo-16x16.png" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Argon - Social Network</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Major+Mono+Display" rel="stylesheet">
+    <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.1/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Styles -->
+    <link href="assets/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/components.css" rel="stylesheet">
+    <link href="assets/css/media.css" rel="stylesheet">
+    <script src="assets/js/load.js" type="text/javascript"></script>
+</head>
+
+<body class="newsfeed">
+    <div class="container-fluid" id="wrapper">
+        <div class="row newsfeed-size">
+            <div class="col-md-12 newsfeed-right-side">
+                <!--barra navegacion-->
+                <nav id="navbar-main" class="navbar navbar-expand-lg shadow-sm sticky-top">
+                    <div class="w-100 justify-content-md-center">
+                        <ul class="nav navbar-nav enable-mobile px-2">
+                            <li class="nav-item">
+                                <button type="button" class="btn nav-link p-0"><img src="assets/images/icons/theme/post-image.png" class="f-nav-icon" alt="Quick make post"></button>
+                            </li>
+                            <li class="nav-item w-100 py-2">
+                                <form class="d-inline form-inline w-100 px-4">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control search-input" placeholder="Search for people, companies, events and more..." aria-label="Search" aria-describedby="search-addon">
+                                        <div class="input-group-append">
+                                            <button class="btn search-button" type="button"><i class='bx bx-search'></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </li>
+                            <li class="nav-item">
+                                <a href="messages.html" class="nav-link nav-icon nav-links message-drop drop-w-tooltip" data-placement="bottom" data-title="Messages">
+                                    <img src="assets/images/icons/navbar/message.png" class="message-dropdown f-nav-icon" alt="navbar icon">
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav mr-5 flex-row" id="main_menu">
+                            <a class="navbar-brand nav-item mr-lg-5" href="index.html"><img src="assets/images/logo-64x64.png" width="40" height="40" class="mr-3" alt="Logo"></a>
+                            <!-- Collect the nav links, forms, and other content for toggling -->
+                            
+                            <li class="nav-item s-nav ml-auto">
+                                <a href="profile-pov-admin.html" class="nav-link nav-links">
+                                    <div class="menu-user-image">
+                                        <img src="assets/images/users/user-4.jpg" class="menu-user-img ml-1" alt="Menu Image">
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item s-nav nav-icon dropdown ">
+                                <a href="settings.html" data-toggle="dropdown" data-placement="bottom" data-title="Settings" class="nav-link settings-link rm-drop-mobile drop-w-tooltip" id="settings-dropdown"><img src="assets/images/icons/navbar/settings.png" class="nav-settings" alt="navbar icon"></a>
+                                <div class="dropdown-menu dropdown-menu-right settings-dropdown shadow-sm" aria-labelledby="settings-dropdown">
+                                    <a class="dropdown-item" href="#">
+                                        <img src="assets/images/icons/navbar/gear-1.png" alt="Navbar icon"> Settings</a>
+                                    <a class="dropdown-item logout-btn" href="#">
+                                        <img src="assets/images/icons/navbar/logout.png" alt="Navbar icon"> Log Out</a>
+                                </div>
+                            </li>
+                            <button type="button" class="btn nav-link" id="menu-toggle"><img src="assets/images/icons/theme/navs.png" alt="Navbar navs"></button>
+                        </ul>
+                    </div>
+                </nav>
+
+                <div class="row newsfeed-right-side-content mt-3">
+                    <!--barra lateral-->
+                    <div class="col-md-2 newsfeed-left-side sticky-top shadow-sm" id="sidebar-wrapper">
+                        <div class="card newsfeed-user-card h-100">
+                            <ul class="list-group list-group-flush newsfeed-left-sidebar">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a href="index.html" class="sidebar-item"><img src="assets/images/icons/left-sidebar/home-icon-silhouette.png" alt="group"> Home</a>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a href="profile-pov-admin.html" class="sidebar-item"><img src="assets/images/icons/left-sidebar/Person.png" alt="group"> Perfil</a>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center sd-active">
+                                    <a href="admin-pov.html" class="sidebar-item"><img src="assets/images/icons/left-sidebar/group.png" alt="group"> Administrador</a>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a href="categoria.html" class="sidebar-item"><img src="assets/images/icons/left-sidebar/team.png" alt="group"> Categorias</a>
+                                </li>
+                                                       
+                            </ul>
+                        </div>
+                    </div>
+                    <!--Contenido-->
+                    <div class="col-md-10 second-section" id="page-content-wrapper">
+                        <div class="mb-3">
+                            <div class="btn-group d-flex top-links-fg">
+                                <a href="#" class="btn btn-quick-links mr-3 ql-active">
+                                    <img src="assets/images/icons/theme/group-white.png" class="mr-2" alt="quick links icon">
+                                    <span class="fs-8">ADMINISTRADOR</span> <!-- Esto tambien aquí -->
+                                </a>
+                            </div>
+                        </div>
+                        <!-- Groups  desde  aquí -->
+                        <hr class="my-5">
+                        <grupos class="groups bg-white shadow-sm">
+                            <div class="card-head d-flex justify-content-between">
+                                <h5 class="mb-4">Categorias</h5>
+                                <a href="/argon-social-master/new-category-form.html" class="btn btn-link">Crear</a>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6">
+                                    <a href="/argon-social-master/categoria.html" class="text-decoration-none text-reset">
+                                        <div class="card group-card shadow-sm">
+                                            <img src="assets/images/groups/group-1.png" class="card-img-top group-card-image" alt="Group image">
+                                            <div class="card-body d-flex flex-column align-items-center text-center">
+                                                <h5 class="card-title">Tecnología</h5>
+                                                <a href="/argon-social-master/admin-pov.html" class="btn btn-sm text-danger" title="Eliminar categoría">Eliminar</a></div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <a href="/argon-social-master/categoria.html" class="text-decoration-none text-reset">
+                                        <div class="card group-card shadow-sm">
+                                            <img src="assets/images/groups/group-2.jpg" class="card-img-top group-card-image" alt="Group image">
+                                            <div class="card-body d-flex flex-column align-items-center text-center">
+                                                <h5 class="card-title">Turismo</h5>
+                                                <a href="/argon-social-master/admin-pov.html" class="btn btn-sm text-danger" title="Eliminar categoría">Eliminar</a></div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <a href="/argon-social-master/categoria.html" class="text-decoration-none text-reset">
+                                        <div class="card group-card shadow-sm">
+                                            <img src="assets/images/groups/group-3.jpg" class="card-img-top group-card-image" alt="Group image">
+                                            <div class="card-body d-flex flex-column align-items-center text-center">
+                                                <h5 class="card-title">Libros</h5>
+                                                <a href="/argon-social-master/admin-pov.html" class="btn btn-sm text-danger" title="Eliminar categoría">Eliminar</a></div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <a href="/argon-social-master/categoria.html" class="text-decoration-none text-reset">
+                                        <div class="card group-card shadow-sm">
+                                            <img src="assets/images/groups/group-4.jpg" class="card-img-top group-card-image" alt="Group image">
+                                            <div class="card-body d-flex flex-column align-items-center text-center">
+                                                <h5 class="card-title">Musica</h5>
+                                                <a href="/argon-social-master/admin-pov.html" class="btn btn-sm text-danger" title="Eliminar categoría">Eliminar</a></div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </grupos>
+                        <hr class="my-5">
+                        <grupos class="groups bg-white shadow-sm">
+                            <div class="card-head d-flex justify-content-between">
+                                <h5 class="mb-4">Usuarios</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6" href="#">
+                                    <a href="/argon-social-master/profile-pov-admin.html" class="text-decoration-none text-reset">
+                                        <div class="card group-card shadow-sm">
+                                            <img src="assets/images/groups/group-1.png" class="card-img-top group-card-image" alt="Group image">
+                                            <div class="card-body d-flex flex-column align-items-center text-center">
+                                                <h5 class="card-title">Roberto</h5>
+                                                <a href="#" class="btn btn-sm text-success" title="Bloquear / Desbloquear usuario" onclick="toggleLock(this); return false;">Activo</a>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 col-sm-6" href="#">
+                                    <a href="/argon-social-master/profile-pov-admin.html" class="text-decoration-none text-reset">
+                                        <div class="card group-card shadow-sm">
+                                            <img src="assets/images/groups/group-2.jpg" class="card-img-top group-card-image" alt="Group image">
+                                            <div class="card-body d-flex flex-column align-items-center text-center">
+                                                <h5 class="card-title">Elisa</h5>
+                                                <a href="#" class="btn btn-sm text-success" title="Bloquear / Desbloquear usuario" onclick="toggleLock(this); return false;">Activo</a>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="col-md-3 col-sm-6" href="#">
+                                    <a href="/argon-social-master/profile-pov-admin.html" class="text-decoration-none text-reset">
+                                        <div class="card group-card shadow-sm">
+                                            <img src="assets/images/groups/group-3.jpg" class="card-img-top group-card-image" alt="Group image">
+                                            <div class="card-body d-flex flex-column align-items-center text-center">
+                                                <h5 class="card-title">MarkRobert</h5>
+                                                <a href="#" class="btn btn-sm text-success" title="Bloquear / Desbloquear usuario" onclick="toggleLock(this); return false;">Activo</a>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 col-sm-6" href="#">
+                                    <a href="/argon-social-master/profile-pov-admin.html" class="text-decoration-none text-reset">
+                                        <div class="card group-card shadow-sm">
+                                            <img src="assets/images/groups/group-4.jpg" class="card-img-top group-card-image" alt="Group image">
+                                            <div class="card-body d-flex flex-column align-items-center text-center">
+                                                <h5 class="card-title">SonSinSon</h5>
+                                                <a href="#" class="btn btn-sm text-success" title="Bloquear / Desbloquear usuario" onclick="toggleLock(this); return false;">Activo</a>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </grupos>
+                        <hr class="my-5">
+                    </div>
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Core -->
+    <script src="assets/js/jquery/jquery-3.3.1.min.js"></script>
+    <script src="assets/js/popper/popper.min.js"></script>
+    <script src="assets/js/bootstrap/bootstrap.min.js"></script>
+    <!-- Optional -->
+    <script type="text/javascript">
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+
+    </script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/components/components.js"></script>
+    <script>
+  function toggleLock(el) {
+    if (el.textContent.trim() === 'Bloqueado') {
+      el.textContent = 'Activo';
+      el.classList.remove('text-danger');
+      el.classList.add('text-success');
+      el.title = 'Desbloquear usuario';
+    } else {
+      el.textContent = 'Bloqueado';
+      el.classList.remove('text-success');
+      el.classList.add('text-danger');
+      el.title = 'Bloquear usuario';
+    }
+  }
+</script>
+</body>
+</html>
