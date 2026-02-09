@@ -7,6 +7,7 @@
 | Elena Ceinos Abeijón  | e.ceinos@alumnos.urjc.es | elenacabe |
 | Sergio Rodríguez Gil | s.rodriguezgi.2021@alumnos.urjc.es | NeoDaru |
 | Alvaro Sepulveda Crespo | a.sepulvedac.2018@alumnos.urjc.es | alvaro-sepu |
+| Cassiel Seth Mayorca Heirisman | cs.mayorca.2018@alumnos.urjc.es | Cassiel123 |
 
 ---
 
