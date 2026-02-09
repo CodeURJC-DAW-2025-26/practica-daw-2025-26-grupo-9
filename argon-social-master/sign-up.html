@@ -128,26 +128,6 @@
     }
     .input-icon .form-control{ padding-left: 40px; height: 44px; border-radius: 12px; }
 
-    /* Password eye button: fixed */
-    .input-icon.has-toggle .form-control{ padding-right: 44px; }
-    .pw-toggle{
-      position:absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 32px;
-      height: 32px;
-      display:grid;
-      place-items:center;
-      border: 0;
-      border-radius: 10px;
-      background: transparent;
-      opacity: .75;
-      cursor: pointer;
-    }
-    .pw-toggle:hover{ background: rgba(15,23,42,.06); opacity: 1; }
-    .pw-toggle i{ font-size: 18px; }
-
     .btn-primary{
       background: var(--brand);
       border-color: var(--brand);
@@ -190,13 +170,8 @@
         <div>
           <h1 class="hero-title">Crea tu perfil en <span style="color:rgba(255,255,255,.92)">eQuis</span></h1>
           <p class="hero-sub">
-            Tu timeline empieza aquí: sigue temas, encuentra gente interesante y publica lo que piensas.
+            La red social donde tus ideas pesan. Publica, comenta, debate y descubre gente con tus mismos gustos.
           </p>
-          <div class="mt-3">
-            <span class="pill"><i class='bx bx-hash'></i> Trends</span>
-            <span class="pill ml-2"><i class='bx bx-message-square-dots'></i> Hilos</span>
-            <span class="pill ml-2"><i class='bx bx-star'></i> Favoritos</span>
-          </div>
         </div>
       </div>
     </div>
@@ -240,76 +215,14 @@
             <div class="col-md-12">
               <div class="form-group input-icon">
                 <i class='bx bx-user-pin'></i>
-                <input type="text" class="form-control" name="username" placeholder="Nombre de usuario (@tuNick)" required>
-              </div>
-              <div class="hint">Tip: corto, fácil y sin espacios. Ej: @SoftwareURJC</div>
-            </div>
-
-            <div class="col-md-4">
-              <div class="form-group input-icon">
-                <i class='bx bx-calendar'></i>
-                <select name="day" class="form-control" required>
-                  <option value="">Día</option>
-                  <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-                  <option value="4">4</option><option value="5">5</option><option value="6">6</option>
-                  <option value="7">7</option><option value="8">8</option><option value="9">9</option>
-                  <option value="10">10</option><option value="11">11</option><option value="12">12</option>
-                  <option value="13">13</option><option value="14">14</option><option value="15">15</option>
-                  <option value="16">16</option><option value="17">17</option><option value="18">18</option>
-                  <option value="19">19</option><option value="20">20</option>
-                  <option value="21">21</option><option value="22">22</option><option value="23">23</option>
-                  <option value="24">24</option><option value="25">25</option><option value="26">26</option>
-                  <option value="27">27</option><option value="28">28</option><option value="29">29</option>
-                  <option value="30">30</option><option value="31">31</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group input-icon">
-                <i class='bx bx-calendar'></i>
-                <select name="month" class="form-control" required>
-                  <option value="">Mes</option>
-                  <option value="1">Ene</option><option value="2">Feb</option><option value="3">Mar</option>
-                  <option value="4">Abr</option><option value="5">May</option><option value="6">Jun</option>
-                  <option value="7">Jul</option><option value="8">Ago</option><option value="9">Sep</option>
-                  <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dic</option>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group input-icon">
-                <i class='bx bx-calendar'></i>
-                <select name="year" class="form-control" required>
-                  <option value="">Año</option>
-                  <option value="2008">2008</option><option value="2007">2007</option><option value="2006">2006</option>
-                  <option value="2005">2005</option><option value="2004">2004</option><option value="2003">2003</option>
-                  <option value="2002">2002</option><option value="2001">2001</option><option value="2000">2000</option>
-                  <option value="1999">1999</option><option value="1998">1998</option><option value="1997">1997</option>
-                  <option value="1996">1996</option><option value="1995">1995</option><option value="1994">1994</option>
-                  <option value="1993">1993</option><option value="1992">1992</option><option value="1991">1991</option>
-                  <option value="1990">1990</option>
-                </select>
+                <input type="text" class="form-control" name="username" placeholder="Nombre de usuario (apodo)" required>
               </div>
             </div>
 
-            <div class="col-md-6">
-              <div class="form-group input-icon has-toggle">
+            <div class="col-md-12">
+              <div class="form-group input-icon">
                 <i class='bx bx-lock-alt'></i>
-                <input id="password2" type="password" class="form-control" name="password" placeholder="Contraseña" required>
-                <button class="pw-toggle" type="button" aria-label="Mostrar contraseña" onclick="togglePassword('password2', this)">
-                  <i class='bx bx-show'></i>
-                </button>
-              </div>
-              <div class="hint">Mínimo 8 caracteres, 1 número y 1 símbolo.</div>
-            </div>
-
-            <div class="col-md-6">
-              <div class="form-group input-icon has-toggle">
-                <i class='bx bx-check-shield'></i>
-                <input id="password3" type="password" class="form-control" name="confirmPassword" placeholder="Repite la contraseña" required>
-                <button class="pw-toggle" type="button" aria-label="Mostrar contraseña" onclick="togglePassword('password3', this)">
-                  <i class='bx bx-show'></i>
-                </button>
+                <input type="password" class="form-control" name="password" placeholder="Contraseña" required>
               </div>
             </div>
 
@@ -324,9 +237,11 @@
             </div>
 
             <div class="col-md-6 text-right">
-              <button type="button" class="btn btn-primary" style="min-width: 160px;">
+              <a href="index.html"
+                class="btn btn-primary d-flex align-items-center justify-content-center"
+                style="min-width: 160px;">
                 Crear cuenta
-              </button>
+              </a>
             </div>
           </div>
         </form>
@@ -340,15 +255,5 @@
   <script src="assets/js/bootstrap/bootstrap.min.js"></script>
   <script src="assets/js/app.js"></script>
 
-  <script>
-    function togglePassword(inputId, btn) {
-      const input = document.getElementById(inputId);
-      const icon = btn.querySelector('i');
-      const isHidden = input.type === 'password';
-      input.type = isHidden ? 'text' : 'password';
-      icon.className = isHidden ? 'bx bx-hide' : 'bx bx-show';
-      btn.setAttribute('aria-label', isHidden ? 'Ocultar contraseña' : 'Mostrar contraseña');
-    }
-  </script>
 </body>
 </html>
