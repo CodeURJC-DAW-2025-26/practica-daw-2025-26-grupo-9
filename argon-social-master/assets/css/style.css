@@ -227,6 +227,7 @@ button:focus {
     height: 100%;
     padding-right: 0;
     background-color: #fff;
+    overflow: hidden;
 }
 
 .newsfeed-user-card {
