@@ -86,14 +86,14 @@
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <a href="index.html" class="sidebar-item"><img src="assets/images/icons/left-sidebar/home-icon-silhouette.png" alt="group"> Home</a>
                                 </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <li class="list-group-item d-flex justify-content-between align-items-center sd-active">
                                     <a href="profile-pov-user.html" class="sidebar-item"><img src="assets/images/icons/left-sidebar/Person.png" alt="group"> Perfil</a>
                                 </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center sd-active">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <a href="admin-pov.html" class="sidebar-item"><img src="assets/images/icons/left-sidebar/group.png" alt="group"> Administrador</a>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <a href="categorias.html" class="sidebar-item"><img src="assets/images/icons/left-sidebar/team.png" alt="group"> Categorias</a>
+                                    <a href="category-pov-admin.html" class="sidebar-item"><img src="assets/images/icons/left-sidebar/team.png" alt="group"> Categorias</a>
                                 </li>
                                                        
                             </ul>
@@ -166,9 +166,30 @@
                                             
                                             <hr class="my-5">
 
+                                            <ul class="list-unstyled" style="margin-bottom: 0;">
+                                                <li class="media post-form w-shadow">
+                                                    <div class="media-body">
+                                                        <div class="form-group post-input">
+                                                            <textarea class="form-control" id="postForm" rows="2" placeholder="What's on your mind?"></textarea>
+                                                        </div>
+                                                        <div class="row post-form-group">
+                                                            <div class="col-md-9">
+                                                                <button type="button" class="btn btn-link post-form-btn btn-sm">
+                                                                    <i class='bx bx-images'></i> <span>Photo/Video</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="col-md-3 text-right">
+                                                                <button type="button" class="btn btn-primary btn-sm">Publish</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            
+
                                             <div class="bg-white profile-posts-options mt-5 mb-4 py-3 d-flex justify-content-between shadow-sm">
                                                 <div class="col-md-3 col-sm-12 d-flex justify-content-between align-items-center">
-                                                    <h6 class="timeline-title mb-0">Publicaciones:</h6>
+                                                    <h6 class="timeline-title mb-0">Comentarios:</h6>
                                                     <span class="text-muted">0</span>
                                                 </div>
                                                 <div class="col-md-9 col-sm-12">
@@ -219,7 +240,22 @@
                                                                 <div class="panel panel-info">
                                                                     <div class="panel-body">
                                                                         <ul class="media-list comments-list">
-                                                                           
+                                                                            <li class="media comment-form">
+                                                                                <a href="#" class="pull-left">
+                                                                                    <img src="assets/images/users/user-4.jpg" alt="" class="img-circle">
+                                                                                </a>
+                                                                                <div class="media-body">
+                                                                                    <form action="" method="" role="form">
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-12">
+                                                                                                <div class="input-group">
+                                                                                                    <input type="text" class="form-control comment-input" placeholder="Write a comment...">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </form>
+                                                                                </div>
+                                                                            </li>
                                                                             <li class="media">
                                                                                 <a href="#" class="pull-left">
                                                                                     <img src="assets/images/users/user-2.jpg" alt="" class="img-circle">
@@ -236,10 +272,8 @@
                                                                                     <div class="argon-reaction">
                                                                                         <span class="like-btn"><a href="#" class="post-card-buttons" id="reactions"><i class='bx bxs-like mr-2'></i> 7</a></span>
                                                                                     </div>
-                                                                                    <a href="#" class="btn btn-sm text-danger" title="Eliminar categoría">Eliminar</a>
                                                                                 </div>
                                                                             </li>
-
                                                                             <li class="media">
                                                                                 <a href="#" class="pull-left">
                                                                                     <img src="https://bootdey.com/img/Content/user_2.jpg" alt="" class="img-circle">
@@ -256,10 +290,8 @@
                                                                                     <div class="argon-reaction">
                                                                                         <span class="like-btn"><a href="#" class="post-card-buttons" id="reactions"><i class='bx bxs-like mr-2'></i> 2</a></span>
                                                                                     </div>
-                                                                                    <a href="#" class="btn btn-sm text-danger" title="Eliminar categoría">Eliminar</a>
                                                                                 </div>
                                                                             </li>
-
                                                                             <li class="media">
                                                                                 <a href="#" class="pull-left">
                                                                                     <img src="https://bootdey.com/img/Content/user_3.jpg" alt="" class="img-circle">
@@ -276,7 +308,6 @@
                                                                                     <div class="argon-reaction">
                                                                                         <span class="like-btn"><a href="#" class="post-card-buttons" id="reactions"><i class='bx bxs-like mr-2'></i> 9</a></span>
                                                                                     </div>
-                                                                                    <a href="#" class="btn btn-sm text-danger" title="Eliminar categoría">Eliminar</a>
                                                                                 </div>
                                                                             </li>
                                                                             
