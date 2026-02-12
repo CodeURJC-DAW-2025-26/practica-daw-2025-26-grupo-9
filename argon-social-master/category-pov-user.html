@@ -222,6 +222,7 @@
                                                                             <a href="#" class="post-card-buttons" id="reactions"><i class='bx bxs-like mr-2'></i>2</a>
                                                                         </span>
                                                                     </div>
+                                                                    <a href="#" class="btn btn-sm" title="Eliminar categoría" style="color: green;">Editar</a>
                                                                     <a href="#" class="btn btn-sm text-danger" title="Eliminar categoría">Eliminar</a>
                                                                 </div>
                                                             </li>
@@ -314,30 +315,33 @@
                             </div>
 
                             <!-- Post 3-->
-                            <div class="post border-bottom p-3 bg-white w-shadow">
-                                <div class="media text-muted pt-3">
-                                    <img src="assets/images/users/user-4.jpg" alt="Online user" class="mr-3 post-user-image">
-                                    <div class="media-body pb-3 mb-0 small lh-125">
-                                        <div class="d-flex justify-content-between align-items-center w-100">
-                                            <a href="/argon-social-master/profile-pov-user.html" class="text-gray-dark post-user-name">Arthur Minasyan</a>
+                            
+                                <div class="post border-bottom p-3 bg-white w-shadow clickable-post" style="cursor:pointer;">
+                                    <div class="media text-muted pt-3">
+                                        <img src="assets/images/users/user-4.jpg" alt="Online user" class="mr-3 post-user-image">
+                                        <div class="media-body pb-3 mb-0 small lh-125">
+                                            <div class="d-flex justify-content-between align-items-center w-100">
+                                                <a href="/argon-social-master/profile-pov-user.html" class="text-gray-dark post-user-name">Arthur Minasyan</a>
+                                            </div>
+                                            <span class="d-block">3 hours ago <i class='bx bx-globe ml-3'></i></span>
                                         </div>
-                                        <span class="d-block">3 hours ago <i class='bx bx-globe ml-3'></i></span>
+                                        <a href="#" class="btn btn-sm" title="Eliminar categoría" style="color: green;">Editar</a>
+                                                        <a href="#" class="btn btn-sm text-danger" title="Eliminar categoría">Eliminar</a>
                                     </div>
-                                    <a href="#" class="btn btn-sm text-danger" title="Eliminar categoría">Eliminar</a>
-                                </div>
-                                <div class="mt-3">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis voluptatem veritatis harum, tenetur, quibusdam voluptatum, incidunt saepe minus maiores ea atque sequi illo veniam sint quaerat corporis totam et. Culpa?</p>
-                                </div>
-                                <div class="mb-3">
-                                    <!-- Reactions -->
-                                    <div class="argon-reaction">
-                                        <span class="like-btn">
-                                            <a href="#" class="post-card-buttons" id="reactions"><i class='bx bxs-like mr-2'></i>7</a>
-                                        </span>
+                                    <div class="mt-3">
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis voluptatem veritatis harum, tenetur, quibusdam voluptatum, incidunt saepe minus maiores ea atque sequi illo veniam sint quaerat corporis totam et. Culpa?</p>
                                     </div>
-                                    <a href="javascript:void(0)" class="post-card-buttons" id="show-comments"><i class='bx bx-message-rounded mr-2'></i>0</a>
+                                    <div class="mb-3">
+                                        <!-- Reactions -->
+                                        <div class="argon-reaction">
+                                            <span class="like-btn">
+                                                <a href="#" class="post-card-buttons" id="reactions"><i class='bx bxs-like mr-2'></i>7</a>
+                                            </span>
+                                        </div>
+                                        <a href="javascript:void(0)" class="post-card-buttons" id="show-comments"><i class='bx bx-message-rounded mr-2'></i>0</a>
+                                    </div>
                                 </div>
-                            </div>
+                            
                         </div>
                     </div>
                     
@@ -402,6 +406,16 @@
         });
 
     </script>
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".clickable-post").forEach(post => {
+    post.addEventListener("click", () => {
+      window.location.href = "/argon-social-master/post-pov-user.html";
+    });
+  });
+});
+</script>
+
 </body>
 
 </html>

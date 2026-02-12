@@ -140,7 +140,7 @@
                         <div class="posts-section mb-5">
 
                             <!-- Post 1-->
-                            <div class="post border-bottom p-3 bg-white w-shadow">
+                            <div class="post border-bottom p-3 bg-white w-shadow clickable-post"  style="cursor:pointer;">
                                 <div class="media text-muted pt-3">
                                     <img src="assets/images/users/user-1.jpg" alt="Online user" class="mr-3 post-user-image">
                                     <div class="media-body pb-3 mb-0 small lh-125">
@@ -252,7 +252,7 @@
                             </div>
 
                             <!-- Post 2-->
-                            <div class="post border-bottom p-3 bg-white w-shadow">
+                            <div class="post border-bottom p-3 bg-white w-shadow clickable-post"  style="cursor:pointer;">
                                 <div class="media text-muted pt-3">
                                     <img src="assets/images/users/user-2.jpg" alt="Online user" class="mr-3 post-user-image">
                                     <div class="media-body pb-3 mb-0 small lh-125">
@@ -284,7 +284,7 @@
                             </div>
 
                             <!-- Post 3-->
-                            <div class="post border-bottom p-3 bg-white w-shadow">
+                            <div class="post border-bottom p-3 bg-white w-shadow clickable-post"  style="cursor:pointer;">
                                 <div class="media text-muted pt-3">
                                     <img src="assets/images/users/user-4.jpg" alt="Online user" class="mr-3 post-user-image">
                                     <div class="media-body pb-3 mb-0 small lh-125">
@@ -372,6 +372,16 @@
         });
 
     </script>
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".clickable-post").forEach(post => {
+    post.addEventListener("click", () => {
+      window.location.href = "/argon-social-master/post-pov-admin.html";
+    });
+  });
+});
+</script>
+
 </body>
 
 </html>
