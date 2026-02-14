@@ -13,12 +13,17 @@ public class SecurityConfig {
 
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/assets/**", "/login", "/register", "/error").permitAll()
+                .requestMatchers(
+                    "/assets/**",
+                    "/login",
+                    "/register",
+                    "/error"
+                ).permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
+                .loginPage("/login")           // GET /login -> tu mustache
+                .loginProcessingUrl("/login")  // POST /login -> lo procesa Spring Security
                 .defaultSuccessUrl("/", true)
                 .failureUrl("/login?error")
                 .permitAll()
@@ -32,3 +37,4 @@ public class SecurityConfig {
         return http.build();
     }
 }
+

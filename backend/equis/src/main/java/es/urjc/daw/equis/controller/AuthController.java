@@ -10,9 +10,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login(@RequestParam(required = false) String error, Model model) {
-        if (error != null) {
-            model.addAttribute("error", true);
-        }
+        model.addAttribute("error", error != null);
         return "sign-in";
     }
 
