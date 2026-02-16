@@ -2,11 +2,12 @@ package es.urjc.daw.equis.model;
 
 import java.sql.Blob;
 import java.time.LocalDateTime;
-
+import java.util.List;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 
 public class Post {
 
@@ -19,6 +20,9 @@ public class Post {
     private int likes;
 
     private LocalDateTime date;
+
+    @OneToMany
+    private List <Comment> comments;
 
     @Lob
     private Blob picture;

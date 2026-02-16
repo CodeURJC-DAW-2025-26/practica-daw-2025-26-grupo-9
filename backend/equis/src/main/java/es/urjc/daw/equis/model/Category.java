@@ -1,11 +1,13 @@
 package es.urjc.daw.equis.model;
 
 import java.sql.Blob;
+import java.util.List;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 
 
 
@@ -19,7 +21,10 @@ public class Category {
     private String description;
     @Lob
     private Blob picture;
-
+    
+    @OneToMany
+    private List <Post> posts;
+    
     public Category (){}
 
     public Category(String name, String description, Blob picture){

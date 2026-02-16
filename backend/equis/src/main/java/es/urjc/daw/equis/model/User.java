@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 
 @Entity(name = "UserTable")
 public class User {
@@ -29,6 +30,11 @@ public class User {
     private String email;
 
     private String encodedPassword;
+
+    @OneToMany
+    private List <Post> posts;
+    @OneToMany
+    private List <Comment> comments;
 
     @Lob
     private Blob profilePicture;
