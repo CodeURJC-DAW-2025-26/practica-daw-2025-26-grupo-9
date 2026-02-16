@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="icon" type="image/png" href="/assets/images/logo-16x16.png" />
+  <title>eQuis - Red Social</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Major+Mono+Display" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@1.9.2/css/boxicons.min.css" rel="stylesheet">
+
+  <!-- Styles -->
+  <link href="/assets/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/css/style.css" rel="stylesheet">
+  <link href="/assets/css/components.css" rel="stylesheet">
+  <link href="/assets/css/profile.css" rel="stylesheet">
+  <link href="/assets/css/media.css" rel="stylesheet">
+  <script src="/assets/js/load.js" type="text/javascript"></script>
+</head>
+
+<body class="profile">
+<div class="container-fluid newsfeed d-flex" id="wrapper">
+  <div class="row newsfeed-size">
+    <div class="col-md-12 p-0">
+
+      <!-- NAVBAR -->
+      <nav id="navbar-main" class="navbar navbar-expand-lg shadow-sm sticky-top">
+        <div class="w-100 justify-content-md-center">
+          <ul class="nav navbar-nav enable-mobile px-2">
+            <li class="nav-item">
+              <button type="button" class="btn nav-link p-0">
+                <img src="/assets/images/icons/theme/post-image.png" class="f-nav-icon" alt="Quick make post">
+              </button>
+            </li>
+            <li class="nav-item w-100 py-2">
+              <form class="d-inline form-inline w-100 px-4" action="/search" method="get">
+                <div class="input-group">
+                  <input type="text" class="form-control search-input" name="q"
+                         placeholder="Search for people, companies, events and more..."
+                         aria-label="Search" aria-describedby="search-addon">
+                  <div class="input-group-append">
+                    <button class="btn search-button" type="submit"><i class='bx bx-search'></i></button>
+                  </div>
+                </div>
+              </form>
+            </li>
+            <li class="nav-item">
+              <a href="/messages" class="nav-link nav-icon nav-links message-drop drop-w-tooltip" data-placement="bottom" data-title="Messages">
+                <img src="/assets/images/icons/navbar/message.png" class="message-dropdown f-nav-icon" alt="navbar icon">
+              </a>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav mr-5 flex-row" id="main_menu">
+            <a class="navbar-brand nav-item mr-lg-5" href="/"><img src="/assets/images/logo-64x64.png" width="40" height="40" class="mr-3" alt="Logo"></a>
+
+            <li class="nav-item s-nav ml-auto">
+              <a href="/profile" class="nav-link nav-links">
+                <div class="menu-user-image">
+                  {{#currentUser.profilePictureUrl}}
+                    <img src="{{currentUser.profilePictureUrl}}" class="menu-user-img ml-1" alt="Menu Image">
+                  {{/currentUser.profilePictureUrl}}
+                  {{^currentUser.profilePictureUrl}}
+                    <img src="/assets/images/users/user-4.jpg" class="menu-user-img ml-1" alt="Menu Image">
+                  {{/currentUser.profilePictureUrl}}
+                </div>
+              </a>
+            </li>
+
+            <li class="nav-item s-nav nav-icon dropdown">
+              <a href="/settings" data-toggle="dropdown" data-placement="bottom" data-title="Settings"
+                 class="nav-link settings-link rm-drop-mobile drop-w-tooltip" id="settings-dropdown">
+                <img src="/assets/images/icons/navbar/settings.png" class="nav-settings" alt="navbar icon">
+              </a>
+              <div class="dropdown-menu dropdown-menu-right settings-dropdown shadow-sm" aria-labelledby="settings-dropdown">
+                <a class="dropdown-item" href="/settings">
+                  <img src="/assets/images/icons/navbar/gear-1.png" alt="Navbar icon"> Settings
+                </a>
+                <a class="dropdown-item logout-btn" href="/logout">
+                  <img src="/assets/images/icons/navbar/logout.png" alt="Navbar icon"> Log Out
+                </a>
+              </div>
+            </li>
+
+            <button type="button" class="btn nav-link" id="menu-toggle">
+              <img src="/assets/images/icons/theme/navs.png" alt="Navbar navs">
+            </button>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="row profile-right-side-content">
+
+        <!-- SIDEBAR -->
+        <div class="col-md-2 newsfeed-left-side sticky-top shadow-sm" id="sidebar-wrapper">
+          <div class="card newsfeed-user-card h-100">
+            <ul class="list-group list-group-flush newsfeed-left-sidebar">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a href="/" class="sidebar-item">
+                  <img src="/assets/images/icons/left-sidebar/home-icon-silhouette.png" alt="group"> Home
+                </a>
+              </li>
+
+              <li class="list-group-item d-flex justify-content-between align-items-center sd-active">
+                <a href="/profile" class="sidebar-item">
+                  <img src="/assets/images/icons/left-sidebar/Person.png" alt="group"> Perfil
+                </a>
+              </li>
+
+              {{#isAdmin}}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a href="/admin" class="sidebar-item">
+                  <img src="/assets/images/icons/left-sidebar/group.png" alt="group"> Administrador
+                </a>
+              </li>
+              {{/isAdmin}}
+
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a href="/categories" class="sidebar-item">
+                  <img src="/assets/images/icons/left-sidebar/team.png" alt="group"> Categorias
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- PROFILE -->
+        <div class="user-profile col-md-10">
+          <div class="profile-header-background">
+            {{#profileUser.coverPictureUrl}}
+              <img src="{{profileUser.coverPictureUrl}}" alt="Profile Header Background">
+            {{/profileUser.coverPictureUrl}}
+            {{^profileUser.coverPictureUrl}}
+              <img src="/assets/images/users/cover/cover-1.gif" alt="Profile Header Background">
+            {{/profileUser.coverPictureUrl}}
+          </div>
+
+          <div class="row profile-rows">
+            <div class="col-md-3">
+              <div class="profile-info-left">
+                <div class="text-center">
+                  <div class="profile-img w-shadow">
+                    <div class="profile-img-overlay"></div>
+                    {{#profileUser.profilePictureUrl}}
+                      <img src="{{profileUser.profilePictureUrl}}" alt="Avatar" class="avatar img-circle">
+                    {{/profileUser.profilePictureUrl}}
+                    {{^profileUser.profilePictureUrl}}
+                      <img src="/assets/images/users/user-4.jpg" alt="Avatar" class="avatar img-circle">
+                    {{/profileUser.profilePictureUrl}}
+                  </div>
+
+                  <p class="profile-fullname mt-3">{{profileUser.name}} {{profileUser.surname}}</p>
+                  <p class="profile-username mb-3 text-muted">@{{profileUser.nickname}}</p>
+
+                  {{#canManageProfile}}
+                    <a href="/profile/edit" class="btn btn-sm btn-outline-primary">Editar perfil</a>
+                  {{/canManageProfile}}
+                </div>
+
+                <div class="intro mt-5 mv-hidden">
+                  <div class="intro-item d-flex justify-content-between align-items-center">
+                    <h3 class="intro-about">Descripción:</h3>
+                  </div>
+                  {{#profileUser.description}}
+                  <div class="intro-item d-flex justify-content-between align-items-center">
+                    <p class="intro-title text-muted">{{profileUser.description}}</p>
+                  </div>
+                  {{/profileUser.description}}
+                  {{^profileUser.description}}
+                  <div class="intro-item d-flex justify-content-between align-items-center">
+                    <p class="intro-title text-muted">Sin descripción.</p>
+                  </div>
+                  {{/profileUser.description}}
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-9 p-0">
+              <div class="profile-info-right">
+                <div class="row">
+                  <div class="col-md-9 profile-center">
+                    <hr class="my-5">
+
+                    <!-- SOLO si es su propio perfil (o decides permitirlo también a admin) -->
+                    {{#isOwnProfile}}
+                    <ul class="list-unstyled" style="margin-bottom: 0;">
+                      <li class="media post-form w-shadow">
+                        <div class="media-body">
+                          <form action="/posts" method="post" enctype="multipart/form-data">
+                            <div class="form-group post-input">
+                              <textarea class="form-control" id="postForm" name="content" rows="2"
+                                        placeholder="What's on your mind?"></textarea>
+                            </div>
+                            <div class="row post-form-group">
+                              <div class="col-md-9">
+                                <label class="btn btn-link post-form-btn btn-sm mb-0">
+                                  <i class='bx bx-images'></i> <span>Photo/Video</span>
+                                  <input type="file" name="picture" accept="image/*,video/*" hidden>
+                                </label>
+                              </div>
+                              <div class="col-md-3 text-right">
+                                <button type="submit" class="btn btn-primary btn-sm">Publish</button>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </li>
+                    </ul>
+                    {{/isOwnProfile}}
+
+                    <!-- COUNTS -->
+                    <div class="bg-white profile-posts-options mt-5 mb-4 py-3 d-flex justify-content-between shadow-sm">
+                      <div class="col-md-3 col-sm-12 d-flex justify-content-between align-items-center">
+                        <h6 class="timeline-title mb-0">Publicaciones:</h6>
+                        <span class="text-muted">{{postsCount}}</span>
+                      </div>
+                      <div class="col-md-9 col-sm-12">
+                        <div class="timeline-manage"></div>
+                      </div>
+                    </div>
+
+                    <div class="bg-white profile-posts-options mt-5 mb-4 py-3 d-flex justify-content-between shadow-sm">
+                      <div class="col-md-3 col-sm-12 d-flex justify-content-between align-items-center">
+                        <h6 class="timeline-title mb-0">Comentarios:</h6>
+                        <span class="text-muted">{{commentsCount}}</span>
+                      </div>
+                      <div class="col-md-9 col-sm-12">
+                        <div class="timeline-manage"></div>
+                      </div>
+                    </div>
+
+                    <!-- POSTS -->
+                    {{#posts}}
+                    <div class="post border-bottom p-3 bg-white w-shadow">
+                      <div class="media text-muted pt-3">
+                        {{#author.profilePictureUrl}}
+                          <img src="{{author.profilePictureUrl}}" alt="Online user" class="mr-3 post-user-image">
+                        {{/author.profilePictureUrl}}
+                        {{^author.profilePictureUrl}}
+                          <img src="/assets/images/users/user-4.jpg" alt="Online user" class="mr-3 post-user-image">
+                        {{/author.profilePictureUrl}}
+
+                        <div class="media-body pb-3 mb-0 small lh-125">
+                          <div class="d-flex justify-content-between align-items-center w-100">
+                            <span class="post-type text-muted">
+                              <a href="/users/{{author.id}}" class="text-gray-dark post-user-name mr-2">{{author.nickname}}</a>
+                            </span>
+                          </div>
+                          <span class="d-block">{{createdAtHuman}} <i class='bx bx-globe ml-3'></i></span>
+                        </div>
+
+                        <!-- Acciones: USER ve editar/borrar si puede; ADMIN puede borrar siempre -->
+                        {{#canEdit}}
+                          <a href="/posts/{{id}}/edit" class="btn btn-sm" style="color: green;">Editar</a>
+                        {{/canEdit}}
+                        {{#canDelete}}
+                          <form action="/posts/{{id}}/delete" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-sm text-danger" title="Eliminar">Eliminar</button>
+                          </form>
+                        {{/canDelete}}
+                      </div>
+
+                      <div class="mt-3">
+                        <p>{{content}}</p>
+                      </div>
+
+                      {{#pictureUrl}}
+                      <div class="d-block mt-3">
+                        <img src="{{pictureUrl}}" class="post-content" alt="post image">
+                      </div>
+                      {{/pictureUrl}}
+
+                      <div class="mb-2">
+                        <div class="argon-reaction">
+                          <span class="like-btn">
+                            <a href="/posts/{{id}}/like" class="post-card-buttons">
+                              <i class='bx bxs-like mr-2'></i> {{likes}}
+                            </a>
+                          </span>
+                        </div>
+                        <a href="javascript:void(0)" class="post-card-buttons show-comments-btn" data-post="{{id}}">
+                          <i class='bx bx-message-rounded mr-2'></i> {{commentsCount}}
+                        </a>
+                      </div>
+
+                      <div class="border-top pt-3 hide-comments" id="comments-{{id}}" style="display: none;">
+                        <div class="row bootstrap snippets">
+                          <div class="col-md-12">
+                            <div class="comment-wrapper">
+                              <div class="panel panel-info">
+                                <div class="panel-body">
+                                  <ul class="media-list comments-list">
+
+                                    {{#isOwnProfile}}
+                                    <li class="media comment-form">
+                                      <a href="#" class="pull-left">
+                                        {{#currentUser.profilePictureUrl}}
+                                          <img src="{{currentUser.profilePictureUrl}}" alt="" class="img-circle">
+                                        {{/currentUser.profilePictureUrl}}
+                                        {{^currentUser.profilePictureUrl}}
+                                          <img src="/assets/images/users/user-4.jpg" alt="" class="img-circle">
+                                        {{/currentUser.profilePictureUrl}}
+                                      </a>
+                                      <div class="media-body">
+                                        <form action="/posts/{{id}}/comments" method="post" role="form">
+                                          <div class="row">
+                                            <div class="col-md-12">
+                                              <div class="input-group">
+                                                <input type="text" name="content" class="form-control comment-input" placeholder="Write a comment...">
+                                                <div class="input-group-btn">
+                                                  <button type="submit" class="btn comment-form-btn" title="Send"><i class='bx bx-send'></i></button>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </form>
+                                      </div>
+                                    </li>
+                                    {{/isOwnProfile}}
+
+                                    {{#comments}}
+                                    <li class="media">
+                                      <a href="/users/{{author.id}}" class="pull-left">
+                                        {{#author.profilePictureUrl}}
+                                          <img src="{{author.profilePictureUrl}}" alt="" class="img-circle">
+                                        {{/author.profilePictureUrl}}
+                                        {{^author.profilePictureUrl}}
+                                          <img src="/assets/images/users/user-2.jpg" alt="" class="img-circle">
+                                        {{/author.profilePictureUrl}}
+                                      </a>
+
+                                      <div class="media-body">
+                                        <div class="d-flex justify-content-between align-items-center w-100">
+                                          <strong class="text-gray-dark">
+                                            <a href="/users/{{author.id}}" class="fs-8">{{author.nickname}}</a>
+                                          </strong>
+                                        </div>
+
+                                        <span class="d-block comment-created-time">{{createdAtHuman}}</span>
+                                        <p class="fs-8 pt-2">{{content}}</p>
+
+                                        <div class="argon-reaction">
+                                          <span class="like-btn">
+                                            <a href="/comments/{{id}}/like" class="post-card-buttons">
+                                              <i class='bx bxs-like mr-2'></i> {{likes}}
+                                            </a>
+                                          </span>
+                                        </div>
+
+                                        {{#canDelete}}
+                                        <form action="/comments/{{id}}/delete" method="post" style="display:inline;">
+                                          <button type="submit" class="btn btn-sm text-danger" title="Eliminar">Eliminar</button>
+                                        </form>
+                                        {{/canDelete}}
+                                      </div>
+                                    </li>
+                                    {{/comments}}
+
+                                    {{^comments}}
+                                    <li class="media">
+                                      <div class="media-body">
+                                        <p class="text-muted fs-8 mb-0">No comments yet.</p>
+                                      </div>
+                                    </li>
+                                    {{/comments}}
+
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    {{/posts}}
+
+                    {{^posts}}
+                    <div class="post border-bottom p-3 bg-white w-shadow">
+                      <p class="mb-0 text-muted">Todavía no hay publicaciones.</p>
+                    </div>
+                    {{/posts}}
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <hr class="my-5">
+
+    </div>
+  </div>
+</div>
+
+<!-- Core -->
+<script src="/assets/js/jquery/jquery-3.3.1.min.js"></script>
+<script src="/assets/js/popper/popper.min.js"></script>
+<script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/components/components.js"></script>
+
+<script>
+  $("#menu-toggle").click(function (e) {
+    e.preventDefault();
+    $("#wrapper").toggleClass("toggled");
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".show-comments-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const postId = btn.getAttribute("data-post");
+        const el = document.getElementById("comments-" + postId);
+        if (!el) return;
+        el.style.display = (el.style.display === "none" || el.style.display === "") ? "block" : "none";
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
