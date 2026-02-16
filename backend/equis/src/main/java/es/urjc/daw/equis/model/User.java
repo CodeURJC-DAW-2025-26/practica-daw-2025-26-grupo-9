@@ -3,38 +3,21 @@ package es.urjc.daw.equis.model;
 import java.sql.Blob;
 import java.util.List;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
-@Entity(name = "UserTable")
+@Entity
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-
     private String surname;
-
     private String nickname;
-
     private String description;
-
     private String email;
-
     private String encodedPassword;
-
-    @OneToMany
-    private List <Post> posts;
-    @OneToMany
-    private List <Comment> comments;
 
     @Lob
     private Blob profilePicture;
@@ -45,11 +28,18 @@ public class User {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles;
 
-    public User() {
-        // Empty constructor required by JPA
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts;
 
-    public User(String name, String surname, String nickname, String description, String email, String encodedPassword, Blob profilePicture, Blob coverPicture, String... roles) {
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
+    public User() {}
+
+    public User(String name, String surname, String nickname, String description,
+                String email, String encodedPassword, Blob profilePicture,
+                Blob coverPicture, String... roles) {
+
         this.name = name;
         this.surname = surname;
         this.nickname = nickname;
@@ -61,79 +51,40 @@ public class User {
         this.roles = List.of(roles);
     }
 
-    public Long getId() {
-        return id;
-    }
+    // GETTERS / SETTERS
 
-    public String getName() {
-        return name;
-    }
+    public Long getId() { return id; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getSurname() {
-        return surname;
-    }
+    public String getSurname() { return surname; }
+    public void setSurname(String surname) { this.surname = surname; }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-    
-    public String getNickname() {
-        return nickname;
-    }
+    public String getNickname() { return nickname; }
+    public void setNickname(String nickname) { this.nickname = nickname; }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public String getDescription() {
-        return description;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getEncodedPassword() { return encodedPassword; }
+    public void setEncodedPassword(String encodedPassword) { this.encodedPassword = encodedPassword; }
 
-    public String getEmail() {
-        return email;
-    }
+    public Blob getProfilePicture() { return profilePicture; }
+    public void setProfilePicture(Blob profilePicture) { this.profilePicture = profilePicture; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public Blob getCoverPicture() { return coverPicture; }
+    public void setCoverPicture(Blob coverPicture) { this.coverPicture = coverPicture; }
 
-    public String getEncodedPassword() {
-        return encodedPassword;
-    }
+    public List<String> getRoles() { return roles; }
+    public void setRoles(List<String> roles) { this.roles = roles; }
 
-    public void setEncodedPassword(String encodedPassword) {
-        this.encodedPassword = encodedPassword;
-    }
+    public List<Post> getPosts() { return posts; }
+    public void setPosts(List<Post> posts) { this.posts = posts; }
 
-    public Blob getProfilePicture() {
-        return profilePicture;
-    }
-
-    public void setProfilePicture(Blob profilePicture) {
-        this.profilePicture = profilePicture;
-    }
-
-    public Blob getCoverPicture() {
-        return coverPicture;
-    }
-
-    public void setCoverPicture(Blob coverPicture) {
-        this.coverPicture = coverPicture;
-    }
-
-    public List<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    }
+    public List<Comment> getComments() { return comments; }
+    public void setComments(List<Comment> comments) { this.comments = comments; }
 }
