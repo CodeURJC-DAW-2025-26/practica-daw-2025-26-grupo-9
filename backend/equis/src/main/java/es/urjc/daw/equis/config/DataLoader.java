@@ -10,10 +10,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.model.Post;
 import es.urjc.daw.equis.model.Comment;
+import es.urjc.daw.equis.model.Category;
 
 import es.urjc.daw.equis.repository.UserRepository;
 import es.urjc.daw.equis.repository.PostRepository;
 import es.urjc.daw.equis.repository.CommentRepository;
+import es.urjc.daw.equis.repository.CategoryRepository;
 
 @Configuration
 public class DataLoader {
@@ -22,6 +24,7 @@ public class DataLoader {
     CommandLineRunner loadData(UserRepository userRepo,
                                PostRepository postRepo,
                                CommentRepository commentRepo,
+                               CategoryRepository categoryRepo,
                                PasswordEncoder encoder) {
 
         return args -> {
@@ -29,47 +32,118 @@ public class DataLoader {
             if (userRepo.count() > 0) return;
 
             // 👤 USERS
-            User admin = new User();
-            admin.setEmail("admin@equis.com");
-            admin.setName("Admin");
-            admin.setEncodedPassword(encoder.encode("admin"));
-            admin.setRoles(List.of("ADMIN"));
-            admin.setNickname("el-bicho");
-            admin.setSurname("Root");
-            admin.setDescription("Administrador del sistema");
+            User admin = createUser("admin@equis.com", "Admin", "Root",
+                    "el-bicho", "Administrador del sistema",
+                    encoder.encode("admin"), List.of("ADMIN"));
 
+            User user1 = createUser("user@equis.com", "User", "Normal",
+                    "murcia-power", "Usuario de prueba",
+                    encoder.encode("user"), List.of("USER"));
 
-            User user = new User();
-            user.setEmail("user@equis.com");
-            user.setName("User");
-            user.setEncodedPassword(encoder.encode("user"));
-            user.setRoles(List.of("USER"));
-            user.setNickname("localidad Murcia");
-            user.setSurname("Normal");
-            user.setDescription("Usuario de prueba");
+            User user2 = createUser("maria@equis.com", "Maria", "Lopez",
+                    "fitness-girl", "Amante del deporte",
+                    encoder.encode("1234"), List.of("USER"));
 
-            userRepo.saveAll(List.of(admin, user));
+            User user3 = createUser("carlos@equis.com", "Carlos", "Perez",
+                    "dev-life", "Spring Boot enjoyer",
+                    encoder.encode("1234"), List.of("USER"));
+
+            userRepo.saveAll(List.of(admin, user1, user2, user3));
+
+            // 📂 CATEGORIES
+            Category tech = createCategory("Tecnología");
+            Category sports = createCategory("Deporte");
+            Category memes = createCategory("Memes");
+
+            categoryRepo.saveAll(List.of(tech, sports, memes));
 
             // 📝 POSTS
-            Post p1 = new Post();
-            p1.setContent("Primer post 🔥");
-            p1.setUser(admin);
+            Post p1 = createPost("Primer post 🔥", admin, tech, 12);
+            Post p2 = createPost("Spring Boot funcionando 🚀", user3, tech, 7);
+            Post p3 = createPost("Hoy entreno pierna 💀", user2, sports, 15);
+            Post p4 = createPost("Murcia existe 🏖️", user1, memes, 3);
+            Post p5 = createPost("Hibernate me odia 😭", user3, tech, 21);
 
-            Post p2 = new Post();
-            p2.setContent("Spring Boot funcionando 🚀");
-            p2.setUser(user);
-
-            postRepo.saveAll(List.of(p1, p2));
+            postRepo.saveAll(List.of(p1, p2, p3, p4, p5));
 
             // 💬 COMMENTS
-            Comment c1 = new Comment();
-            c1.setContent("Esto ya va fino 😌");
-            c1.setUser(user);
-            c1.setPost(p1);
+            Comment c1  = createComment("Esto ya va fino 😌", user1, p1, 4);
+            Comment c2  = createComment("Confirmo 😂", user2, p4, 2);
+            Comment c3  = createComment("Spring nunca falla", admin, p2, 5);
+            Comment c4  = createComment("Pierna = dolor eterno", user3, p3, 8);
+            Comment c5  = createComment("Hibernate siempre gana", admin, p5, 1);
 
-            commentRepo.save(c1);
+            // 🔥 MÁS COMENTARIOS
+            Comment c6  = createComment("Buen post 👌", user2, p1, 3);
+            Comment c7  = createComment("Totalmente de acuerdo", user3, p1, 6);
+            Comment c8  = createComment("JAJAJA real", user1, p4, 9);
+            Comment c9  = createComment("Murcia supremacy 😌", user2, p4, 5);
+            Comment c10 = createComment("Spring Boot >>> todo", user3, p2, 11);
 
-            System.out.println("🔥 Datos de prueba creados");
+            Comment c11 = createComment("Hibernate trauma unlocked 😭", user1, p5, 7);
+            Comment c12 = createComment("Eso es skill issue 😏", admin, p5, 12);
+            Comment c13 = createComment("Pierna hoy también 💀", user2, p3, 4);
+            Comment c14 = createComment("Respeta el descanso bro", user1, p3, 2);
+            Comment c15 = createComment("Código limpio o nada", user3, p2, 10);
+
+            commentRepo.saveAll(List.of(
+                c1, c2, c3, c4, c5,
+                c6, c7, c8, c9, c10,
+                c11, c12, c13, c14, c15
+            ));
+
+
+            System.out.println("🔥 Datos masivos creados");
         };
+    }
+
+    // =========================
+    // Helpers (EXAMEN GOLD)
+    // =========================
+
+    private User createUser(String email, String name, String surname,
+                            String nickname, String description,
+                            String password, List<String> roles) {
+
+        User u = new User();
+        u.setEmail(email);
+        u.setName(name);
+        u.setSurname(surname);
+        u.setNickname(nickname);
+        u.setDescription(description);
+        u.setEncodedPassword(password);
+        u.setRoles(roles);
+
+        return u;
+    }
+
+    private Category createCategory(String name) {
+        Category c = new Category();
+        c.setName(name);
+        return c;
+    }
+
+    private Post createPost(String content, User user,
+                            Category category, int likes) {
+
+        Post p = new Post();
+        p.setContent(content);
+        p.setUser(user);
+        p.setCategory(category);
+        p.setLikes(likes);
+
+        return p;
+    }
+
+    private Comment createComment(String content, User user,
+                                  Post post, int likes) {
+
+        Comment c = new Comment();
+        c.setContent(content);
+        c.setUser(user);
+        c.setPost(post);
+        c.setLikes(likes);
+
+        return c;
     }
 }

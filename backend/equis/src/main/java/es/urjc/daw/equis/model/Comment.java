@@ -19,7 +19,7 @@ public class Comment {
     @Column(nullable = false)
     private LocalDateTime date;
     private static final DateTimeFormatter FORMATTER =
-        DateTimeFormatter.ofPattern("dd MMM yyyy");
+        DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
