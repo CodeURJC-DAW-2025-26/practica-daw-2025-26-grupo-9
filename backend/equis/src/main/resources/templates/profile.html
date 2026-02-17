@@ -79,9 +79,15 @@
                 <a class="dropdown-item" href="/settings">
                   <img src="/assets/images/icons/navbar/gear-1.png" alt="Navbar icon"> Settings
                 </a>
-                <a class="dropdown-item logout-btn" href="/logout">
-                  <img src="/assets/images/icons/navbar/logout.png" alt="Navbar icon"> Log Out
-                </a>
+
+                <!-- Logout should be POST with CSRF -->
+                <form action="/logout" method="post" style="display: inline;">
+                  <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
+                  <button type="submit" class="dropdown-item logout-btn" style="cursor:pointer;">
+                    <img src="/assets/images/icons/navbar/logout.png" alt="Navbar icon"> Log Out
+                  </button>
+                </form>
+
               </div>
             </li>
 
@@ -184,12 +190,15 @@
                   <div class="col-md-9 profile-center">
                     <hr class="my-5">
 
-                    <!-- SOLO si es su propio perfil (o decides permitirlo también a admin) -->
+                    <!-- ONLY if it is their own profile -->
                     {{#isOwnProfile}}
                     <ul class="list-unstyled" style="margin-bottom: 0;">
                       <li class="media post-form w-shadow">
                         <div class="media-body">
                           <form action="/posts" method="post" enctype="multipart/form-data">
+
+                            <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
+
                             <div class="form-group post-input">
                               <textarea class="form-control" id="postForm" name="content" rows="2"
                                         placeholder="What's on your mind?"></textarea>
@@ -252,12 +261,13 @@
                           <span class="d-block">{{createdAtHuman}} <i class='bx bx-globe ml-3'></i></span>
                         </div>
 
-                        <!-- Acciones: USER ve editar/borrar si puede; ADMIN puede borrar siempre -->
                         {{#canEdit}}
                           <a href="/posts/{{id}}/edit" class="btn btn-sm" style="color: green;">Editar</a>
                         {{/canEdit}}
+
                         {{#canDelete}}
                           <form action="/posts/{{id}}/delete" method="post" style="display:inline;">
+                            <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
                             <button type="submit" class="btn btn-sm text-danger" title="Eliminar">Eliminar</button>
                           </form>
                         {{/canDelete}}
@@ -306,6 +316,7 @@
                                       </a>
                                       <div class="media-body">
                                         <form action="/posts/{{id}}/comments" method="post" role="form">
+                                          <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
                                           <div class="row">
                                             <div class="col-md-12">
                                               <div class="input-group">
@@ -352,6 +363,7 @@
 
                                         {{#canDelete}}
                                         <form action="/comments/{{id}}/delete" method="post" style="display:inline;">
+                                          <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
                                           <button type="submit" class="btn btn-sm text-danger" title="Eliminar">Eliminar</button>
                                         </form>
                                         {{/canDelete}}

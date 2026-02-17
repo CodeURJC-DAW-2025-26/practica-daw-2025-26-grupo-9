@@ -7,5 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import es.urjc.daw.equis.model.Post;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
+
     Page<Post> findAllByOrderByDateDesc(Pageable pageable);
+
+    // para perfil y no index
+    Page<Post> findByUserIdOrderByDateDesc(Long userId, Pageable pageable);
+
+    long countByUserId(Long userId);
 }
