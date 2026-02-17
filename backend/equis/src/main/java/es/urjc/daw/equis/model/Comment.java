@@ -3,6 +3,8 @@ package es.urjc.daw.equis.model;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
+import java.time.format.DateTimeFormatter;
+
 
 @Entity
 public class Comment {
@@ -13,7 +15,11 @@ public class Comment {
 
     private String content;
     private int likes;
+
+    @Column(nullable = false)
     private LocalDateTime date;
+    private static final DateTimeFormatter FORMATTER =
+        DateTimeFormatter.ofPattern("dd MMM yyyy");
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
@@ -49,4 +55,15 @@ public class Comment {
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
+
+    public String getCreatedAtHuman() {
+        return this.date.format(FORMATTER);
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.date = LocalDateTime.now();
+    }
+
+
 }

@@ -1,5 +1,8 @@
 package es.urjc.daw.equis.model;
 
+import java.time.format.DateTimeFormatter;
+
+
 import java.sql.Blob;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +18,12 @@ public class Post {
 
     private String content;
     private int likes;
+
+    @Column(nullable = false)
     private LocalDateTime date;
+    private static final DateTimeFormatter FORMATTER =
+        DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
 
     @Lob
     private Blob picture;
@@ -41,6 +49,10 @@ public class Post {
     }
 
     // GETTERS / SETTERS
+    @PrePersist
+    public void prePersist() {
+        this.date = LocalDateTime.now();
+}
 
     public Long getId() { return id; }
 
@@ -64,4 +76,14 @@ public class Post {
 
     public List<Comment> getComments() { return comments; }
     public void setComments(List<Comment> comments) { this.comments = comments; }
+
+    public String getCreatedAtHuman() {
+        return this.date.format(FORMATTER);
+    }
+
+    public int getCommentsCount() {
+        return this.comments != null ? this.comments.size() : 0;
+    }
+
+
 }

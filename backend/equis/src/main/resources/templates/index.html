@@ -155,16 +155,16 @@
                             {{#posts}}
                             <div class="post border-bottom p-3 bg-white w-shadow">
                                 <div class="media text-muted pt-3">
-                                    {{#author.profilePictureUrl}}
-                                        <img src="{{author.profilePictureUrl}}" alt="Online user" class="mr-3 post-user-image">
-                                    {{/author.profilePictureUrl}}
-                                    {{^author.profilePictureUrl}}
+                                    {{#user.profilePictureUrl}}
+                                        <img src="{{user.profilePictureUrl}}" alt="Online user" class="mr-3 post-user-image">
+                                    {{/user.profilePictureUrl}}
+                                    {{^user.profilePictureUrl}}
                                         <img src="/assets/images/users/user-1.jpg" alt="Online user" class="mr-3 post-user-image">
-                                    {{/author.profilePictureUrl}}
+                                    {{/user.profilePictureUrl}}
 
                                     <div class="media-body pb-3 mb-0 small lh-125">
                                         <div class="d-flex justify-content-between align-items-center w-100">
-                                            <a href="/users/{{author.id}}" class="text-gray-dark post-user-name">{{author.nickname}}</a>
+                                            <a href="/users/{{user.id}}" class="text-gray-dark post-user-name">{{user.nickname}}</a>
                                             <div class="dropdown">
                                                 <a href="#" class="post-more-settings" role="button" data-toggle="dropdown" id="postOptions-{{id}}" aria-haspopup="true" aria-expanded="false">
                                                     <i class='bx bx-dots-horizontal-rounded'></i>
@@ -271,18 +271,18 @@
                                                             <!-- Comments list -->
                                                             {{#comments}}
                                                             <li class="media">
-                                                                <a href="/users/{{author.id}}" class="pull-left">
-                                                                    {{#author.profilePictureUrl}}
-                                                                        <img src="{{author.profilePictureUrl}}" alt="" class="img-circle">
-                                                                    {{/author.profilePictureUrl}}
-                                                                    {{^author.profilePictureUrl}}
+                                                                <a href="/users/{{user.id}}" class="pull-left">
+                                                                    {{#user.profilePictureUrl}}
+                                                                        <img src="{{user.profilePictureUrl}}" alt="" class="img-circle">
+                                                                    {{/user.profilePictureUrl}}
+                                                                    {{^user.profilePictureUrl}}
                                                                         <img src="/assets/images/users/user-2.jpg" alt="" class="img-circle">
-                                                                    {{/author.profilePictureUrl}}
+                                                                    {{/user.profilePictureUrl}}
                                                                 </a>
                                                                 <div class="media-body">
                                                                     <div class="d-flex justify-content-between align-items-center w-100">
                                                                         <strong class="text-gray-dark">
-                                                                            <a href="/users/{{author.id}}" class="fs-8">{{author.nickname}}</a>
+                                                                            <a href="/users/{{user.id}}" class="fs-8">{{user.nickname}}</a>
                                                                         </strong>
                                                                     </div>
                                                                     <span class="d-block comment-created-time">{{createdAtHuman}}</span>
