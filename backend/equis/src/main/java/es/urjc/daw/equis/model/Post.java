@@ -1,10 +1,8 @@
 package es.urjc.daw.equis.model;
 
-import java.time.format.DateTimeFormatter;
-
-
 import java.sql.Blob;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -17,16 +15,21 @@ public class Post {
     private Long id;
 
     private String content;
-    private int likes;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes;
 
     @Column(nullable = false)
     private LocalDateTime date;
-    private static final DateTimeFormatter FORMATTER =
-        DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
+    private static final DateTimeFormatter FORMATTER =
+            DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @Lob
     private Blob picture;
+
+    @Transient
+    private long likesCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -41,26 +44,33 @@ public class Post {
 
     public Post() {}
 
-    public Post(String content, int likes, LocalDateTime date, Blob picture) {
+    public Post(String content, Blob picture) {
         this.content = content;
-        this.likes = likes;
-        this.date = date;
         this.picture = picture;
     }
 
-    // GETTERS / SETTERS
     @PrePersist
     public void prePersist() {
         this.date = LocalDateTime.now();
-}
+    }
+
+    // GETTERS / SETTERS
 
     public Long getId() { return id; }
 
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
 
-    public int getLikes() { return likes; }
-    public void setLikes(int likes) { this.likes = likes; }
+    public List<Like> getLikes() { return likes; }
+    public void setLikes(List<Like> likes) { this.likes = likes; }
+
+    public long getLikesCount() {
+        return likesCount;
+    }
+
+    public void setLikesCount(long likesCount) {
+        this.likesCount = likesCount;
+    }
 
     public LocalDateTime getDate() { return date; }
     public void setDate(LocalDateTime date) { this.date = date; }
@@ -82,8 +92,6 @@ public class Post {
     }
 
     public int getCommentsCount() {
-        return this.comments != null ? this.comments.size() : 0;
+        return comments != null ? comments.size() : 0;
     }
-
-
 }
