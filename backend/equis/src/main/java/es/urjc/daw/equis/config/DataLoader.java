@@ -57,34 +57,33 @@ public class DataLoader {
 
             categoryRepo.saveAll(List.of(tech, sports, memes));
 
-            // 📝 POSTS
-            Post p1 = createPost("Primer post 🔥", admin, tech, 12);
-            Post p2 = createPost("Spring Boot funcionando 🚀", user3, tech, 7);
-            Post p3 = createPost("Hoy entreno pierna 💀", user2, sports, 15);
-            Post p4 = createPost("Murcia existe 🏖️", user1, memes, 3);
-            Post p5 = createPost("Hibernate me odia 😭", user3, tech, 21);
+            // 📝 POSTS (sin likes ahora)
+            Post p1 = createPost("Primer post 🔥", admin, tech);
+            Post p2 = createPost("Spring Boot funcionando 🚀", user3, tech);
+            Post p3 = createPost("Hoy entreno pierna 💀", user2, sports);
+            Post p4 = createPost("Murcia existe 🏖️", user1, memes);
+            Post p5 = createPost("Hibernate me odia 😭", user3, tech);
 
             postRepo.saveAll(List.of(p1, p2, p3, p4, p5));
 
-            // 💬 COMMENTS
-            Comment c1  = createComment("Esto ya va fino 😌", user1, p1, 4);
-            Comment c2  = createComment("Confirmo 😂", user2, p4, 2);
-            Comment c3  = createComment("Spring nunca falla", admin, p2, 5);
-            Comment c4  = createComment("Pierna = dolor eterno", user3, p3, 8);
-            Comment c5  = createComment("Hibernate siempre gana", admin, p5, 1);
+            // 💬 COMMENTS (sin likes ahora)
+            Comment c1  = createComment("Esto ya va fino 😌", user1, p1);
+            Comment c2  = createComment("Confirmo 😂", user2, p4);
+            Comment c3  = createComment("Spring nunca falla", admin, p2);
+            Comment c4  = createComment("Pierna = dolor eterno", user3, p3);
+            Comment c5  = createComment("Hibernate siempre gana", admin, p5);
 
-            // 🔥 MÁS COMENTARIOS
-            Comment c6  = createComment("Buen post 👌", user2, p1, 3);
-            Comment c7  = createComment("Totalmente de acuerdo", user3, p1, 6);
-            Comment c8  = createComment("JAJAJA real", user1, p4, 9);
-            Comment c9  = createComment("Murcia supremacy 😌", user2, p4, 5);
-            Comment c10 = createComment("Spring Boot >>> todo", user3, p2, 11);
+            Comment c6  = createComment("Buen post 👌", user2, p1);
+            Comment c7  = createComment("Totalmente de acuerdo", user3, p1);
+            Comment c8  = createComment("JAJAJA real", user1, p4);
+            Comment c9  = createComment("Murcia supremacy 😌", user2, p4);
+            Comment c10 = createComment("Spring Boot >>> todo", user3, p2);
 
-            Comment c11 = createComment("Hibernate trauma unlocked 😭", user1, p5, 7);
-            Comment c12 = createComment("Eso es skill issue 😏", admin, p5, 12);
-            Comment c13 = createComment("Pierna hoy también 💀", user2, p3, 4);
-            Comment c14 = createComment("Respeta el descanso bro", user1, p3, 2);
-            Comment c15 = createComment("Código limpio o nada", user3, p2, 10);
+            Comment c11 = createComment("Hibernate trauma unlocked 😭", user1, p5);
+            Comment c12 = createComment("Eso es skill issue 😏", admin, p5);
+            Comment c13 = createComment("Pierna hoy también 💀", user2, p3);
+            Comment c14 = createComment("Respeta el descanso bro", user1, p3);
+            Comment c15 = createComment("Código limpio o nada", user3, p2);
 
             commentRepo.saveAll(List.of(
                 c1, c2, c3, c4, c5,
@@ -92,13 +91,12 @@ public class DataLoader {
                 c11, c12, c13, c14, c15
             ));
 
-
             System.out.println("🔥 Datos masivos creados");
         };
     }
 
     // =========================
-    // Helpers (EXAMEN GOLD)
+    // Helpers
     // =========================
 
     private User createUser(String email, String name, String surname,
@@ -123,26 +121,22 @@ public class DataLoader {
         return c;
     }
 
-    private Post createPost(String content, User user,
-                            Category category, int likes) {
+    private Post createPost(String content, User user, Category category) {
 
         Post p = new Post();
         p.setContent(content);
         p.setUser(user);
         p.setCategory(category);
-        p.setLikes(likes);
 
         return p;
     }
 
-    private Comment createComment(String content, User user,
-                                  Post post, int likes) {
+    private Comment createComment(String content, User user, Post post) {
 
         Comment c = new Comment();
         c.setContent(content);
         c.setUser(user);
         c.setPost(post);
-        c.setLikes(likes);
 
         return c;
     }
