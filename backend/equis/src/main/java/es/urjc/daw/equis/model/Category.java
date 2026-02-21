@@ -21,6 +21,9 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Post> posts;
 
+    @Transient
+    private long postsCount;
+
     public Category() {}
 
     public Category(String name, String description, Blob picture) {
@@ -44,4 +47,7 @@ public class Category {
 
     public List<Post> getPosts() { return posts; }
     public void setPosts(List<Post> posts) { this.posts = posts; }
+
+    public long getPostsCount() { return postsCount; }
+    public void setPostsCount(long postsCount) { this.postsCount = postsCount; }
 }
