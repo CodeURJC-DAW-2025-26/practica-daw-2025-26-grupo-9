@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Categorías</title>
+  <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <a class="navbar-brand" href="/">Equis</a>
+  <div class="ml-auto">
+    <a class="btn btn-sm btn-outline-primary" href="/">Feed</a>
+    <a class="btn btn-sm btn-outline-secondary" href="/profile">Perfil</a>
+    <a class="btn btn-sm btn-outline-danger" href="/logout">Salir</a>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8">
+      <h4 class="mb-3">Categorías</h4>
+
+      <div class="list-group">
+        {{#allCategories}}
+          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="/categories/{{id}}">
+            <span>{{name}}</span>
+            <span class="badge badge-primary badge-pill">{{postsCount}}</span>
+          </a>
+        {{/allCategories}}
+        {{^allCategories}}
+          <div class="list-group-item text-muted">No hay categorías.</div>
+        {{/allCategories}}
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <h6 class="text-muted">Más populares</h6>
+      <ul class="list-group">
+        {{#topCategories}}
+          <li class="list-group-item">
+            <a href="/categories/{{id}}">{{name}}</a>
+            <span class="badge badge-light badge-pill float-right">{{postsCount}}</span>
+          </li>
+        {{/topCategories}}
+        {{^topCategories}}
+          <li class="list-group-item text-muted">Sin datos.</li>
+        {{/topCategories}}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/jquery/jquery.min.js"></script>
+<script src="/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Categoría</title>
+  <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <a class="navbar-brand" href="/">Equis</a>
+  <div class="ml-auto">
+    <a class="btn btn-sm btn-outline-primary" href="/categories">Categorías</a>
+    <a class="btn btn-sm btn-outline-secondary" href="/profile">Perfil</a>
+    <a class="btn btn-sm btn-outline-danger" href="/logout">Salir</a>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8">
+      <h4 class="mb-1">{{category.name}}</h4>
+      {{#category.description}}
+        <p class="text-muted">{{category.description}}</p>
+      {{/category.description}}
+
+      <div class="mt-3">
+        {{#posts}}
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <a href="/users/{{user.id}}"><strong>{{user.nickname}}</strong></a>
+                <span class="text-muted small">{{createdAtHuman}}</span>
+              </div>
+              <p class="mt-2 mb-2">{{content}}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted small">
+                  ❤️ {{likesCount}} · 💬 {{commentsCount}}
+                </div>
+                <a class="btn btn-sm btn-outline-primary" href="/posts/{{id}}/like?redirect=category">Like</a>
+              </div>
+            </div>
+          </div>
+        {{/posts}}
+
+        {{^posts}}
+          <div class="alert alert-secondary">No hay publicaciones en esta categoría.</div>
+        {{/posts}}
+
+        {{#hasNext}}
+          <a class="btn btn-outline-secondary btn-block" href="/categories/{{category.id}}?page={{nextPage}}">Cargar más</a>
+        {{/hasNext}}
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <h6 class="text-muted">Más populares</h6>
+      <ul class="list-group">
+        {{#topCategories}}
+          <li class="list-group-item">
+            <a href="/categories/{{id}}">{{name}}</a> <span class="text-muted small">({{postsCount}})</span>
+          </li>
+        {{/topCategories}}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/jquery/jquery.min.js"></script>
+<script src="/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+</body>
+</html>

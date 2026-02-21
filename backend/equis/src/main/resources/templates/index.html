@@ -129,9 +129,17 @@
                             <li class="media post-form w-shadow">
                                 <div class="media-body">
                                     <form action="/posts" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
                                         <div class="form-group post-input">
                                             <textarea class="form-control" id="postForm" name="content" rows="2"
                                                       placeholder="What's on your mind, {{currentUser.nickname}}?"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <select class="form-control" name="categoryId">
+                                                {{#categories}}
+                                                    <option value="{{id}}">{{name}}</option>
+                                                {{/categories}}
+                                            </select>
                                         </div>
                                         <div class="row post-form-group">
                                             <div class="col-md-9">
@@ -316,11 +324,13 @@
                             </div>
                             {{/posts}}
 
+                            {{#hasNext}}
                             <div class="d-flex justify-content-center my-5 load-post">
                                 <a href="/?page={{nextPage}}" class="btn btn-quick-link join-group-btn border shadow" data-toggle="tooltip" data-placement="top" data-title="Load More Post">
                                     <i class='bx bx-dots-horizontal-rounded'></i>
                                 </a>
                             </div>
+                            {{/hasNext}}
                         </div>
                     </div>
 
@@ -336,7 +346,7 @@
                                             <ul class="list-group list-group-flush newsfeed-left-sidebar tamaño">
                                                 {{#topCategories}}
                                                     <li class="list-group-item">
-                                                        <a href="/categories/{{id}}">{{name}}</a>
+                                                        <a href="/categories/{{id}}">{{name}}</a> <span class="text-muted small">({{postsCount}})</span>
                                                     </li>
                                                 {{/topCategories}}
                                                 {{^topCategories}}
