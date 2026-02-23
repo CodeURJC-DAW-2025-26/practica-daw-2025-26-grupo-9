@@ -57,7 +57,10 @@ public class CommentService {
         }
         commentRepository.deleteById(commentId);
     }
-
+    @Transactional(readOnly = true)
+    public long countByPostId(Long postId) {
+        return commentRepository.countByPostId(postId);
+    }
     @Transactional
     public void deleteCommentsByPost(Long postId) {
         // Useful if you delete posts manually or for moderation

@@ -19,7 +19,9 @@ public class PostService {
     public Post save(Post post) {
         return postRepository.save(post);
     }
-
+    public Page<Post> getPostsByUserId(Long userId, Pageable pageable) {
+        return postRepository.findByUserIdOrderByDateDesc(userId, pageable);
+    }
     public Page<Post> getFeed(Pageable pageable) {
         return postRepository.findAllByOrderByDateDesc(pageable);
     }
