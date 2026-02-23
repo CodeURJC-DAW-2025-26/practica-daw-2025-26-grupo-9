@@ -11,11 +11,14 @@ import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.model.Post;
 import es.urjc.daw.equis.model.Comment;
 import es.urjc.daw.equis.model.Category;
+import es.urjc.daw.equis.model.Like;
 
 import es.urjc.daw.equis.repository.UserRepository;
 import es.urjc.daw.equis.repository.PostRepository;
 import es.urjc.daw.equis.repository.CommentRepository;
 import es.urjc.daw.equis.repository.CategoryRepository;
+import es.urjc.daw.equis.repository.LikeRepository;
+
 
 @Configuration
 public class DataLoader {
@@ -25,6 +28,7 @@ public class DataLoader {
                                PostRepository postRepo,
                                CommentRepository commentRepo,
                                CategoryRepository categoryRepo,
+                               LikeRepository likeRepo,
                                PasswordEncoder encoder) {
 
         return args -> {
@@ -91,6 +95,24 @@ public class DataLoader {
                 c11, c12, c13, c14, c15
             ));
 
+            // ❤️ LIKES POR DEFECTO
+            Like l1 = createPostLike(user1, p1);
+            Like l2 = createPostLike(user2, p1);
+            Like l3 = createPostLike(user3, p2);
+            Like l4 = createPostLike(admin, p2);
+            Like l5 = createPostLike(user2, p3);
+
+            Like l6 = createCommentLike(user1, c2);
+            Like l7 = createCommentLike(user2, c1);
+            Like l8 = createCommentLike(user3, c3);
+            Like l9 = createCommentLike(admin, c5);
+            Like l10 = createCommentLike(user1, c10);
+
+            likeRepo.saveAll(List.of(
+                l1, l2, l3, l4, l5,
+                l6, l7, l8, l9, l10
+            ));
+
             System.out.println("🔥 Datos masivos creados");
         };
     }
@@ -139,5 +161,19 @@ public class DataLoader {
         c.setPost(post);
 
         return c;
+    }
+
+    private Like createPostLike(User user, Post post) {
+        Like like = new Like();
+        like.setUser(user);
+        like.setPost(post);
+        return like;
+    }
+
+    private Like createCommentLike(User user, Comment comment) {
+        Like like = new Like();
+        like.setUser(user);
+        like.setComment(comment);
+        return like;
     }
 }
