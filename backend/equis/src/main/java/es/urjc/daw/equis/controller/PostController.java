@@ -98,11 +98,10 @@ public class PostController {
                 }
             );
 
-        // Redirigir según el parámetro
         if ("profile".equals(redirect)) {
             return "redirect:/profile";
         } else {
-            return "redirect:/users/" + comment.getPost().getUser().getId();
+            return "redirect:/";
         }
     }
 
