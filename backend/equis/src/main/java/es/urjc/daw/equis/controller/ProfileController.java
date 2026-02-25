@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import es.urjc.daw.equis.model.Post;
 import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.service.CommentService;
 import es.urjc.daw.equis.service.PostService;
@@ -64,6 +65,11 @@ public class ProfileController {
         Pageable pageable = PageRequest.of(0, 10);
         var postsPage = postService.getPostsByUserId(profileUser.getId(), pageable);
         var posts = postsPage.getContent();
+        postService.enrichLikesCounts(posts);
+        for (Post post : posts) {
+            var comments = commentService.getCommentsByPost(post.getId());
+            commentService.enrichLikesCounts(comments);
+        }
 
         // No LikeService: if you still want likesCount, move it inside PostService
         // (e.g., postService.enrichLikesCounts(posts)) or remove these fields from the view.

@@ -9,6 +9,7 @@ import es.urjc.daw.equis.model.Comment;
 import es.urjc.daw.equis.model.Post;
 import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.repository.CommentRepository;
+import es.urjc.daw.equis.repository.LikeRepository;
 import es.urjc.daw.equis.repository.PostRepository;
 
 @Service
@@ -16,10 +17,23 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final LikeRepository likeRepository;
 
-    public CommentService(CommentRepository commentRepository, PostRepository postRepository) {
+    public CommentService(CommentRepository commentRepository, PostRepository postRepository, LikeRepository likeRepository) {
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
+        this.likeRepository = likeRepository;
+    }
+
+    public void enrichLikesCounts(List<Comment> comments) {
+        for (Comment comment : comments) {
+            long count = likeRepository.countByComment(comment);
+            comment.setLikesCount(count);
+        }
+    }
+
+    public List<Comment> findByPostId(Long postId) {
+        return commentRepository.findByPostId(postId);
     }
 
     @Transactional(readOnly = true)
