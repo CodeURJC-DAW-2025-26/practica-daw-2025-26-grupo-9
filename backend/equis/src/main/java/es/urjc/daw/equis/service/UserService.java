@@ -20,10 +20,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -50,7 +52,17 @@ public class UserService {
 
         user.setEncodedPassword(passwordEncoder.encode(user.getEncodedPassword()));
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        // Enviar email de bienvenida (sin romper registro si falla)
+        try {
+            emailService.sendWelcomeEmail(savedUser);
+        } catch (Exception e) {
+            // Loggear el error pero no interrumpir el registro
+            System.err.println("Error sending welcome email: " + e.getMessage());
+        }
+
+        return savedUser;
     }
 
     @Transactional(readOnly = true)
