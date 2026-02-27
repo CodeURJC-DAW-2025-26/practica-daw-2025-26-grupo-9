@@ -10,6 +10,7 @@ import es.urjc.daw.equis.model.Category;
 import es.urjc.daw.equis.repository.CategoryRepository;
 import es.urjc.daw.equis.repository.UserRepository;
 import es.urjc.daw.equis.repository.PostRepository;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Comparator;
 import java.util.List;
@@ -59,4 +60,18 @@ public class GlobalControllerAdvice {
                 .thenComparing(Category::getName, String.CASE_INSENSITIVE_ORDER));
         return cats;
     }
+
+    /**
+     * sd-active en cada pagina
+     */
+    @ModelAttribute
+public void addActivePageAttributes(HttpServletRequest request, org.springframework.ui.Model model) {
+
+    String uri = request.getRequestURI();
+
+    model.addAttribute("homeActive", uri.equals("/"));
+    model.addAttribute("profileActive", uri.startsWith("/profile"));
+    model.addAttribute("adminActive", uri.startsWith("/admin"));
+    model.addAttribute("categoriesActive", uri.startsWith("/categories"));
+}
 }

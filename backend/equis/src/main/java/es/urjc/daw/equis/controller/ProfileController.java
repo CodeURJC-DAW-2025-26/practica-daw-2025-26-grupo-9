@@ -36,6 +36,34 @@ public class ProfileController {
         this.commentService = commentService;
     }
 
+        private void loadProfileData(User profileUser, User currentUser, Model model) {
+        boolean isAdmin = currentUser != null
+                && currentUser.getRoles() != null
+                && currentUser.getRoles().contains("ADMIN");
+
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("profileUser", profileUser);
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isOwnProfile",
+                currentUser != null && currentUser.getId().equals(profileUser.getId()));
+        model.addAttribute("canManageProfile",
+                currentUser != null && currentUser.getId().equals(profileUser.getId()));
+
+        Pageable pageable = PageRequest.of(0, 10);
+        var postsPage = postService.getPostsByUserId(profileUser.getId(), pageable);
+        var posts = postsPage.getContent();
+        postService.enrichLikesCounts(posts);
+
+        model.addAttribute("posts", posts);
+        model.addAttribute("postsCount", postsPage.getTotalElements());
+
+        long commentsCount = posts.stream()
+                .mapToLong(p -> commentService.countByPostId(p.getId()))
+                .sum();
+
+        model.addAttribute("commentsCount", commentsCount);
+    }   
+
     // -------------------------
     // GET: profile page
     // -------------------------
@@ -54,7 +82,7 @@ public class ProfileController {
         User profileUser = currentUser;
 
         boolean isAdmin = currentUser.getRoles() != null
-                && currentUser.getRoles().contains("ROLE_ADMIN");
+                && currentUser.getRoles().contains("ADMIN");
 
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("profileUser", profileUser);
@@ -176,5 +204,30 @@ public String editProfile(Model model, Principal principal, HttpServletRequest r
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(img);
+    }
+
+    @GetMapping("/users/{id}")
+    public String viewUserProfile(@PathVariable Long id,
+                                @RequestParam(required = false) String from,
+                                Principal principal,
+                                Model model) {
+
+        User profileUser = userService.getByIdOrThrow(id);
+
+        User currentUser = null;
+        if (principal != null) {
+            currentUser = userService.findByEmail(principal.getName()).orElse(null);
+        }
+
+        loadProfileData(profileUser, currentUser, model);
+
+        boolean fromAdmin = "admin".equals(from);
+
+        model.addAttribute("adminActive", fromAdmin);
+        model.addAttribute("profileActive", !fromAdmin);
+        model.addAttribute("homeActive", false);
+        model.addAttribute("categoriesActive", false);
+
+        return "profile";
     }
 }

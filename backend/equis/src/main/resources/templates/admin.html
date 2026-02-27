@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="/assets/images/logo-16x16.png" />
+    <title>eQuis - Administrador</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Major+Mono+Display" rel="stylesheet">
+    <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.1/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Styles -->
+    <link href="/assets/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
+    <link href="/assets/css/components.css" rel="stylesheet">
+    <link href="/assets/css/media.css" rel="stylesheet">
+</head>
+
+<body class="newsfeed">
+<div class="container-fluid" id="wrapper">
+    <div class="row newsfeed-size">
+
+        <!-- SIDEBAR -->
+        {{> partials/sidebar}}
+
+        <!-- CONTENIDO -->
+        <div class="col-md-10 second-section" id="page-content-wrapper">
+
+            <!-- HEADER -->
+            <div class="mb-4">
+                <div class="btn-group d-flex top-links-fg">
+                    <a href="#" class="btn btn-quick-links mr-3 ql-active">
+                        <img src="/assets/images/icons/theme/group-white.png" class="mr-2" alt="icon">
+                        <span class="fs-8">ADMINISTRADOR</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ================= CATEGORÍAS ================= -->
+
+            <div class="groups bg-white shadow-sm p-4 mb-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5>Categorías</h5>
+                    <a href="/admin/categories/new" class="btn btn-sm btn-primary">Crear</a>
+                </div>
+
+                <div class="row">
+                    {{#categories}}
+                    <div class="col-md-3 col-sm-6 mb-4">
+                        <div class="card group-card shadow-sm h-100">
+                            <img src="/categories/{{id}}/image" class="card-img-top group-card-image" alt="Category image">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">{{name}}</h6>
+                                <small class="text-muted d-block mb-2">
+                                    {{postsCount}} posts
+                                </small>
+
+                                <a href="/admin/categories/delete/{{id}}"
+                                   class="btn btn-sm btn-outline-danger">
+                                    Eliminar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {{/categories}}
+
+                    {{^categories}}
+                    <div class="col-12 text-center text-muted">
+                        No hay categorías registradas.
+                    </div>
+                    {{/categories}}
+                </div>
+            </div>
+
+            <!-- ================= USUARIOS ================= -->
+
+            <div class="groups bg-white shadow-sm p-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5>Usuarios</h5>
+                </div>
+
+                <div class="row">
+                    {{#users}}
+                    <div class="col-md-3 col-sm-6 mb-4">
+                        <div class="card group-card shadow-sm h-100">
+                            <a href="/users/{{id}}?from=admin">
+                                <img src="/users/{{id}}/profile-picture"
+                                    class="card-img-top group-card-image"
+                                    alt="User image">
+                            </a>
+
+                            <div class="card-body text-center">
+                                <h6 class="card-title">{{name}}</h6>
+
+                                {{#active}}
+                                <a href="/admin/users/toggle/{{id}}"
+                                   class="btn btn-sm btn-success">
+                                    Activo
+                                </a>
+                                {{/active}}
+
+                                {{^active}}
+                                <a href="/admin/users/toggle/{{id}}"
+                                   class="btn btn-sm btn-danger">
+                                    Bloqueado
+                                </a>
+                                {{/active}}
+                            </div>
+                        </div>
+                    </div>
+                    {{/users}}
+
+                    {{^users}}
+                    <div class="col-12 text-center text-muted">
+                        No hay usuarios disponibles.
+                    </div>
+                    {{/users}}
+                </div>
+
+                <!-- ================= PAGINACIÓN ================= -->
+
+                {{#totalPages}}
+                <div class="mt-4 text-center">
+
+                    {{#pages}}
+                        <a href="/admin?page={{.}}"
+                           class="btn btn-sm btn-light {{#isCurrent}}{{/isCurrent}}">
+                            {{.}}
+                        </a>
+                    {{/pages}}
+
+                </div>
+                {{/totalPages}}
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- JS -->
+<script src="/assets/js/jquery/jquery-3.3.1.min.js"></script>
+<script src="/assets/js/popper/popper.min.js"></script>
+<script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/components/components.js"></script>
+
+</body>
+</html>

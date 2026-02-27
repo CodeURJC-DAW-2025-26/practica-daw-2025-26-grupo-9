@@ -16,6 +16,7 @@ public class Category {
     private String description;
 
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     private Blob picture;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)

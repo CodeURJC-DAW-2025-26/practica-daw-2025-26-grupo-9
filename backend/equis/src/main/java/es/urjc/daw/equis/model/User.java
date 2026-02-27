@@ -20,9 +20,11 @@ public class User {
     private String encodedPassword;
 
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     private Blob profilePicture;
 
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     private Blob coverPicture;
 
     @ElementCollection(fetch = FetchType.EAGER)

@@ -15,6 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.repository.UserRepository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @Service
 public class UserService {
 
@@ -160,5 +163,10 @@ public class UserService {
     private byte[] blobToBytes(Blob blob) throws SQLException {
         if (blob == null) return null;
         return blob.getBytes(1, (int) blob.length());
+    }
+
+    @Transactional(readOnly = true)
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 }

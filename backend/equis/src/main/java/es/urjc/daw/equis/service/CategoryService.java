@@ -76,4 +76,24 @@ public class CategoryService {
         }
         categoryRepository.deleteById(id);
     }
+
+    @Transactional(readOnly = true)
+    public Category getByIdOrThrow(Long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+    }
+
+    @Transactional(readOnly = true)
+    public byte[] getImage(Long id) throws Exception {
+
+        Category category = categoryRepository.findById(id)
+                .orElseThrow();
+
+        if (category.getPicture() == null) {
+            return null;
+        }
+
+        return category.getPicture()
+                .getBytes(1, (int) category.getPicture().length());
+    }
 }

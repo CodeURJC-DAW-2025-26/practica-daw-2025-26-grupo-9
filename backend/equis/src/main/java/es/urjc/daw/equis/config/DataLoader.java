@@ -1,9 +1,14 @@
 package es.urjc.daw.equis.config;
 
+import java.io.InputStream;
+import java.sql.Blob;
 import java.util.List;
+
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -55,9 +60,18 @@ public class DataLoader {
             userRepo.saveAll(List.of(admin, user1, user2, user3));
 
             // 📂 CATEGORIES
-            Category tech = createCategory("Tecnología");
-            Category sports = createCategory("Deporte");
-            Category memes = createCategory("Memes");
+
+            Category tech = createCategory("Tecnología",
+                    "Todo sobre programación",
+                    "static/assets/images/groups/category-1.png");
+
+            Category sports = createCategory("Deporte",
+                    "Vida fitness",
+                    "static/assets/images/groups/category-2.jpg");
+
+            Category memes = createCategory("Memes",
+                    "Contenido random",
+                    "static/assets/images/groups/category-3.jpg");
 
             categoryRepo.saveAll(List.of(tech, sports, memes));
 
@@ -137,10 +151,27 @@ public class DataLoader {
         return u;
     }
 
-    private Category createCategory(String name) {
+     private Category createCategory(String name, String description,
+                                    String imagePath) {
+
         Category c = new Category();
         c.setName(name);
+        c.setDescription(description);
+        c.setPicture(loadImageAsBlob(imagePath));
+
         return c;
+    }
+
+    private Blob loadImageAsBlob(String path) {
+        try {
+            ClassPathResource resource = new ClassPathResource(path);
+            InputStream is = resource.getInputStream();
+            byte[] bytes = is.readAllBytes();
+            return new SerialBlob(bytes);
+        } catch (Exception e) {
+            System.err.println("⚠ No se pudo cargar imagen: " + path);
+            return null;
+        }
     }
 
     private Post createPost(String content, User user, Category category) {
