@@ -10,39 +10,43 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain filterChain(
-            HttpSecurity http,
-            CustomAuthenticationProvider customAuthenticationProvider) throws Exception {
+@Bean
+public SecurityFilterChain filterChain(
+        HttpSecurity http,
+        CustomAuthenticationProvider customAuthenticationProvider) throws Exception {
 
-        http.authenticationProvider(customAuthenticationProvider);
+    http.authenticationProvider(customAuthenticationProvider);
 
-        http
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/assets/**",
-                    "/login",
-                    "/register",
-                    "/error"
-                ).permitAll()
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/profile", true)
-                .failureUrl("/login?error")
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
-                .permitAll()
-            );
+    http
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers(
+                "/",
+                "/assets/**",
+                "/favicon.ico",
+                "/login",
+                "/register",
+                "/error"
+            ).permitAll()
+            .requestMatchers("/admin/**").hasRole("ADMIN")
+            .anyRequest().authenticated()
+        )
+        .formLogin(form -> form
+            .loginPage("/login")
+            .loginProcessingUrl("/login")
+            .defaultSuccessUrl("/profile", true)
+            .failureUrl("/login?error")
+            .permitAll()
+        )
+        .logout(logout -> logout
+            .logoutUrl("/logout")
+            .logoutSuccessUrl("/")   // 👈 aquí está la clave
+            .invalidateHttpSession(true)
+            .deleteCookies("JSESSIONID")
+            .permitAll()
+        );
 
-        return http.build();
-    }
-
+    return http.build();
+}
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

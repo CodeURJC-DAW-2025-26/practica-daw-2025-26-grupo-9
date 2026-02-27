@@ -1,35 +1,39 @@
-<!--Barra lateral-->
+<!-- Sidebar -->
 <div class="col-md-2 newsfeed-left-side sticky-top shadow-sm" id="sidebar-wrapper">
-    <div class="card newsfeed-user-card h-100">
-        <ul class="list-group list-group-flush newsfeed-left-sidebar">
+  <div class="card newsfeed-user-card h-100">
+    <ul class="list-group list-group-flush newsfeed-left-sidebar">
 
-            <li class="list-group-item d-flex justify-content-between align-items-center {{#homeActive}}sd-active{{/homeActive}}">
-                <a href="/" class="sidebar-item">
-                    <img src="/assets/images/icons/left-sidebar/home-icon-silhouette.png" alt="group"> Home
-                </a>
-            </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center {{#homeActive}}sd-active{{/homeActive}}">
+        <a href="/" class="sidebar-item">
+          <img src="/assets/images/icons/left-sidebar/home-icon-silhouette.png" alt="Home icon">
+          Inicio
+        </a>
+      </li>
 
-            <li class="list-group-item d-flex justify-content-between align-items-center {{#profileActive}}sd-active{{/profileActive}}">
-                <a href="/profile" class="sidebar-item">
-                    <img src="/assets/images/icons/left-sidebar/Person.png" alt="group"> Perfil
-                </a>
-            </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center {{#profileActive}}sd-active{{/profileActive}}">
+        <a href="/users/{{currentUser.id}}" class="sidebar-item">
+          <img src="/assets/images/icons/left-sidebar/Person.png" alt="Profile icon">
+          Perfil
+        </a>
+      </li>
 
-            {{#isAdmin}}
-            <li class="list-group-item d-flex justify-content-between align-items-center {{#adminActive}}sd-active{{/adminActive}}">
-                <a href="/admin" class="sidebar-item">
-                    <img src="/assets/images/icons/left-sidebar/group.png" alt="group"> Administrador
-                </a>
-            </li>
-            {{/isAdmin}}
+      {{#isAdmin}}
+      <li class="list-group-item d-flex justify-content-between align-items-center {{#adminActive}}sd-active{{/adminActive}}">
+        <a href="/admin" class="sidebar-item">
+          <img src="/assets/images/icons/left-sidebar/group.png" alt="Admin icon">
+          Administrador
+        </a>
+      </li>
+      {{/isAdmin}}
 
-            <li class="list-group-item d-flex justify-content-between align-items-center {{#categoriesActive}}sd-active{{/categoriesActive}}">
-                <a href="/categories" class="sidebar-item">
-                    <img src="/assets/images/icons/left-sidebar/team.png" alt="group"> Categorias
-                </a>
-            </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center {{#categoriesActive}}sd-active{{/categoriesActive}}">
+        <a href="/categories" class="sidebar-item">
+          <img src="/assets/images/icons/left-sidebar/team.png" alt="Categories icon">
+          Categorías
+        </a>
+      </li>
 
-        </ul>
-    </div>
+    </ul>
+  </div>
 </div>
-<!--Barra lateral-->
+<!-- /Sidebar -->

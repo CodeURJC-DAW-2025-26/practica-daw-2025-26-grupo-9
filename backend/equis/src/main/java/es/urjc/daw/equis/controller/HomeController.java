@@ -6,23 +6,21 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-
 import es.urjc.daw.equis.model.Category;
-import es.urjc.daw.equis.repository.LikeRepository;
+import es.urjc.daw.equis.model.Post;
+import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.repository.CategoryRepository;
+import es.urjc.daw.equis.repository.LikeRepository;
 import es.urjc.daw.equis.repository.PostRepository;
 import es.urjc.daw.equis.repository.UserRepository;
-import es.urjc.daw.equis.model.User;
-import es.urjc.daw.equis.model.Post;
 
 @Controller
 public class HomeController {
@@ -46,33 +44,34 @@ public HomeController(PostRepository postRepository,
 public String home(Model model,
                    @RequestParam(name = "page", defaultValue = "1") int page) {
 
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    boolean loggedIn = auth != null
+            && auth.isAuthenticated()
+            && !"anonymousUser".equals(auth.getName());
+
+    if (!loggedIn) {
+        return "presentation";
+    }
+
     int size = 10;
     if (page < 1) page = 1;
 
-    // ✅ Feed general: aplicamos el "algoritmo" sobre todas las publicaciones
     List<Post> allPosts = postRepository.findAll();
     List<Post> ordered = applyAlgorithm(allPosts);
-
     Page<Post> pageResult = sliceAsPage(ordered, page, size);
 
     model.addAttribute("posts", pageResult.getContent());
     model.addAttribute("nextPage", page + 1);
     model.addAttribute("hasNext", pageResult.hasNext());
 
-    // ✅ Lista de categorías (para el selector del formulario)
     List<Category> cats = categoryRepository.findAll();
     cats.forEach(c -> c.setPostsCount(postRepository.countByCategoryId(c.getId())));
     model.addAttribute("categories", cats);
 
-    // ✅ Categorías más populares (por nº de posts)
     model.addAttribute("topCategories", topCategories(5));
 
-    // currentUser ya lo aporta GlobalControllerAdvice, pero lo mantenemos compatible
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
-        User user = userRepository.findByEmail(auth.getName()).orElse(null);
-        model.addAttribute("currentUser", user);
-    }
+    User user = userRepository.findByEmail(auth.getName()).orElse(null);
+    model.addAttribute("currentUser", user);
 
     return "index";
 }
