@@ -1,10 +1,12 @@
 package es.urjc.daw.equis.controller;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,6 +44,7 @@ public class HomeController {
         this.categoryRepository = categoryRepository;
     }
 
+
     @GetMapping("/")
     public String home(Model model,
                        @RequestParam(name = "page", defaultValue = "1") int page) {
@@ -77,6 +80,7 @@ public class HomeController {
 
         return "index";
     }
+
 
     @GetMapping("/categories")
     public String categories(Model model) {
@@ -134,7 +138,7 @@ public class HomeController {
         List<Post> top = ordered.stream().limit(5).toList();
 
         List<String> labels = top.stream()
-                .map(Post::getContent)
+                .map(post -> post.getContent().replaceAll("\\?+$", ""))
                 .toList();
 
         List<Long> likes = top.stream()
@@ -151,31 +155,48 @@ public class HomeController {
         return "stats";
     }
 
+
     private List<Post> applyAlgorithm(List<Post> posts) {
+
         List<Post> copy = new ArrayList<>(posts);
 
         copy.forEach(post -> {
-            post.setLikesCount(likeRepository.countByPost(post));
-            if (post.getComments() != null) {
-                post.getComments().forEach(comment ->
-                        comment.setLikesCount(likeRepository.countByComment(comment))
-                );
-            }
+            long realLikes = likeRepository.countByPost(post);
+            post.setLikesCount(realLikes);
         });
 
-        copy.sort(Comparator
-                .comparingLong(Post::getLikesCount).reversed()
-                .thenComparing(Post::getDate, Comparator.nullsLast(Comparator.reverseOrder())));
+        copy.sort((p1, p2) -> {
+            long score1 = calculateScore(p1);
+            long score2 = calculateScore(p2);
+            return Long.compare(score2, score1);
+        });
 
         return copy;
     }
+
+    private long calculateScore(Post post) {
+
+        long likes = likeRepository.countByPost(post);
+        long comments = post.getComments() != null ? post.getComments().size() : 0;
+
+        long hoursSincePost = 0;
+        if (post.getDate() != null) {
+            hoursSincePost = ChronoUnit.HOURS
+                    .between(post.getDate(), LocalDateTime.now());
+        }
+
+        long freshnessScore = Math.max(0, 1000 - hoursSincePost);
+
+        return (likes * 3) + (comments * 2) + freshnessScore;
+    }
+
 
     private Page<Post> sliceAsPage(List<Post> ordered, int page1Based, int size) {
         int from = (page1Based - 1) * size;
         int to = Math.min(from + size, ordered.size());
         List<Post> content = from >= ordered.size() ? List.of() : ordered.subList(from, to);
 
-        return new org.springframework.data.domain.PageImpl<>(
+        return new PageImpl<>(
                 content,
                 PageRequest.of(Math.max(page1Based - 1, 0), size),
                 ordered.size()
@@ -185,7 +206,7 @@ public class HomeController {
     private List<Category> topCategories(int limit) {
         List<Category> cats = categoryRepository.findAll();
         cats.forEach(c -> c.setPostsCount(postRepository.countByCategoryId(c.getId())));
-        cats.sort(Comparator.comparingLong(Category::getPostsCount).reversed());
+        cats.sort((c1, c2) -> Long.compare(c2.getPostsCount(), c1.getPostsCount()));
         return cats.stream().limit(limit).toList();
     }
 }
