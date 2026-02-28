@@ -35,6 +35,9 @@ public class Comment {
     @Transient
     private long likesCount;
 
+    @Transient
+    private boolean owner;
+
     public Comment() {}
 
     public Comment(String content) {
@@ -46,7 +49,9 @@ public class Comment {
         this.date = LocalDateTime.now();
     }
 
+    // ============================
     // GETTERS / SETTERS
+    // ============================
 
     public Long getId() { return id; }
 
@@ -70,5 +75,14 @@ public class Comment {
 
     public String getCreatedAtHuman() {
         return this.date.format(FORMATTER);
+    }
+
+
+    public boolean isOwner() {
+        return owner;
+    }
+
+    public void setOwner(boolean owner) {
+        this.owner = owner;
     }
 }
