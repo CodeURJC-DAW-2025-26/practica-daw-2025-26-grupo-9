@@ -132,13 +132,11 @@ Solo si han cambiado.
 - **Usuario Admin**: usuario: `admin`, contraseña: `admin`
 - **Usuario Registrado**: usuario: `user`, contraseña: `user`
 
-### **Diagrama de Entidades de Base de Datos**
+### **Database Entities Diagram**
 
-Diagrama mostrando las entidades, sus campos y relaciones:
+Entity-Relationship diagram showing entities, attributes, and relationships:
 
-![Diagrama Entidad-Relación](images/database-diagram.png)
-
-> [Descripción opcional: Ej: "El diagrama muestra las 4 entidades principales: Usuario, Producto, Pedido y Categoría, con sus respectivos atributos y relaciones 1:N y N:M."]
+![Entity-Relationship Diagram](images/database-diagram.png)
 
 ### **Diagrama de Clases y Templates**
 
