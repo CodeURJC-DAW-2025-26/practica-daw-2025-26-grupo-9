@@ -61,6 +61,14 @@
 
                     {{#canManageProfile}}
                       <a href="/profile/edit" class="btn btn-sm btn-outline-primary">Editar perfil</a>
+                      <form action="/profile/delete" method="post" style="display:inline;">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                        <button type="submit"
+                                class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('¿Estás segura de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.')">
+                          Eliminar cuenta
+                        </button>
+                      </form>
                     {{/canManageProfile}}
                   </div>
 

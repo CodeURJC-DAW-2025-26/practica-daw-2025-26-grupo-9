@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import es.urjc.daw.equis.service.CommentService;
 import es.urjc.daw.equis.service.PostService;
 import es.urjc.daw.equis.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class ProfileController {
 
@@ -30,13 +32,26 @@ public class ProfileController {
     private final PostService postService;
     private final CommentService commentService;
 
-    public ProfileController(UserService userService, PostService postService, CommentService commentService) {
+    public ProfileController(UserService userService,
+                             PostService postService,
+                             CommentService commentService) {
         this.userService = userService;
         this.postService = postService;
         this.commentService = commentService;
     }
 
-        private void loadProfileData(User profileUser, User currentUser, Model model) {
+    private void addCsrfToken(HttpServletRequest request, Model model) {
+        CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
+        if (token != null) {
+            model.addAttribute("csrfToken", token.getToken());
+        }
+    }
+
+    private void loadProfileData(User profileUser,
+                                 User currentUser,
+                                 Model model,
+                                 HttpServletRequest request) {
+
         boolean isAdmin = currentUser != null
                 && currentUser.getRoles() != null
                 && currentUser.getRoles().contains("ADMIN");
@@ -54,6 +69,11 @@ public class ProfileController {
         var posts = postsPage.getContent();
         postService.enrichLikesCounts(posts);
 
+        for (Post post : posts) {
+            var comments = commentService.getCommentsByPost(post.getId());
+            commentService.enrichLikesCounts(comments);
+        }
+
         model.addAttribute("posts", posts);
         model.addAttribute("postsCount", postsPage.getTotalElements());
 
@@ -62,13 +82,15 @@ public class ProfileController {
                 .sum();
 
         model.addAttribute("commentsCount", commentsCount);
-    }   
 
-    // -------------------------
-    // GET: profile page
-    // -------------------------
+        addCsrfToken(request, model);
+    }
+
+    // GET PROFILE
     @GetMapping("/profile")
-    public String profile(Model model, Principal principal) {
+    public String profile(Model model,
+                          Principal principal,
+                          HttpServletRequest request) {
 
         if (principal == null) {
             return "redirect:/login";
@@ -79,64 +101,29 @@ public class ProfileController {
             return "redirect:/login";
         }
 
-        User profileUser = currentUser;
-
-        boolean isAdmin = currentUser.getRoles() != null
-                && currentUser.getRoles().contains("ADMIN");
-
-        model.addAttribute("currentUser", currentUser);
-        model.addAttribute("profileUser", profileUser);
-        model.addAttribute("isAdmin", isAdmin);
-        model.addAttribute("isOwnProfile", true);
-        model.addAttribute("canManageProfile", true);
-
-        Pageable pageable = PageRequest.of(0, 10);
-        var postsPage = postService.getPostsByUserId(profileUser.getId(), pageable);
-        var posts = postsPage.getContent();
-        postService.enrichLikesCounts(posts);
-        for (Post post : posts) {
-            var comments = commentService.getCommentsByPost(post.getId());
-            commentService.enrichLikesCounts(comments);
-        }
-
-        // No LikeService: if you still want likesCount, move it inside PostService
-        // (e.g., postService.enrichLikesCounts(posts)) or remove these fields from the view.
-        // Here we just send posts as-is.
-        model.addAttribute("posts", posts);
-        model.addAttribute("postsCount", postsPage.getTotalElements());
-
-        long commentsCount = posts.stream()
-                .mapToLong(p -> commentService.countByPostId(p.getId()))
-                .sum();
-
-        model.addAttribute("commentsCount", commentsCount);
-
+        loadProfileData(currentUser, currentUser, model, request);
         return "profile";
     }
 
-    // -------------------------
-    // GET: edit profile page
-    // -------------------------
-@GetMapping("/profile/edit")
-public String editProfile(Model model, Principal principal, HttpServletRequest request) {
+    // GET EDIT PROFILE
+    @GetMapping("/profile/edit")
+    public String editProfile(Model model,
+                              Principal principal,
+                              HttpServletRequest request) {
 
-    if (principal == null) {
-        return "redirect:/login";
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        User user = userService.getByEmailOrThrow(principal.getName());
+        model.addAttribute("user", user);
+
+        addCsrfToken(request, model);
+
+        return "editProfile";
     }
 
-    User user = userService.getByEmailOrThrow(principal.getName());
-    model.addAttribute("user", user);
-
-    CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
-    if (token != null) {
-        model.addAttribute("csrfToken", token.getToken());
-    }
-
-    return "editProfile";
-}
-    // -------------------------
-    // POST: update profile
-    // -------------------------
+    // POST EDIT PROFILE
     @PostMapping("/profile/edit")
     public String updateProfile(@RequestParam String name,
                                 @RequestParam String surname,
@@ -146,7 +133,8 @@ public String editProfile(Model model, Principal principal, HttpServletRequest r
                                 @RequestParam(required = false) MultipartFile profileImage,
                                 @RequestParam(required = false) MultipartFile coverImage,
                                 Principal principal,
-                                Model model) throws IOException, SQLException {
+                                Model model)
+            throws IOException, SQLException {
 
         if (principal == null) {
             return "redirect:/login";
@@ -167,16 +155,16 @@ public String editProfile(Model model, Principal principal, HttpServletRequest r
 
         } catch (IllegalArgumentException ex) {
             model.addAttribute("errorMessage", ex.getMessage());
-            model.addAttribute("user", userService.getByEmailOrThrow(principal.getName()));
+            model.addAttribute("user",
+                    userService.getByEmailOrThrow(principal.getName()));
             return "editProfile";
         }
     }
 
-    // -------------------------
-    // GET: profile image bytes
-    // -------------------------
+    // GET PROFILE IMAGE
     @GetMapping("/user/{id}/profile-image")
-    public ResponseEntity<byte[]> getProfileImage(@PathVariable Long id) throws SQLException {
+    public ResponseEntity<byte[]> getProfileImage(@PathVariable Long id)
+            throws SQLException {
 
         byte[] img = userService.getProfilePictureBytes(id);
 
@@ -189,11 +177,10 @@ public String editProfile(Model model, Principal principal, HttpServletRequest r
                 .body(img);
     }
 
-    // -------------------------
-    // GET: cover image bytes
-    // -------------------------
+    // GET COVER IMAGE
     @GetMapping("/user/{id}/cover-image")
-    public ResponseEntity<byte[]> getCoverImage(@PathVariable Long id) throws SQLException {
+    public ResponseEntity<byte[]> getCoverImage(@PathVariable Long id)
+            throws SQLException {
 
         byte[] img = userService.getCoverPictureBytes(id);
 
@@ -206,11 +193,13 @@ public String editProfile(Model model, Principal principal, HttpServletRequest r
                 .body(img);
     }
 
+    // GET USER PROFILE
     @GetMapping("/users/{id}")
     public String viewUserProfile(@PathVariable Long id,
-                                @RequestParam(required = false) String from,
-                                Principal principal,
-                                Model model) {
+                                  @RequestParam(required = false) String from,
+                                  Principal principal,
+                                  Model model,
+                                  HttpServletRequest request) {
 
         User profileUser = userService.getByIdOrThrow(id);
 
@@ -219,7 +208,7 @@ public String editProfile(Model model, Principal principal, HttpServletRequest r
             currentUser = userService.findByEmail(principal.getName()).orElse(null);
         }
 
-        loadProfileData(profileUser, currentUser, model);
+        loadProfileData(profileUser, currentUser, model, request);
 
         boolean fromAdmin = "admin".equals(from);
 
@@ -229,5 +218,25 @@ public String editProfile(Model model, Principal principal, HttpServletRequest r
         model.addAttribute("categoriesActive", false);
 
         return "profile";
+    }
+
+    // POST DELETE PROFILE
+    @PostMapping("/profile/delete")
+    public String deleteProfile(Principal principal,
+                                HttpServletRequest request) {
+
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            userService.deleteUser(principal.getName());
+            SecurityContextHolder.clearContext();
+            request.getSession().invalidate();
+            return "redirect:/login?deleted";
+
+        } catch (Exception ex) {
+            return "redirect:/profile?deleteError";
+        }
     }
 }

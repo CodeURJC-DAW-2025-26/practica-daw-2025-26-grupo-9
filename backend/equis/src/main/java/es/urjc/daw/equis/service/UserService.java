@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import javax.sql.rowset.serial.SerialBlob;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,9 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.repository.UserRepository;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 @Service
 public class UserService {
@@ -168,5 +167,14 @@ public class UserService {
     @Transactional(readOnly = true)
     public Page<User> findAll(Pageable pageable) {
         return userRepository.findAll(pageable);
+    }
+
+    @Transactional
+    public void deleteUser(String email) {
+
+        User user = getByEmailOrThrow(email);
+        Long userId = user.getId();
+
+        userRepository.deleteById(userId);
     }
 }
