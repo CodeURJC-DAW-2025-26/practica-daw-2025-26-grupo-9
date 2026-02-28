@@ -175,6 +175,7 @@
                                                                 </a>
                                                                 <div class="media-body">
                                                                     <form action="/posts/{{id}}/comments" method="post" role="form">
+                                                                        <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
                                                                         <div class="row">
                                                                             <div class="col-md-12">
                                                                                 <div class="input-group">
@@ -190,7 +191,7 @@
                                                             </li>
 
                                                             <!-- Comments list -->
-                                                            {{#comments}}
+                                                           {{#comments}}
                                                             <li class="media">
                                                                 <a href="/users/{{user.id}}" class="pull-left">
                                                                     {{#user.profilePictureUrl}}
@@ -200,19 +201,35 @@
                                                                         <img src="/assets/images/users/user-2.jpg" alt="" class="img-circle">
                                                                     {{/user.profilePictureUrl}}
                                                                 </a>
+
                                                                 <div class="media-body">
-                                                                    <div class="d-flex justify-content-between align-items-center w-100">
-                                                                        <strong class="text-gray-dark">
-                                                                            <a href="/users/{{user.id}}" class="fs-8">{{user.nickname}}</a>
-                                                                        </strong>
-                                                                    </div>
+                                                                    <strong>
+                                                                        <a href="/users/{{user.id}}">{{user.nickname}}</a>
+                                                                    </strong>
+
                                                                     <span class="d-block comment-created-time">{{createdAtHuman}}</span>
-                                                                    <p class="fs-8 pt-2">{{content}}</p>
-                                                                    <div class="mt-1">
+
+                                                                    <p>{{content}}</p>
+
+                                                                    <div>
                                                                         <a href="/posts/comments/{{id}}/like" class="post-card-buttons">
                                                                             <i class='bx bxs-like mr-1'></i> {{likesCount}}
                                                                         </a>
                                                                     </div>
+
+                                                                    {{#owner}}
+                                                                    <form action="/posts/comments/{{id}}/edit" method="post" class="d-inline">
+                                                                        <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
+                                                                        <input type="text" name="content" value="{{content}}" required>
+                                                                        <button type="submit">Editar</button>
+                                                                    </form>
+
+                                                                    <form action="/posts/comments/{{id}}/delete" method="post" class="d-inline">
+                                                                        <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
+                                                                        <button type="submit">Borrar</button>
+                                                                    </form>
+                                                                    {{/owner}}
+
                                                                 </div>
                                                             </li>
                                                             {{/comments}}
