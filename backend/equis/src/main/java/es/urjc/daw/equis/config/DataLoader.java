@@ -43,18 +43,22 @@ public class DataLoader {
             // 👤 USERS
             User admin = createUser("admin@equis.com", "Admin", "Root",
                     "el-bicho", "Administrador del sistema",
+                    "static/assets/images/users/user-2.jpg",
                     encoder.encode("admin"), List.of("ADMIN"));
 
             User user1 = createUser("user@equis.com", "User", "Normal",
                     "murcia-power", "Usuario de prueba",
+                    "static/assets/images/users/user-4.jpg",
                     encoder.encode("user"), List.of("USER"));
 
             User user2 = createUser("maria@equis.com", "Maria", "Lopez",
                     "fitness-girl", "Amante del deporte",
+                    "static/assets/images/users/user-1.jpg",
                     encoder.encode("1234"), List.of("USER"));
 
             User user3 = createUser("carlos@equis.com", "Carlos", "Perez",
                     "dev-life", "Spring Boot enjoyer",
+                    "static/assets/images/users/user-3.jpg",
                     encoder.encode("1234"), List.of("USER"));
 
             userRepo.saveAll(List.of(admin, user1, user2, user3));
@@ -137,6 +141,7 @@ public class DataLoader {
 
     private User createUser(String email, String name, String surname,
                             String nickname, String description,
+                            String imageURL,
                             String password, List<String> roles) {
 
         User u = new User();
@@ -147,6 +152,13 @@ public class DataLoader {
         u.setDescription(description);
         u.setEncodedPassword(password);
         u.setRoles(roles);
+
+        u.setProfilePicture(loadImageAsBlob(imageURL));
+
+        // Cover image by default
+        u.setCoverPicture(
+            loadImageAsBlob("static/assets/images/users/cover/cover-1.gif")
+        );
 
         return u;
     }
