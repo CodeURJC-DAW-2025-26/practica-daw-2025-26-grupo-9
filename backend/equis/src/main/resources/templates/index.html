@@ -41,14 +41,14 @@
                         <ul class="list-unstyled" style="margin-bottom: 0;">
                             <li class="media post-form w-shadow">
                                 <div class="media-body">
-                                    <form action="/posts" method="post" enctype="multipart/form-data">
+                                    <form action="/posts/newPost" method="post" enctype="multipart/form-data">
                                         <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
                                         <div class="form-group post-input">
                                             <textarea class="form-control" id="postForm" name="content" rows="2"
                                                       placeholder="What's on your mind, {{currentUser.nickname}}?"></textarea>
                                         </div>
                                         <div class="form-group">
-                                            <select class="form-control" name="categoryId">
+                                            <select class="form-control" name="category_id">
                                                 {{#categories}}
                                                     <option value="{{id}}">{{name}}</option>
                                                 {{/categories}}
@@ -96,7 +96,7 @@
                                                             <div class="col-md-2">
                                                                 <i class='bx bx-bookmark-plus post-option-icon'></i>
                                                             </div>
-                                                            <div class="col-md-10">
+                                                            <div class=  "col-md-10">
                                                                 <span class="fs-9">Save post</span>
                                                                 <small id="savePost" class="form-text text-muted">Add this to your saved items</small>
                                                             </div>
@@ -135,11 +135,11 @@
                                     <p>{{content}}</p>
                                 </div>
 
-                                {{#pictureUrl}}
+                                {{#picture}}
                                 <div class="d-block mt-3">
-                                    <img src="{{pictureUrl}}" class="post-content" alt="post image">
+                                    <img src="/posts/post/{{id}}/image" class="post-content" alt="post image">
                                 </div>
-                                {{/pictureUrl}}
+                                {{/picture}}
 
                                 <div class="mb-3">
                                     <div class="argon-reaction">
