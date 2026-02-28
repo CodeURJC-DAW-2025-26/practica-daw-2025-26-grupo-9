@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Estadísticas</title>
+
+  <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/media.css">
+</head>
+
+<body>
+
+{{>partials/navbar}}
+
+<div class="container-fluid">
+  <div class="row">
+
+    {{>partials/sidebar}}
+
+    <div class="col-md-10 mt-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h4 class="mb-4">Posts con más Likes</h4>
+          <canvas id="likesChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="/assets/js/jquery/jquery-3.3.1.min.js"></script>
+<script src="/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const labels = {{{labels}}};
+  const data = {{{likes}}};
+
+  new Chart(document.getElementById('likesChart'), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Número de Likes',
+        data: data,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
