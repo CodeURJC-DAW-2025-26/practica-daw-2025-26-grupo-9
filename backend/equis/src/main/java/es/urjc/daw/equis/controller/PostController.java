@@ -5,13 +5,8 @@ import java.sql.Blob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.urjc.daw.equis.model.Comment;
@@ -32,8 +27,10 @@ public class PostController {
     private final LikeRepository likeRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+
     @Autowired
     private PostService postService;
+
     public PostController(PostRepository postRepository,
                           LikeRepository likeRepository,
                           UserRepository userRepository,
@@ -44,22 +41,23 @@ public class PostController {
         this.commentRepository = commentRepository;
     }
 
-
     @PostMapping("/newPost")
     public String newPost(@RequestParam String content,
-                    @RequestParam Long category_id,
-                    @RequestParam(required = false)  MultipartFile picture,
-                    Authentication auth) throws Exception{
-        
+                          @RequestParam Long category_id,
+                          @RequestParam(required = false) MultipartFile picture,
+                          Authentication auth) throws Exception {
+
         if (auth == null || auth.getName().equals("anonymousUser")) {
             return "redirect:/login";
         }
-        System.out.println("entra a guardar el post");
+
         Post post = new Post();
-        postService.save(post, picture, auth, category_id,content);
-        System.out.println("sale del postservice");
+        postService.save(post, picture, auth, category_id, content);
+
         return "redirect:/";
     }
+
+
     @GetMapping("/post/{id}/image")
     public ResponseEntity<byte[]> getPostImage(@PathVariable Long id) throws Exception {
 
@@ -78,10 +76,11 @@ public class PostController {
                 .body(imageBytes);
     }
 
+
     @GetMapping("/{id}/like")
-    public String togglePostLike(@PathVariable Long id, 
-                                Authentication auth,
-                                @RequestParam(required = false) String redirect) {
+    public String togglePostLike(@PathVariable Long id,
+                                 Authentication auth,
+                                 @RequestParam(required = false) String redirect) {
 
         if (auth == null || auth.getName().equals("anonymousUser")) {
             return "redirect:/login";
@@ -95,28 +94,23 @@ public class PostController {
         }
 
         likeRepository.findByUserAndPost(user, post)
-            .ifPresentOrElse(
-                likeRepository::delete,
-                () -> {
-                    Like like = new Like();
-                    like.setUser(user);
-                    like.setPost(post);
-                    likeRepository.save(like);
-                }
-            );
+                .ifPresentOrElse(
+                        likeRepository::delete,
+                        () -> {
+                            Like like = new Like();
+                            like.setUser(user);
+                            like.setPost(post);
+                            likeRepository.save(like);
+                        }
+                );
 
-        // Redirigir según el parámetro
-        if ("profile".equals(redirect)) {
-            return "redirect:/profile";
-        } else {
-            return "redirect:/";
-        }
+        return "redirect:/";
     }
+
 
     @GetMapping("/comments/{id}/like")
     public String toggleCommentLike(@PathVariable Long id,
-                                    Authentication auth,
-                                    @RequestParam(required = false) String redirect) {
+                                    Authentication auth) {
 
         if (auth == null || auth.getName().equals("anonymousUser")) {
             return "redirect:/login";
@@ -130,21 +124,99 @@ public class PostController {
         }
 
         likeRepository.findByUserAndComment(user, comment)
-            .ifPresentOrElse(
-                likeRepository::delete,
-                () -> {
-                    Like like = new Like();
-                    like.setUser(user);
-                    like.setComment(comment);
-                    likeRepository.save(like);
-                }
-            );
+                .ifPresentOrElse(
+                        likeRepository::delete,
+                        () -> {
+                            Like like = new Like();
+                            like.setUser(user);
+                            like.setComment(comment);
+                            likeRepository.save(like);
+                        }
+                );
 
-        if ("profile".equals(redirect)) {
-            return "redirect:/profile";
-        } else {
-            return "redirect:/";
-        }
+        return "redirect:/";
     }
 
+
+    @PostMapping("/{postId}/comments")
+    public String addComment(@PathVariable Long postId,
+                             @RequestParam String content,
+                             Authentication auth) {
+
+        if (auth == null || auth.getName().equals("anonymousUser")) {
+            return "redirect:/login";
+        }
+
+        Post post = postRepository.findById(postId).orElse(null);
+        User user = userRepository.findByEmail(auth.getName()).orElse(null);
+
+        if (post == null || user == null) {
+            return "redirect:/";
+        }
+
+        Comment comment = new Comment();
+        comment.setContent(content);
+        comment.setPost(post);
+        comment.setUser(user);
+
+        commentRepository.save(comment);
+
+        return "redirect:/";
+    }
+
+
+    @PostMapping("/comments/{id}/edit")
+    public String editComment(@PathVariable Long id,
+                              @RequestParam String content,
+                              Authentication auth) {
+
+        if (auth == null || auth.getName().equals("anonymousUser")) {
+            return "redirect:/login";
+        }
+
+        Comment comment = commentRepository.findById(id).orElse(null);
+        User user = userRepository.findByEmail(auth.getName()).orElse(null);
+
+        if (comment == null || user == null) {
+            return "redirect:/";
+        }
+
+        if (!comment.getUser().getId().equals(user.getId())) {
+            return "redirect:/";
+        }
+
+        comment.setContent(content);
+        commentRepository.save(comment);
+
+        return "redirect:/";
+    }
+
+
+    @PostMapping("/comments/{id}/delete")
+    public String deleteComment(@PathVariable Long id,
+                                Authentication auth) {
+
+        if (auth == null || auth.getName().equals("anonymousUser")) {
+            return "redirect:/login";
+        }
+
+        Comment comment = commentRepository.findById(id).orElse(null);
+        User user = userRepository.findByEmail(auth.getName()).orElse(null);
+
+        if (comment == null || user == null) {
+            return "redirect:/";
+        }
+
+        boolean isOwner = comment.getUser().getId().equals(user.getId());
+        boolean isAdmin = user.getRoles() != null &&
+                          user.getRoles().contains("ADMIN");
+
+        if (!isOwner && !isAdmin) {
+            return "redirect:/";
+        }
+
+        commentRepository.delete(comment);
+
+        return "redirect:/";
+    }
 }

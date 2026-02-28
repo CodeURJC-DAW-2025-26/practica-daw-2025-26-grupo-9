@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.urjc.daw.equis.model.Category;
+import es.urjc.daw.equis.model.Comment;
 import es.urjc.daw.equis.model.Post;
 import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.repository.CategoryRepository;
@@ -44,7 +45,6 @@ public class HomeController {
         this.categoryRepository = categoryRepository;
     }
 
-
     @GetMapping("/")
     public String home(Model model,
                        @RequestParam(name = "page", defaultValue = "1") int page) {
@@ -63,6 +63,21 @@ public class HomeController {
 
         List<Post> allPosts = postRepository.findAll();
         List<Post> ordered = applyAlgorithm(allPosts);
+
+        // 🔥 NUEVO: marcar owner en comentarios
+        User currentUser = userRepository.findByEmail(auth.getName()).orElse(null);
+
+        for (Post post : ordered) {
+            if (post.getComments() != null) {
+                for (Comment comment : post.getComments()) {
+                    boolean isOwner = comment.getUser() != null
+                            && currentUser != null
+                            && comment.getUser().getId().equals(currentUser.getId());
+                    comment.setOwner(isOwner);
+                }
+            }
+        }
+
         Page<Post> pageResult = sliceAsPage(ordered, page, size);
 
         model.addAttribute("posts", pageResult.getContent());
@@ -74,13 +89,10 @@ public class HomeController {
         model.addAttribute("categories", cats);
 
         model.addAttribute("topCategories", topCategories(5));
-
-        User user = userRepository.findByEmail(auth.getName()).orElse(null);
-        model.addAttribute("currentUser", user);
+        model.addAttribute("currentUser", currentUser);
 
         return "index";
     }
-
 
     @GetMapping("/categories")
     public String categories(Model model) {
@@ -109,6 +121,24 @@ public class HomeController {
 
         List<Post> posts = category.getPosts() != null ? category.getPosts() : List.of();
         List<Post> ordered = applyAlgorithm(posts);
+
+        // 🔥 NUEVO: marcar owner en comentarios también aquí
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = auth != null
+                ? userRepository.findByEmail(auth.getName()).orElse(null)
+                : null;
+
+        for (Post post : ordered) {
+            if (post.getComments() != null) {
+                for (Comment comment : post.getComments()) {
+                    boolean isOwner = comment.getUser() != null
+                            && currentUser != null
+                            && comment.getUser().getId().equals(currentUser.getId());
+                    comment.setOwner(isOwner);
+                }
+            }
+        }
+
         Page<Post> pageResult = sliceAsPage(ordered, page, size);
 
         model.addAttribute("category", category);
@@ -116,10 +146,10 @@ public class HomeController {
         model.addAttribute("nextPage", page + 1);
         model.addAttribute("hasNext", pageResult.hasNext());
         model.addAttribute("topCategories", topCategories(10));
+        model.addAttribute("currentUser", currentUser);
 
         return "category";
     }
-
 
     @GetMapping("/stats")
     public String stats(Model model) throws Exception {
@@ -155,15 +185,22 @@ public class HomeController {
         return "stats";
     }
 
-
     private List<Post> applyAlgorithm(List<Post> posts) {
 
         List<Post> copy = new ArrayList<>(posts);
 
         copy.forEach(post -> {
-            long realLikes = likeRepository.countByPost(post);
-            post.setLikesCount(realLikes);
+
+    long realLikes = likeRepository.countByPost(post);
+    post.setLikesCount(realLikes);
+
+    if (post.getComments() != null) {
+        post.getComments().forEach(comment -> {
+            long commentLikes = likeRepository.countByComment(comment);
+            comment.setLikesCount(commentLikes);
         });
+        }
+    });
 
         copy.sort((p1, p2) -> {
             long score1 = calculateScore(p1);
@@ -189,7 +226,6 @@ public class HomeController {
 
         return (likes * 3) + (comments * 2) + freshnessScore;
     }
-
 
     private Page<Post> sliceAsPage(List<Post> ordered, int page1Based, int size) {
         int from = (page1Based - 1) * size;
