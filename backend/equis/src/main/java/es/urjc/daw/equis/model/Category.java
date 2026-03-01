@@ -24,6 +24,9 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Post> posts;
 
+    @Column(name = "image_type")
+    private String imageType;   
+
     @Transient
     private long postsCount;
 
@@ -36,6 +39,14 @@ public class Category {
     }
 
     // GETTERS / SETTERS
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
+    }
 
     @Transient
     public boolean isGeneral() {

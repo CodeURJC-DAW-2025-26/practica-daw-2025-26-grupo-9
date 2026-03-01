@@ -51,25 +51,6 @@ public class CategoryService {
     }
 
     @Transactional
-    public Category createCategory(String name, String description) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Category name cannot be empty");
-        }
-
-        String normalizedName = name.trim();
-
-        if (categoryRepository.existsByNameIgnoreCase(normalizedName)) {
-            throw new IllegalArgumentException("Category already exists: " + normalizedName);
-        }
-
-        Category category = new Category();
-        category.setName(normalizedName);
-        category.setDescription(description != null ? description.trim() : null);
-
-        return categoryRepository.save(category);
-    }
-
-    @Transactional
     public Category renameCategory(Long id, String newName, String newDescription) {
         if (newName == null || newName.trim().isEmpty()) {
             throw new IllegalArgumentException("Category name cannot be empty");
@@ -166,57 +147,77 @@ public class CategoryService {
         return postRepository.findByCategoryId(id);
     }
 
-    @Transactional
-    public Category updateCategory(Long id,
-                                    String name,
-                                    String description,
-                                    MultipartFile image)
-            throws Exception {
+@Transactional
+public Category updateCategory(Long id,
+                                String name,
+                                String description,
+                                MultipartFile image)
+        throws Exception {
 
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
-        // Actualizar campos básicos
-        category.setName(name.trim());
-        category.setDescription(description);
+    Category category = categoryRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Category not found"));
 
-        // Actualizar imagen solo si se sube nueva
-        if (image != null && !image.isEmpty()) {
-            category.setPicture(
-                new javax.sql.rowset.serial.SerialBlob(image.getBytes())
-            );
+    // Actualizar campos básicos
+    category.setName(name.trim());
+    category.setDescription(description);
+
+    // Actualizar imagen solo si se sube nueva
+    if (image != null && !image.isEmpty()) {
+
+        String contentType = image.getContentType();
+
+        // Validar PNG o JPG
+        if (!"image/png".equals(contentType) &&
+            !"image/jpeg".equals(contentType)) {
+            throw new IllegalArgumentException("Solo se permiten PNG o JPG");
         }
 
-        return categoryRepository.save(category);
+        category.setPicture(new javax.sql.rowset.serial.SerialBlob(image.getBytes()));
+        category.setImageType(contentType); // ← ESTO FALTABA
     }
 
-    public void createCategory(String name,
-                           String description,
-                           MultipartFile image) {
-
-    try {
-
-        name = name.trim();
-
-        if (name.isBlank()) {
-            throw new IllegalArgumentException("El nombre no puede estar vacío");
-        }
-
-        if (categoryRepository.existsByNameIgnoreCase(name)) {
-            throw new IllegalArgumentException("Ya existe una categoría con ese nombre");
-        }
-
-        Category category = new Category();
-        category.setName(name);
-        category.setDescription(description != null ? description.trim() : "");
-
-        if (image != null && !image.isEmpty()) {
-            category.setPicture(new SerialBlob(image.getBytes()));
-        }
-
-        categoryRepository.save(category);
-
-    } catch (Exception e) {
-        throw new RuntimeException("Error creando categoría", e);
-    }
+    return categoryRepository.save(category);
 }
+
+    @Transactional
+    public void createCategory(String name,
+                            String description,
+                            MultipartFile image) {
+
+        try {
+
+            name = name.trim();
+
+            if (name.isBlank()) {
+                throw new IllegalArgumentException("El nombre no puede estar vacío");
+            }
+
+            if (categoryRepository.existsByNameIgnoreCase(name)) {
+                throw new IllegalArgumentException("Ya existe una categoría con ese nombre");
+            }
+
+            Category category = new Category();
+            category.setName(name);
+            category.setDescription(description != null ? description.trim() : "");
+
+            if (image != null && !image.isEmpty()) {
+
+                String contentType = image.getContentType();
+
+                // Validar solo PNG y JPG
+                if (!"image/png".equals(contentType) &&
+                    !"image/jpeg".equals(contentType)) {
+                    throw new IllegalArgumentException("Solo se permiten imágenes PNG o JPG");
+                }
+
+                category.setPicture(new SerialBlob(image.getBytes()));
+                category.setImageType(image.getContentType());
+            }
+
+            categoryRepository.save(category);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error creando categoría", e);
+        }
+    }
 }

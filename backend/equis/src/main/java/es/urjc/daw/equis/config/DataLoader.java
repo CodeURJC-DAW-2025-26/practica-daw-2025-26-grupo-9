@@ -170,13 +170,27 @@ public class DataLoader {
         return u;
     }
 
-     private Category createCategory(String name, String description,
+    private Category createCategory(String name,
+                                    String description,
                                     String imagePath) {
 
         Category c = new Category();
+
         c.setName(name);
         c.setDescription(description);
-        c.setPicture(loadImageAsBlob(imagePath));
+
+        // Cargar imagen real desde resources
+        Blob imageBlob = loadImageAsBlob(imagePath);
+        c.setPicture(imageBlob);
+
+        // Detectar tipo según extensión
+        if (imagePath.endsWith(".png")) {
+            c.setImageType("image/png");
+        } else if (imagePath.endsWith(".jpg") || imagePath.endsWith(".jpeg")) {
+            c.setImageType("image/jpeg");
+        } else {
+            c.setImageType("image/jpeg"); // fallback
+        }
 
         return c;
     }
