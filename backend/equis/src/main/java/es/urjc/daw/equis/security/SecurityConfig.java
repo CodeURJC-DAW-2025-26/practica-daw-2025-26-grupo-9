@@ -25,7 +25,9 @@ public SecurityFilterChain filterChain(
                 "/favicon.ico",
                 "/login",
                 "/register",
-                "/error"
+                "/error",
+                "/user/*/profile-image",
+                "/posts/post/*/image"
             ).permitAll()
             .requestMatchers("/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated()

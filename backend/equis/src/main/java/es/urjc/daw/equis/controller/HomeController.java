@@ -47,16 +47,9 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model,
-                       @RequestParam(name = "page", defaultValue = "1") int page) {
+                    @RequestParam(name = "page", defaultValue = "1") int page) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        boolean loggedIn = auth != null
-                && auth.isAuthenticated()
-                && !"anonymousUser".equals(auth.getName());
-
-        if (!loggedIn) {
-            return "presentation";
-        }
 
         int size = 10;
         if (page < 1) page = 1;
@@ -64,8 +57,9 @@ public class HomeController {
         List<Post> allPosts = postRepository.findAll();
         List<Post> ordered = applyAlgorithm(allPosts);
 
-        // 🔥 NUEVO: marcar owner en comentarios
-        User currentUser = userRepository.findByEmail(auth.getName()).orElse(null);
+        User currentUser = userRepository
+                .findByEmail(auth.getName())
+                .orElse(null);
 
         for (Post post : ordered) {
             if (post.getComments() != null) {
@@ -83,12 +77,6 @@ public class HomeController {
         model.addAttribute("posts", pageResult.getContent());
         model.addAttribute("nextPage", page + 1);
         model.addAttribute("hasNext", pageResult.hasNext());
-
-        List<Category> cats = categoryRepository.findAll();
-        cats.forEach(c -> c.setPostsCount(postRepository.countByCategoryId(c.getId())));
-        model.addAttribute("categories", cats);
-
-        model.addAttribute("topCategories", topCategories(5));
         model.addAttribute("currentUser", currentUser);
 
         return "index";
@@ -160,7 +148,7 @@ public class HomeController {
                 && !"anonymousUser".equals(auth.getName());
 
         if (!loggedIn) {
-            return "presentation";
+            return "redirect:/login";
         }
 
         List<Post> allPosts = postRepository.findAll();
