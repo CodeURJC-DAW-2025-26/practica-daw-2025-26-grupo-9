@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import es.urjc.daw.equis.model.Category;
 import es.urjc.daw.equis.model.Post;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
@@ -19,6 +20,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     long countByCategoryId(Long categoryId);
 
+    List<Post> findByCategory(Category category);
+
+    long countByCategory(Category category);
+    
     List<Post> findByCategoryId(Long categoryId);
 
     void deleteByCategoryId(Long categoryId);
