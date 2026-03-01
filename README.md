@@ -76,10 +76,10 @@ A general feed prioritizes posts based on user interaction and recency, improvin
 📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=x91MPoITQ3I)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web.
 
-### **Diagrama de Navegación**
-Diagrama que muestra cómo se navega entre las diferentes páginas de la aplicación:
+### **Navigation Diagram**
+Diagram showing how to navigate between the different pages of the application:
 
-![Diagrama de Navegación](images/navigation-diagram.png)
+![Diagrama de Navegación](images/navigation-diagram.jpg)
 
 > [Descripción opcional del flujo de navegación: Ej: "El usuario puede acceder desde la página principal a todas las secciones mediante el menú de navegación. Los usuarios anónimos solo tienen acceso a las páginas públicas, mientras que los registrados pueden acceder a su perfil y panel de usuario."]
 
