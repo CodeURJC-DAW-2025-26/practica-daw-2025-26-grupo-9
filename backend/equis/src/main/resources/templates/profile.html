@@ -103,19 +103,23 @@
                         <li class="media post-form w-shadow">
                           <div class="media-body">
                             <form action="/posts/newPost" method="post" enctype="multipart/form-data">
-                              <input type="hidden" name="_csrf" value="{{csrfToken}}">
-                              <input type="hidden" name="category_id" value="1">
-
+                              <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
+                            
                               <div class="form-group post-input">
-                                <textarea class="form-control" id="postForm" name="content" rows="2"
-                                          placeholder="What's on your mind?"></textarea>
+                                <textarea class="form-control" id="postForm" name="content" rows="2" placeholder="What's on your mind?"></textarea>
                               </div>
-
+                              <div class="form-group">
+                                <select class="form-control" name="category_id">
+                                  {{#categories}}
+                                  <option value="{{id}}">{{name}}</option>
+                                  {{/categories}}
+                                </select>
+                              </div>
                               <div class="row post-form-group">
                                 <div class="col-md-9">
                                   <label class="btn btn-link post-form-btn btn-sm mb-0">
-                                    <i class='bx bx-images'></i> <span>Photo/Video</span>
-                                    <input type="file" name="picture" accept="image/*,video/*" hidden>
+                                    <img src="/assets/images/icons/theme/post-image.png" alt="post form icon"> <span>Photo</span>
+                                    <input type="file" name="picture" accept="image/*" hidden>
                                   </label>
                                 </div>
                                 <div class="col-md-3 text-right">

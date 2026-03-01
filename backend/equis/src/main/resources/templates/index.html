@@ -46,6 +46,7 @@
                                         <div class="form-group post-input">
                                             {{#currentUser}}
                                             <textarea class="form-control"
+                                                    id="postForm"
                                                     name="content"
                                                     rows="2"
                                                     placeholder="What's on your mind, {{nickname}}?"></textarea>
@@ -53,6 +54,7 @@
 
                                             {{^currentUser}}
                                             <textarea class="form-control"
+                                                    id="postForm"
                                                     rows="2"
                                                     placeholder="Inicia sesión para publicar"
                                                     disabled></textarea>
@@ -69,7 +71,7 @@
                                             <div class="col-md-9">
                                                 <label class="btn btn-link post-form-btn btn-sm mb-0">
                                                     <img src="/assets/images/icons/theme/post-image.png" alt="post form icon"> <span>Photo/Video</span>
-                                                    <input type="file" name="picture" accept="image/*,video/*" hidden>
+                                                    <input type="file" name="picture" accept="image/*" hidden>
                                                 </label>
                                             </div>
                                             <div class="col-md-3 text-right">
