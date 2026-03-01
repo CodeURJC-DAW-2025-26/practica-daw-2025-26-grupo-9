@@ -44,8 +44,19 @@
                                     <form action="/posts/newPost" method="post" enctype="multipart/form-data">
                                         <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
                                         <div class="form-group post-input">
-                                            <textarea class="form-control" id="postForm" name="content" rows="2"
-                                                      placeholder="What's on your mind, {{currentUser.nickname}}?"></textarea>
+                                            {{#currentUser}}
+                                            <textarea class="form-control"
+                                                    name="content"
+                                                    rows="2"
+                                                    placeholder="What's on your mind, {{nickname}}?"></textarea>
+                                            {{/currentUser}}
+
+                                            {{^currentUser}}
+                                            <textarea class="form-control"
+                                                    rows="2"
+                                                    placeholder="Inicia sesión para publicar"
+                                                    disabled></textarea>
+                                            {{/currentUser}}
                                         </div>
                                         <div class="form-group">
                                             <select class="form-control" name="category_id">
@@ -159,9 +170,10 @@
                                                         <ul class="media-list comments-list">
 
                                                             <!-- Comment form -->
+                                                            {{#currentUser}}
                                                             <li class="media comment-form">
                                                                 <a href="#" class="pull-left">
-                                                                    <img src="/user/{{currentUser.id}}/profile-image"
+                                                                    <img src="/user/{{id}}/profile-image"
                                                                         class="mr-3 post-user-image">
                                                                 </a>
                                                                 <div class="media-body">
@@ -170,9 +182,15 @@
                                                                         <div class="row">
                                                                             <div class="col-md-12">
                                                                                 <div class="input-group">
-                                                                                    <input type="text" name="content" class="form-control comment-input" placeholder="Write a comment...">
+                                                                                    <input type="text" name="content"
+                                                                                        class="form-control comment-input"
+                                                                                        placeholder="Write a comment...">
                                                                                     <div class="input-group-btn">
-                                                                                        <button type="submit" class="btn comment-form-btn" title="Send"><i class='bx bx-send'></i></button>
+                                                                                        <button type="submit"
+                                                                                                class="btn comment-form-btn"
+                                                                                                title="Send">
+                                                                                            <i class='bx bx-send'></i>
+                                                                                        </button>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -180,6 +198,18 @@
                                                                     </form>
                                                                 </div>
                                                             </li>
+                                                            {{/currentUser}}
+
+                                                            {{^currentUser}}
+                                                            <li class="media comment-form">
+                                                                <div class="media-body text-center">
+                                                                    <p class="text-muted mb-2">Debes iniciar sesión para comentar</p>
+                                                                    <a href="/login" class="btn btn-sm btn-outline-primary">
+                                                                        Iniciar sesión
+                                                                    </a>
+                                                                </div>
+                                                            </li>
+                                                            {{/currentUser}}
 
                                                             <!-- Comments list -->
                                                            {{#comments}}

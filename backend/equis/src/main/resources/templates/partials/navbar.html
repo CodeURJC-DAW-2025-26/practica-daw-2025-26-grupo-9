@@ -35,25 +35,44 @@
         <img src="/assets/images/logo-64x64.png" width="40" height="40" class="mr-3" alt="Logo">
       </a>
 
+      {{#currentUser}}
       <li class="nav-item s-nav ml-auto">
         <a href="/profile" class="nav-link nav-links">
           <div class="menu-user-image">
-            <img src="/user/{{currentUser.id}}/profile-image"
-                 class="menu-user-img ml-1"
-                 alt="Menu Image"
-                 onerror="this.onerror=null;this.src='/assets/images/users/user-4.jpg';">
+            <img src="/user/{{id}}/profile-image"
+                class="menu-user-img ml-1"
+                alt="Menu Image"
+                onerror="this.onerror=null;this.src='/assets/images/users/user-4.jpg';">
           </div>
         </a>
       </li>
 
-    <li class="nav-item s-nav nav-icon">
-      <form action="/logout" method="post" style="margin:0;">
-        <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
-        <button type="submit" style="border:0;background:transparent;padding:0;cursor:pointer;">
-          <img src="/assets/images/icons/navbar/logout.png" class="nav-settings" alt="Logout">
-        </button>
-      </form>
-    </li>
+      <li class="nav-item s-nav nav-icon">
+        <form action="/logout" method="post" style="margin:0;">
+          <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
+          <button type="submit"
+                  style="border:0;background:transparent;padding:0;cursor:pointer;">
+            <img src="/assets/images/icons/navbar/logout.png"
+                class="nav-settings"
+                alt="Logout">
+          </button>
+        </form>
+      </li>
+      {{/currentUser}}
+
+      {{^currentUser}}
+      <li class="nav-item s-nav ml-auto">
+        <a href="/login" class="nav-link nav-links">
+          Inicia sesión
+        </a>
+      </li>
+
+      <li class="nav-item s-nav">
+        <a href="/register" class="nav-link nav-links">
+          Regístrate
+        </a>
+      </li>
+      {{/currentUser}}
 
       <button type="button" class="btn nav-link" id="menu-toggle">
         <img src="/assets/images/icons/theme/navs.png" alt="Navbar navs">
