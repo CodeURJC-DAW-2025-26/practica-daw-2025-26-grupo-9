@@ -162,17 +162,17 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 ---
 
-#### **Alumno 2 - [Nombre Completo]**
+#### **Alumno 2 - [Elena Ceinos abeijón]**
 
 [Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Levantar Spring con maven](https://github.com/CodeURJC-DAW-2025-26/daw-2025-26-project-base/commit/3a0f64a0b60036c0c6c0fd1290d7f4bd01a0a6ac)  | [Archivo1](URL_archivo_1)   |
+|2| [Basic controllers,security and mustache ] (https://github.com/CodeURJC-DAW-2025-26/daw-2025-26-project-base/commit/23b5eceb13a154a57b792596d9ffdb5445b85833 | [Archivo2](URL_archivo_2)   |
+|3| [Encrypted pass](https://github.com/CodeURJC-DAW-2025-26/daw-2025-26-project-base/commit/be05b165ff4c1d0cfbe4aa4f386233c9d611aa3e)  | [Archivo3](URL_archivo_3)   |
+|4| [User controller to use service instead of repo]([URL_commit_4](https://github.com/CodeURJC-DAW-2025-26/daw-2025-26-project-base/commit/0baab265c178a8b0e252e9ffb92f46c637d88a82))  | [Archivo4](URL_archivo_4)   |
+|5| [Keystore and port changed]([URL_commit_5](https://github.com/CodeURJC-DAW-2025-26/daw-2025-26-project-base/commit/a18f80a9da77da081ad270afb3943a83a49cac93))  | [Archivo5](URL_archivo_5)   |
 
 ---
 
