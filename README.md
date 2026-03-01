@@ -190,17 +190,17 @@ Implemetacion del la tecnologia avanzada(grafico), algoritmo de ordenacion, come
 
 ---
 
-#### **Alumno 4 - [Nombre Completo]**
+#### **Student 4 - Sergio Rodríguez Gil**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+In addition to general improvements, I was responsible for implementing the like functionality, anonymous user support, and the email notification system triggered upon user registration.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Implement email when registering](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/2a47bb86e06fd37659b784adb9d0512229784960)  | [EmailService.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/service/EmailService.java)   |
+|2| [Implemented anonymous user functionalities](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/b759f7955bc4381611a7ad08ce3624b71207877b)  | [HomeController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/controller/HomeController.java)   |
+|3| [Create PostController](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/23df9ec1ac04559ee73aa56b1c7c087546eabd49)  | [PostController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/controller/PostController.java)   |
+|4| [Create LikeRepository.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/92ca883afdc37f2eb7cdb490285bca0dfa8f9fbc)  | [welcome.html](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/resources/templates/welcome.html)   |
+|5| [Create like entity](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/de5cf7c223372dbe743bb82c318eab982ba77077)  | [Like.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/model/Like.java)   |
 
 ---
 
