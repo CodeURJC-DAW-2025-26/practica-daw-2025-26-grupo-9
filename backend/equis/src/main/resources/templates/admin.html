@@ -20,6 +20,9 @@
 
 <body class="newsfeed">
 <div class="container-fluid" id="wrapper">
+    <!-- NAVBAR -->
+    {{> partials/navbar}}
+
     <div class="row newsfeed-size">
 
         <!-- SIDEBAR -->
@@ -50,17 +53,43 @@
                     {{#categories}}
                     <div class="col-md-3 col-sm-6 mb-4">
                         <div class="card group-card shadow-sm h-100">
-                            <img src="/categories/{{id}}/image" class="card-img-top group-card-image" alt="Category image">
+                            <a href="/admin/categories/{{id}}">
+                                <img src="/categories/{{id}}/image"
+                                    class="card-img-top group-card-image"
+                                    alt="Category image">
+                            </a>
+
                             <div class="card-body text-center">
                                 <h6 class="card-title">{{name}}</h6>
+
                                 <small class="text-muted d-block mb-2">
                                     {{postsCount}} posts
                                 </small>
 
-                                <a href="/admin/categories/delete/{{id}}"
-                                   class="btn btn-sm btn-outline-danger">
-                                    Eliminar
+                                <div class="d-flex justify-content-center gap-2">
+
+                                <!-- BOTÓN EDITAR -->
+                                <a href="/admin/categories/edit/{{id}}"
+                                class="btn btn-sm btn-outline-primary">
+                                    Editar
                                 </a>
+
+                                <!-- BOTÓN ELIMINAR -->
+                                {{^general}}
+                                <form action="/admin/categories/delete/{{id}}"
+                                    method="post"
+                                    style="display:inline;">
+                                    <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('¿Eliminar categoría y TODO su contenido?');">
+                                        Eliminar
+                                    </button>
+                                </form>
+                                {{/general}}
+
+                            </div>
+
                             </div>
                         </div>
                     </div>
@@ -94,20 +123,18 @@
 
                             <div class="card-body text-center">
                                 <h6 class="card-title">{{name}}</h6>
+                                {{^currentAdmin}}
+                                    <form action="/admin/users/toggle/{{id}}" method="post" style="display:inline;">
+                                        <input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}">
+                                        <button type="submit"
+                                                class="btn btn-sm {{#active}}btn-success{{/active}}{{^active}}btn-danger{{/active}}">
+                                            
+                                            {{#active}}Activo{{/active}}
+                                            {{^active}}Bloqueado{{/active}}
 
-                                {{#active}}
-                                <a href="/admin/users/toggle/{{id}}"
-                                   class="btn btn-sm btn-success">
-                                    Activo
-                                </a>
-                                {{/active}}
-
-                                {{^active}}
-                                <a href="/admin/users/toggle/{{id}}"
-                                   class="btn btn-sm btn-danger">
-                                    Bloqueado
-                                </a>
-                                {{/active}}
+                                        </button>
+                                    </form>
+                                {{/currentAdmin}}
                             </div>
                         </div>
                     </div>

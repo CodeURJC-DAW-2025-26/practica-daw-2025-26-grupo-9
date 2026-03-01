@@ -27,14 +27,22 @@ public SecurityFilterChain filterChain(
                 "/register",
                 "/error"
             ).permitAll()
-            .requestMatchers("/admin/**").hasRole("ADMIN")
+            .requestMatchers("/admin/**").hasAuthority("ADMIN")
             .anyRequest().authenticated()
         )
         .formLogin(form -> form
             .loginPage("/login")
             .loginProcessingUrl("/login")
             .defaultSuccessUrl("/profile", true)
-            .failureUrl("/login?error")
+            .failureHandler((request, response, exception) -> {
+
+                if (exception instanceof org.springframework.security.authentication.DisabledException) {
+                    response.sendRedirect("/login?blocked");
+                } else {
+                    response.sendRedirect("/login?error");
+                }
+
+            })
             .permitAll()
         )
         .logout(logout -> logout

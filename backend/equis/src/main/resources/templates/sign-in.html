@@ -190,6 +190,13 @@
         </div>
         {{/error}}
 
+        {{#blocked}}
+        <div class="alert alert-danger" role="alert">
+          Cuenta bloqueada por el administrador.
+        </div>
+        {{/blocked}}
+        
+
 <form action="/login" method="post">
 
   <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">

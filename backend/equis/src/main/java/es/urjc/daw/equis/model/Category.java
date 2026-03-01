@@ -12,7 +12,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String name;
+    
     private String description;
 
     @Lob
@@ -34,6 +36,11 @@ public class Category {
     }
 
     // GETTERS / SETTERS
+
+    @Transient
+    public boolean isGeneral() {
+        return "General".equalsIgnoreCase(this.name);
+    }
 
     public Long getId() { return id; }
 

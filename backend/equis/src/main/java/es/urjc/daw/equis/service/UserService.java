@@ -177,4 +177,23 @@ public class UserService {
 
         userRepository.deleteById(userId);
     }
+
+    @Transactional
+    public void toggleUserActive(Long userId, String currentAdminEmail) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        User currentAdmin = userRepository.findByEmail(currentAdminEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Admin not found"));
+
+        // 🔒 Evitar que el admin se bloquee a sí mismo
+        if (user.getId().equals(currentAdmin.getId())) {
+            throw new IllegalArgumentException("No puedes bloquearte a ti mismo");
+        }
+
+        user.setActive(!user.isActive());
+
+        userRepository.save(user);
+    }
 }

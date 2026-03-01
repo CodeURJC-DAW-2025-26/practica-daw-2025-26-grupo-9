@@ -32,4 +32,11 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
 
     @Transactional
     void deleteByUserAndComment(User user, Comment comment);
+
+
+     // Para al eliminar una categoria poder eliminar el contenido
+    void deleteByPostId(Long postId);
+    void deleteByCommentId(Long commentId);
+
+    void deleteByPostCategoryId(Long categoryId);
 }

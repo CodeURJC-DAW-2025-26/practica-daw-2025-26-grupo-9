@@ -1,12 +1,17 @@
 package es.urjc.daw.equis.model;
 
 import java.sql.Blob;
+import java.util.Collection;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.*;
 
 @Entity
-public class User {
+public class User implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +23,11 @@ public class User {
     private String description;
     private String email;
     private String encodedPassword;
+
+    @Transient
+    private boolean currentAdmin;
+
+    private boolean active = true;
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
@@ -55,6 +65,12 @@ public class User {
 
     // GETTERS / SETTERS
 
+    public boolean isCurrentAdmin() {return currentAdmin;}
+    public void setCurrentAdmin(boolean currentAdmin) {this.currentAdmin = currentAdmin;}
+
+    public boolean isActive() {return active;}
+    public void setActive(boolean active) { this.active = active;}
+    
     public Long getId() { return id; }
 
     public String getName() { return name; }
@@ -89,4 +105,44 @@ public class User {
 
     public List<Comment> getComments() { return comments; }
     public void setComments(List<Comment> comments) { this.comments = comments; }
+
+
+    // UserDetails
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
+    }
+
+    @Override
+    public String getPassword() {
+        return encodedPassword;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return active;   // 🔥 CLAVE
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return active;   // 🔥 CLAVE
+    }
 }

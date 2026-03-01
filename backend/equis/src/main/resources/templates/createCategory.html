@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="icon" type="image/png" href="/assets/images/logo-16x16.png" />
+  <title>eQuis - Crear categoría</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Major+Mono+Display" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@1.9.2/css/boxicons.min.css" rel="stylesheet">
+
+  <!-- Styles -->
+  <link href="/assets/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/css/style.css" rel="stylesheet">
+  <link href="/assets/css/components.css" rel="stylesheet">
+  <link href="/assets/css/forms.css" rel="stylesheet">
+  <link href="/assets/css/media.css" rel="stylesheet">
+</head>
+
+<body class="messenger">
+
+  <!-- NAVBAR -->
+  {{> partials/navbar}}
+
+  <div class="row newsfeed-right-side-content mt-2">
+
+    <!-- SIDEBAR -->
+    {{> partials/sidebar}}
+
+    <!-- CONTENIDO -->
+    <div class="col-md-9 d-flex justify-content-center align-items-center min-vh-100">
+      <div class="col-md-6">
+        <div class="content">
+          <div class="settings-form p-4 shadow bg-white rounded">
+
+            <h2 class="text-center mb-2">Crear nueva categoría</h2>
+            <p class="text-center text-muted mb-4">
+              Añade una nueva categoría a eQuis
+            </p>
+
+            {{#errorMessage}}
+            <div class="alert alert-danger" role="alert">
+              {{errorMessage}}
+            </div>
+            {{/errorMessage}}
+
+            {{#successMessage}}
+            <div class="alert alert-success" role="alert">
+              {{successMessage}}
+            </div>
+            {{/successMessage}}
+
+            <!-- FORM -->
+            <form action="/admin/categories/new"
+                  method="post"
+                  enctype="multipart/form-data">
+
+              <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
+
+              <!-- Nombre -->
+              <div class="form-group">
+                <label>Nombre</label>
+                <input type="text"
+                       name="name"
+                       class="form-control"
+                       placeholder="Ej: Tecnología"
+                       required>
+              </div>
+
+              <!-- Descripción -->
+              <div class="form-group">
+                <label>Descripción</label>
+                <textarea name="description"
+                          class="form-control"
+                          rows="3"
+                          placeholder="Describe esta categoría..."></textarea>
+              </div>
+
+              <!-- Imagen -->
+              <div class="form-group">
+                <label>Imagen</label>
+                <input type="file"
+                       name="image"
+                       class="form-control-file"
+                       accept="image/*">
+              </div>
+
+              <!-- BOTONES -->
+              <div class="d-flex justify-content-between align-items-center mt-4">
+                <a href="/admin" class="btn btn-secondary btn-sm">
+                  Cancelar
+                </a>
+
+                <button type="submit" class="btn btn-success btn-sm">
+                  Crear categoría
+                </button>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JS -->
+  <script src="/assets/js/jquery/jquery-3.3.1.min.js"></script>
+  <script src="/assets/js/popper/popper.min.js"></script>
+  <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+  <script src="/assets/js/components/components.js"></script>
+
+</body>
+</html>

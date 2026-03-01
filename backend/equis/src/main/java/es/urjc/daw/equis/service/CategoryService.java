@@ -1,20 +1,42 @@
 package es.urjc.daw.equis.service;
 
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
+
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import es.urjc.daw.equis.model.Category;
+import es.urjc.daw.equis.model.Post;
 import es.urjc.daw.equis.repository.CategoryRepository;
+import es.urjc.daw.equis.repository.CommentRepository;
+import es.urjc.daw.equis.repository.LikeRepository;
+import es.urjc.daw.equis.repository.PostRepository;
 
 @Service
 public class CategoryService {
 
-    private final CategoryRepository categoryRepository;
+        private final CategoryRepository categoryRepository;
+    private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository,
+                                PostRepository postRepository,
+                                CommentRepository commentRepository,
+                                LikeRepository likeRepository) {
         this.categoryRepository = categoryRepository;
+        this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
+        this.likeRepository = likeRepository;
     }
 
     @Transactional(readOnly = true)
@@ -96,4 +118,105 @@ public class CategoryService {
         return category.getPicture()
                 .getBytes(1, (int) category.getPicture().length());
     }
+
+    public Optional<Category> findByName(String name) {
+        return categoryRepository.findByNameIgnoreCase(name);
+    }
+
+    @Transactional
+    public void deleteCategoryAndAllContent(Long categoryId) {
+
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        // (Opcional) Proteger "General" si no quieres borrarla
+        if ("General".equalsIgnoreCase(category.getName())) {
+            throw new IllegalArgumentException("No se puede eliminar la categoría General");
+        }
+
+        // 1) Obtener posts de la categoría
+        var posts = postRepository.findByCategoryId(categoryId);
+
+        for (var post : posts) {
+
+            // 2) Obtener comments del post
+            var comments = commentRepository.findByPostId(post.getId());
+
+            // 3) Borrar likes de cada comment (si existe FK likes.comment_id)
+            for (var c : comments) {
+                likeRepository.deleteByCommentId(c.getId());
+            }
+
+            // 4) Borrar comments del post
+            commentRepository.deleteByPostId(post.getId());
+
+            // 5) Borrar likes del post (si existe FK likes.post_id)
+            likeRepository.deleteByPostId(post.getId());
+        }
+
+        // 6) Borrar posts
+        postRepository.deleteByCategoryId(categoryId);
+
+        // 7) Borrar categoría
+        categoryRepository.deleteById(categoryId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Post> getPostsByCategoryId(Long id) {
+        return postRepository.findByCategoryId(id);
+    }
+
+    @Transactional
+    public Category updateCategory(Long id,
+                                    String name,
+                                    String description,
+                                    MultipartFile image)
+            throws Exception {
+
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+        // Actualizar campos básicos
+        category.setName(name.trim());
+        category.setDescription(description);
+
+        // Actualizar imagen solo si se sube nueva
+        if (image != null && !image.isEmpty()) {
+            category.setPicture(
+                new javax.sql.rowset.serial.SerialBlob(image.getBytes())
+            );
+        }
+
+        return categoryRepository.save(category);
+    }
+
+    public void createCategory(String name,
+                           String description,
+                           MultipartFile image) {
+
+    try {
+
+        name = name.trim();
+
+        if (name.isBlank()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío");
+        }
+
+        if (categoryRepository.existsByNameIgnoreCase(name)) {
+            throw new IllegalArgumentException("Ya existe una categoría con ese nombre");
+        }
+
+        Category category = new Category();
+        category.setName(name);
+        category.setDescription(description != null ? description.trim() : "");
+
+        if (image != null && !image.isEmpty()) {
+            category.setPicture(new SerialBlob(image.getBytes()));
+        }
+
+        categoryRepository.save(category);
+
+    } catch (Exception e) {
+        throw new RuntimeException("Error creando categoría", e);
+    }
+}
 }

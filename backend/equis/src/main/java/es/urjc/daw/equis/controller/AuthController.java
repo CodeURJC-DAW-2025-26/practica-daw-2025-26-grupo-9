@@ -19,8 +19,12 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String login(@RequestParam(required = false) String error, Model model) {
+    public String login(
+        @RequestParam(required = false) String error,
+        @RequestParam(required = false) String blocked,
+        Model model) {
         model.addAttribute("error", error != null);
+    model.addAttribute("blocked", blocked != null);
         return "sign-in";
     }
 

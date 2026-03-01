@@ -63,6 +63,7 @@ public class DataLoader {
 
             userRepo.saveAll(List.of(admin, user1, user2, user3));
 
+
             // 📂 CATEGORIES
 
             Category tech = createCategory("Tecnología",
@@ -77,7 +78,13 @@ public class DataLoader {
                     "Contenido random",
                     "static/assets/images/groups/category-3.jpg");
 
-            categoryRepo.saveAll(List.of(tech, sports, memes));
+            Category general = createCategory("General",    
+                    "Contenido para el feed sin categoria",
+                    "static/assets/images/groups/category-3.jpg");
+
+
+            categoryRepo.saveAll(List.of(tech, sports, memes, general));
+
 
             // 📝 POSTS (sin likes ahora)
             Post p1 = createPost("Primer post 🔥", admin, tech);
