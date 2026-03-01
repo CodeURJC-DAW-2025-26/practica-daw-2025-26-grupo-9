@@ -68,6 +68,13 @@ public class PostService {
     public Page<Post> getPostsByUserId(Long userId, Pageable pageable) {
         return postRepository.findByUserIdOrderByDateDesc(userId, pageable);
     }
+
+public List<Post> findByCategory(Category category) {
+    return postRepository.findByCategory(category);
+}
+    public long countByCategory(Category category) {
+    return postRepository.countByCategory(category);
+}
     public Page<Post> getFeed(Pageable pageable) {
         return postRepository.findAllByOrderByDateDesc(pageable);
     }
