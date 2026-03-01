@@ -23,49 +23,67 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-
+   
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
     }
 
-    @Transactional
-    public User register(User user) {
+   @Transactional
+public User register(User user,
+                     MultipartFile profileImage,
+                     MultipartFile coverImage) throws IOException, SQLException {
 
-        if (user == null) {
-            throw new IllegalArgumentException("User cannot be null");
-        }
-
-        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
-            throw new IllegalArgumentException("Email cannot be empty");
-        }
-
-        if (user.getEncodedPassword() == null || user.getEncodedPassword().trim().isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be empty");
-        }
-
-        String normalizedEmail = normalizeEmail(user.getEmail());
-        user.setEmail(normalizedEmail);
-
-        if (userRepository.findByEmail(normalizedEmail).isPresent()) {
-            throw new IllegalArgumentException("Email already in use");
-        }
-
-        user.setEncodedPassword(passwordEncoder.encode(user.getEncodedPassword()));
-
-        User savedUser = userRepository.save(user);
-
-        // Enviar email de bienvenida (sin romper registro si falla)
-        try {
-            emailService.sendWelcomeEmail(savedUser);
-        } catch (Exception e) {
-            // Loggear el error pero no interrumpir el registro
-            System.err.println("Error sending welcome email: " + e.getMessage());
-        }
-
-        return savedUser;
+    if (user == null) {
+        throw new IllegalArgumentException("User cannot be null");
     }
+
+    if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+        throw new IllegalArgumentException("Email cannot be empty");
+    }
+
+    if (user.getEncodedPassword() == null || user.getEncodedPassword().trim().isEmpty()) {
+        throw new IllegalArgumentException("Password cannot be empty");
+    }
+
+    String normalizedEmail = normalizeEmail(user.getEmail());
+    user.setEmail(normalizedEmail);
+
+    if (userRepository.findByEmail(normalizedEmail).isPresent()) {
+        throw new IllegalArgumentException("Email already in use");
+    }
+
+    user.setEncodedPassword(passwordEncoder.encode(user.getEncodedPassword()));
+
+    // PROFILE IMAGE
+    if (profileImage != null && !profileImage.isEmpty()) {
+        user.setProfilePicture(bytesToBlob(profileImage.getBytes()));
+    } else {
+        var is = getClass().getResourceAsStream("/static/assets/images/avatardefault.png");
+        if (is == null) throw new IllegalStateException("Missing /static/assets/images/avatardefault.png");
+        user.setProfilePicture(bytesToBlob(is.readAllBytes()));
+    }
+
+    // COVER IMAGE
+    if (coverImage != null && !coverImage.isEmpty()) {
+        user.setCoverPicture(bytesToBlob(coverImage.getBytes()));
+    } else {
+        var is = getClass().getResourceAsStream("/static/assets/images/coverdefault.jpg");
+        if (is == null) throw new IllegalStateException("Missing /static/assets/images/coverdefault.jpg");
+        user.setCoverPicture(bytesToBlob(is.readAllBytes()));
+    }
+
+    User savedUser = userRepository.save(user);
+
+    try {
+        emailService.sendWelcomeEmail(savedUser);
+    } catch (Exception e) {
+        System.err.println("Error sending welcome email: " + e.getMessage());
+    }
+
+    return savedUser;
+}
 
     @Transactional(readOnly = true)
     public Optional<User> findByEmail(String email) {

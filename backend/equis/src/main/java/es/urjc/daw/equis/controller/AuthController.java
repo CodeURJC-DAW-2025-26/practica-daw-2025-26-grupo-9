@@ -1,10 +1,16 @@
 package es.urjc.daw.equis.controller;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.service.UserService;
@@ -35,13 +41,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String processRegister(@ModelAttribute User user) {
+    public String processRegister(@ModelAttribute User user,
+                                @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
+                                @RequestParam(value = "coverImage", required = false) MultipartFile coverImage) throws IOException, SQLException {
 
-        // Default role for new users
         user.setRoles(List.of("ROLE_USER"));
-
-        userService.register(user);
-
+        userService.register(user, profileImage, coverImage);
         return "redirect:/login";
     }
 }
