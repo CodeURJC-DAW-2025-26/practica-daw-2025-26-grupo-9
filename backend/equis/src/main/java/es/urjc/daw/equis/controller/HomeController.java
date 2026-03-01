@@ -47,7 +47,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model,
-                    @RequestParam(name = "page", defaultValue = "1") int page) {
+                       @RequestParam(name = "page", defaultValue = "1") int page) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -57,9 +57,10 @@ public class HomeController {
         List<Post> allPosts = postRepository.findAll();
         List<Post> ordered = applyAlgorithm(allPosts);
 
-        User currentUser = userRepository
-                .findByEmail(auth.getName())
-                .orElse(null);
+        User currentUser = null;
+        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
+            currentUser = userRepository.findByEmail(auth.getName()).orElse(null);
+        }
 
         for (Post post : ordered) {
             if (post.getComments() != null) {
@@ -79,6 +80,13 @@ public class HomeController {
         model.addAttribute("hasNext", pageResult.hasNext());
         model.addAttribute("currentUser", currentUser);
 
+        // 🔥 LO QUE FALTABA
+        List<Category> cats = categoryRepository.findAll();
+        cats.forEach(c -> c.setPostsCount(postRepository.countByCategoryId(c.getId())));
+
+        model.addAttribute("categories", cats);
+        model.addAttribute("topCategories", topCategories(5));
+
         return "index";
     }
 
@@ -88,8 +96,7 @@ public class HomeController {
         all.forEach(c -> c.setPostsCount(postRepository.countByCategoryId(c.getId())));
         model.addAttribute("allCategories", all);
 
-        List<Category> top = topCategories(10);
-        model.addAttribute("topCategories", top);
+        model.addAttribute("topCategories", topCategories(10));
 
         return "categories";
     }
@@ -110,11 +117,11 @@ public class HomeController {
         List<Post> posts = category.getPosts() != null ? category.getPosts() : List.of();
         List<Post> ordered = applyAlgorithm(posts);
 
-        // 🔥 NUEVO: marcar owner en comentarios también aquí
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = auth != null
-                ? userRepository.findByEmail(auth.getName()).orElse(null)
-                : null;
+        User currentUser = null;
+        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
+            currentUser = userRepository.findByEmail(auth.getName()).orElse(null);
+        }
 
         for (Post post : ordered) {
             if (post.getComments() != null) {
@@ -179,16 +186,16 @@ public class HomeController {
 
         copy.forEach(post -> {
 
-    long realLikes = likeRepository.countByPost(post);
-    post.setLikesCount(realLikes);
+            long realLikes = likeRepository.countByPost(post);
+            post.setLikesCount(realLikes);
 
-    if (post.getComments() != null) {
-        post.getComments().forEach(comment -> {
-            long commentLikes = likeRepository.countByComment(comment);
-            comment.setLikesCount(commentLikes);
+            if (post.getComments() != null) {
+                post.getComments().forEach(comment -> {
+                    long commentLikes = likeRepository.countByComment(comment);
+                    comment.setLikesCount(commentLikes);
+                });
+            }
         });
-        }
-    });
 
         copy.sort((p1, p2) -> {
             long score1 = calculateScore(p1);
