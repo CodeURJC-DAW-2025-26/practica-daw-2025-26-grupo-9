@@ -80,7 +80,7 @@ public class HomeController {
         model.addAttribute("hasNext", pageResult.hasNext());
         model.addAttribute("currentUser", currentUser);
 
-        // 🔥 LO QUE FALTABA
+        
         List<Category> cats = categoryRepository.findAll();
         cats.forEach(c -> c.setPostsCount(postRepository.countByCategoryId(c.getId())));
 
@@ -88,62 +88,6 @@ public class HomeController {
         model.addAttribute("topCategories", topCategories(5));
 
         return "index";
-    }
-
-    @GetMapping("/categories")
-    public String categories(Model model) {
-        List<Category> all = categoryRepository.findAll();
-        all.forEach(c -> c.setPostsCount(postRepository.countByCategoryId(c.getId())));
-        model.addAttribute("allCategories", all);
-
-        model.addAttribute("topCategories", topCategories(10));
-
-        return "categories";
-    }
-
-    @GetMapping("/categories/{id}")
-    public String categoryView(@PathVariable Long id,
-                               @RequestParam(name = "page", defaultValue = "1") int page,
-                               Model model) {
-
-        if (page < 1) page = 1;
-        int size = 10;
-
-        Category category = categoryRepository.findById(id).orElse(null);
-        if (category == null) {
-            return "redirect:/categories";
-        }
-
-        List<Post> posts = category.getPosts() != null ? category.getPosts() : List.of();
-        List<Post> ordered = applyAlgorithm(posts);
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = null;
-        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
-            currentUser = userRepository.findByEmail(auth.getName()).orElse(null);
-        }
-
-        for (Post post : ordered) {
-            if (post.getComments() != null) {
-                for (Comment comment : post.getComments()) {
-                    boolean isOwner = comment.getUser() != null
-                            && currentUser != null
-                            && comment.getUser().getId().equals(currentUser.getId());
-                    comment.setOwner(isOwner);
-                }
-            }
-        }
-
-        Page<Post> pageResult = sliceAsPage(ordered, page, size);
-
-        model.addAttribute("category", category);
-        model.addAttribute("posts", pageResult.getContent());
-        model.addAttribute("nextPage", page + 1);
-        model.addAttribute("hasNext", pageResult.hasNext());
-        model.addAttribute("topCategories", topCategories(10));
-        model.addAttribute("currentUser", currentUser);
-
-        return "category";
     }
 
     @GetMapping("/stats")
