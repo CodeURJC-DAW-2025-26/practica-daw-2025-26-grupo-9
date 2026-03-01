@@ -176,17 +176,17 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 ---
 
-#### **Alumno 3 - [Nombre Completo]**
+#### **Alumno 3 - Alvaro Sepúlveda Crespo**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Implemetacion del la tecnologia avanzada(grafico), algoritmo de ordenacion, comentarios y categorias.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| Algoritmo de ordenacion de post (https://github.com/CodeURJC-DAW-2025-26/daw-2025-26-project-base/commit/653ddbbe04218c0b467e5d8ec2feaad85deeaa95)  | [Archivo1](URL_archivo_1)   |
+|2| Home controller changes for chart(https://github.com/CodeURJC-DAW-2025-26/daw-2025-26-project-base/commit/a57771f9d4e0df223c44ef26f44be4ffaa1996c0)  | [Archivo2](URL_archivo_2)   |
+|3| Controller changes for comments(https://github.com/CodeURJC-DAW-2025-26/daw-2025-26-project-base/commit/49cdb7942b2bab35629a7d5b431c15c0107f72ea)  | [Archivo3](URL_archivo_3)   |
+|4| Global controller advice change for categories(https://github.com/CodeURJC-DAW-2025-26/daw-2025-26-project-base/commit/49cdb7942b2bab35629a7d5b431c15c0107f72ea)  | [Archivo4](URL_archivo_4)   |
+|5| fix for categories controller(https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/aae11f368baef394a5af3c06e8cee4ca2bc21a32)  | [Archivo5](URL_archivo_5)   |
 
 ---
 
