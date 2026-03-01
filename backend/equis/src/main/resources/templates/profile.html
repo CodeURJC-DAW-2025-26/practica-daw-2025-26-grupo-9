@@ -102,8 +102,9 @@
                       <ul class="list-unstyled" style="margin-bottom: 0;">
                         <li class="media post-form w-shadow">
                           <div class="media-body">
-                            <form action="/posts" method="post" enctype="multipart/form-data">
-                              <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
+                            <form action="/posts/newPost" method="post" enctype="multipart/form-data">
+                              <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                              <input type="hidden" name="category_id" value="1">
 
                               <div class="form-group post-input">
                                 <textarea class="form-control" id="postForm" name="content" rows="2"
