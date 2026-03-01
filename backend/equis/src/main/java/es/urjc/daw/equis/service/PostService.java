@@ -78,4 +78,8 @@ public List<Post> findByCategory(Category category) {
     public Page<Post> getFeed(Pageable pageable) {
         return postRepository.findAllByOrderByDateDesc(pageable);
     }
+
+public Post findById(Long id) {
+    return postRepository.findById(id).orElse(null);
+}
 }

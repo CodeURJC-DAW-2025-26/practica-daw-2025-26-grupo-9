@@ -4,6 +4,8 @@ import es.urjc.daw.equis.model.Category;
 import es.urjc.daw.equis.model.Post;
 import es.urjc.daw.equis.service.CategoryService;
 import es.urjc.daw.equis.service.PostService;
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -39,7 +41,9 @@ public class CategoryController {
 }
 
     @GetMapping("/categories/{id}")
-    public String getPostsByCategory(@PathVariable Long id, Model model) {
+    public String getPostsByCategory(@PathVariable Long id,
+                                 Model model,
+                                 HttpServletRequest request) {
 
         Category category = categoryService.findById(id);
 
@@ -55,6 +59,9 @@ public class CategoryController {
         model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("currentCategory", category);
         model.addAttribute("topCategories", topCategories(5));
+        String currentPath = request.getRequestURI() +
+        (request.getQueryString() != null ? "?" + request.getQueryString() : "");
+        model.addAttribute("currentPath", currentPath);
 
         return "index";  
     }

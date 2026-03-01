@@ -182,20 +182,22 @@
                           {{/canDelete}}
                         </div>
 
-                        <div class="mt-3">
-                          <p>{{content}}</p>
-                        </div>
+                          <a href="/posts/{{id}}" class="text-decoration-none text-dark">
+                              <div class="mt-3">
+                                  <p>{{content}}</p>
+                              </div>
 
-                        {{#pictureUrl}}
-                        <div class="d-block mt-3">
-                          <img src="{{pictureUrl}}" class="post-content" alt="post image">
-                        </div>
-                        {{/pictureUrl}}
+                              {{#pictureUrl}}
+                              <div class="d-block mt-3">
+                                  <img src="{{pictureUrl}}" class="post-content" alt="post image">
+                              </div>
+                              {{/pictureUrl}}
+                          </a>
 
                         <div class="mb-2">
                           <div class="argon-reaction">
                             <span class="like-btn">
-                              <a href="/posts/{{id}}/like?redirect=profile" class="post-card-buttons">
+                              <a href="/posts/{{id}}/like?redirect={{currentPath}}" class="post-card-buttons">
                                 <i class='bx bxs-like mr-2'></i> {{likesCount}}
                               </a>
                             </span>
@@ -222,6 +224,7 @@
                                         </a>
                                         <div class="media-body">
                                           <form action="/posts/{{id}}/comments" method="post" role="form">
+                                            <input type="hidden" name="redirect" value="{{currentPath}}">
                                             <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
                                             <div class="row">
                                               <div class="col-md-12">
@@ -258,7 +261,7 @@
 
                                           <div class="argon-reaction">
                                             <span class="like-btn">
-                                              <a href="/posts/comments/{{id}}/like?redirect=profile" class="post-card-buttons">
+                                              <a href="/posts/comments/{{id}}/like?redirect={{currentPath}}" class="post-card-buttons">
                                                 <i class='bx bxs-like mr-2'></i> {{likesCount}}
                                               </a>
                                             </span>

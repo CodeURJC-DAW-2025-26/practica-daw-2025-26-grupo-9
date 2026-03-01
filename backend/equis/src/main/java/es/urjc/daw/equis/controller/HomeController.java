@@ -13,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,6 +25,7 @@ import es.urjc.daw.equis.repository.CategoryRepository;
 import es.urjc.daw.equis.repository.LikeRepository;
 import es.urjc.daw.equis.repository.PostRepository;
 import es.urjc.daw.equis.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class HomeController {
@@ -47,7 +47,8 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model,
-                       @RequestParam(name = "page", defaultValue = "1") int page) {
+                   @RequestParam(name = "page", defaultValue = "1") int page,
+                   HttpServletRequest request) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -86,6 +87,9 @@ public class HomeController {
 
         model.addAttribute("categories", cats);
         model.addAttribute("topCategories", topCategories(5));
+
+        String currentPath = request.getRequestURI() + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
+        model.addAttribute("currentPath", currentPath);
 
         return "index";
     }

@@ -1,10 +1,12 @@
 package es.urjc.daw.equis.controller;
 
 import java.sql.Blob;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +20,9 @@ import es.urjc.daw.equis.repository.LikeRepository;
 import es.urjc.daw.equis.repository.PostRepository;
 import es.urjc.daw.equis.repository.UserRepository;
 import es.urjc.daw.equis.service.PostService;
+import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.ui.Model;
 
 @Controller
 @RequestMapping("/posts")
@@ -43,9 +48,10 @@ public class PostController {
 
     @PostMapping("/newPost")
     public String newPost(@RequestParam String content,
-                          @RequestParam Long category_id,
-                          @RequestParam(required = false) MultipartFile picture,
-                          Authentication auth) throws Exception {
+                        @RequestParam Long category_id,
+                        @RequestParam(required = false) MultipartFile picture,
+                        @RequestParam(required = false) String redirect,
+                        Authentication auth) throws Exception {
 
         if (auth == null || auth.getName().equals("anonymousUser")) {
             return "redirect:/login";
@@ -54,7 +60,7 @@ public class PostController {
         Post post = new Post();
         postService.save(post, picture, auth, category_id, content);
 
-        return "redirect:/";
+        return safeRedirect(redirect, "/");
     }
 
 
@@ -79,8 +85,8 @@ public class PostController {
 
     @GetMapping("/{id}/like")
     public String togglePostLike(@PathVariable Long id,
-                                 Authentication auth,
-                                 @RequestParam(required = false) String redirect) {
+                                Authentication auth,
+                                @RequestParam(required = false) String redirect) {
 
         if (auth == null || auth.getName().equals("anonymousUser")) {
             return "redirect:/login";
@@ -90,7 +96,7 @@ public class PostController {
         Post post = postRepository.findById(id).orElse(null);
 
         if (user == null || post == null) {
-            return "redirect:/";
+            return safeRedirect(redirect, "/");
         }
 
         likeRepository.findByUserAndPost(user, post)
@@ -104,13 +110,14 @@ public class PostController {
                         }
                 );
 
-        return "redirect:/";
+        return safeRedirect(redirect, "/");
     }
 
 
     @GetMapping("/comments/{id}/like")
     public String toggleCommentLike(@PathVariable Long id,
-                                    Authentication auth) {
+                                    Authentication auth,
+                                    @RequestParam(required = false) String redirect) {
 
         if (auth == null || auth.getName().equals("anonymousUser")) {
             return "redirect:/login";
@@ -120,7 +127,7 @@ public class PostController {
         Comment comment = commentRepository.findById(id).orElse(null);
 
         if (user == null || comment == null) {
-            return "redirect:/";
+            return safeRedirect(redirect, "/");
         }
 
         likeRepository.findByUserAndComment(user, comment)
@@ -134,14 +141,14 @@ public class PostController {
                         }
                 );
 
-        return "redirect:/";
+        return safeRedirect(redirect, "/");
     }
-
 
     @PostMapping("/{postId}/comments")
     public String addComment(@PathVariable Long postId,
-                             @RequestParam String content,
-                             Authentication auth) {
+                            @RequestParam String content,
+                            Authentication auth,
+                            @RequestParam(required = false) String redirect) {
 
         if (auth == null || auth.getName().equals("anonymousUser")) {
             return "redirect:/login";
@@ -151,7 +158,7 @@ public class PostController {
         User user = userRepository.findByEmail(auth.getName()).orElse(null);
 
         if (post == null || user == null) {
-            return "redirect:/";
+            return safeRedirect(redirect, "/");
         }
 
         Comment comment = new Comment();
@@ -161,14 +168,15 @@ public class PostController {
 
         commentRepository.save(comment);
 
-        return "redirect:/";
+        return safeRedirect(redirect, "/");
     }
 
 
     @PostMapping("/comments/{id}/edit")
     public String editComment(@PathVariable Long id,
-                              @RequestParam String content,
-                              Authentication auth) {
+                            @RequestParam String content,
+                            Authentication auth,
+                            @RequestParam(required = false) String redirect) {
 
         if (auth == null || auth.getName().equals("anonymousUser")) {
             return "redirect:/login";
@@ -188,7 +196,7 @@ public class PostController {
         comment.setContent(content);
         commentRepository.save(comment);
 
-        return "redirect:/";
+        return safeRedirect(redirect, "/");
     }
 
 
@@ -219,4 +227,56 @@ public class PostController {
 
         return "redirect:/";
     }
+
+    @GetMapping("/{id}")
+    public String viewPost(@PathVariable Long id,
+                        Model model,
+                        Authentication auth,
+                        HttpServletRequest request){
+
+        Post post = postService.findById(id);
+        if (post == null) return "redirect:/";
+
+        User currentUser = null;
+        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
+            currentUser = userRepository.findByEmail(auth.getName()).orElse(null);
+        }
+
+        post.setLikesCount(likeRepository.countByPost(post));
+
+        if (post.getComments() != null) {
+            for (Comment c : post.getComments()) {
+                c.setLikesCount(likeRepository.countByComment(c));
+                boolean isOwner = currentUser != null
+                        && c.getUser() != null
+                        && c.getUser().getId().equals(currentUser.getId());
+                c.setOwner(isOwner);
+            }
+        }
+
+        model.addAttribute("posts", List.of(post));
+        model.addAttribute("singlePost", true);
+        model.addAttribute("currentUser", currentUser);
+
+        String currentPath = request.getRequestURI();
+        model.addAttribute("currentPath", currentPath);
+
+        // 🔥 ESTO FALTABA
+        CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
+        if (token != null) {
+            model.addAttribute("_csrf", token);
+        }
+
+        return "post";
+    }
+
+    private String safeRedirect(String redirect, String fallback) {
+    if (redirect == null || redirect.isBlank()) return "redirect:" + fallback;
+
+    // Solo permitimos rutas internas (evita http(s):// y open redirects)
+    if (redirect.startsWith("/") && !redirect.startsWith("//")) {
+        return "redirect:" + redirect;
+    }
+    return "redirect:" + fallback;
+}
 }

@@ -86,11 +86,10 @@ public class ProfileController {
         addCsrfToken(request, model);
     }
 
-    // GET PROFILE
     @GetMapping("/profile")
     public String profile(Model model,
-                          Principal principal,
-                          HttpServletRequest request) {
+                        Principal principal,
+                        HttpServletRequest request) {
 
         if (principal == null) {
             return "redirect:/login";
@@ -102,6 +101,11 @@ public class ProfileController {
         }
 
         loadProfileData(currentUser, currentUser, model, request);
+
+        // 👇 AÑADE ESTO
+        String currentPath = request.getRequestURI();
+        model.addAttribute("currentPath", currentPath);
+
         return "profile";
     }
 
@@ -119,6 +123,8 @@ public class ProfileController {
         model.addAttribute("user", user);
 
         addCsrfToken(request, model);
+        String currentPath = request.getRequestURI();
+        model.addAttribute("currentPath", currentPath);
 
         return "editProfile";
     }
@@ -193,13 +199,12 @@ public class ProfileController {
                 .body(img);
     }
 
-    // GET USER PROFILE
     @GetMapping("/users/{id}")
     public String viewUserProfile(@PathVariable Long id,
-                                  @RequestParam(required = false) String from,
-                                  Principal principal,
-                                  Model model,
-                                  HttpServletRequest request) {
+                                @RequestParam(required = false) String from,
+                                Principal principal,
+                                Model model,
+                                HttpServletRequest request) {
 
         User profileUser = userService.getByIdOrThrow(id);
 
@@ -209,6 +214,10 @@ public class ProfileController {
         }
 
         loadProfileData(profileUser, currentUser, model, request);
+
+        // 👇 AÑADE ESTO
+        String currentPath = request.getRequestURI();
+        model.addAttribute("currentPath", currentPath);
 
         boolean fromAdmin = "admin".equals(from);
 
