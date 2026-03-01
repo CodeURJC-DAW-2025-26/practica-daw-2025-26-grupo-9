@@ -170,46 +170,47 @@
                                                         <ul class="media-list comments-list">
 
                                                             <!-- Comment form -->
+                                                             <li class="media comment-form">
                                                             {{#currentUser}}
-                                                            <li class="media comment-form">
-                                                                <a href="#" class="pull-left">
-                                                                    <img src="/user/{{id}}/profile-image"
-                                                                        class="mr-3 post-user-image">
-                                                                </a>
-                                                                <div class="media-body">
-                                                                    <form action="/posts/{{id}}/comments" method="post" role="form">
-                                                                        <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
-                                                                        <div class="row">
-                                                                            <div class="col-md-12">
-                                                                                <div class="input-group">
-                                                                                    <input type="text" name="content"
-                                                                                        class="form-control comment-input"
-                                                                                        placeholder="Write a comment...">
-                                                                                    <div class="input-group-btn">
-                                                                                        <button type="submit"
-                                                                                                class="btn comment-form-btn"
-                                                                                                title="Send">
-                                                                                            <i class='bx bx-send'></i>
-                                                                                        </button>
-                                                                                    </div>
+                                                            <a href="#" class="pull-left">
+                                                                <img src="/user/{{id}}/profile-image"
+                                                                    class="mr-3 post-user-image">
+                                                            </a>
+                                                            {{/currentUser}}
+
+                                                            <div class="media-body">
+                                                                {{#currentUser}}
+                                                                <form action="/posts/{{postId}}/comments" method="post">
+                                                                    <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <div class="input-group">
+                                                                                <input type="text" name="content"
+                                                                                    class="form-control comment-input"
+                                                                                    placeholder="Write a comment...">
+                                                                                <div class="input-group-btn">
+                                                                                    <button type="submit"
+                                                                                            class="btn comment-form-btn"
+                                                                                            title="Send">
+                                                                                        <i class='bx bx-send'></i>
+                                                                                    </button>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </form>
-                                                                </div>
-                                                            </li>
-                                                            {{/currentUser}}
+                                                                    </div>
+                                                                </form>
+                                                                {{/currentUser}}
 
-                                                            {{^currentUser}}
-                                                            <li class="media comment-form">
+                                                                {{^currentUser}}
                                                                 <div class="media-body text-center">
                                                                     <p class="text-muted mb-2">Debes iniciar sesión para comentar</p>
                                                                     <a href="/login" class="btn btn-sm btn-outline-primary">
                                                                         Iniciar sesión
                                                                     </a>
                                                                 </div>
-                                                            </li>
-                                                            {{/currentUser}}
+                                                                {{/currentUser}}
+                                                            </div>
+                                                        </li>
 
                                                             <!-- Comments list -->
                                                            {{#comments}}
