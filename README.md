@@ -150,7 +150,7 @@ Diagrama de clases de la aplicación con diferenciación por colores o secciones
 
 #### **Alumno 1 - [David Paul Limaylla Ticlavilca]**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+[Levantar la bbdd y funcionalidades del administrador (bloquear usuario, eliminar post, eliminar comentario, crear categoria, editar categoria, eliminar categoria) - (categorias y post) views user]
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
