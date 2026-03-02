@@ -62,7 +62,7 @@ public class ProfileController {
         model.addAttribute("isOwnProfile",
                 currentUser != null && currentUser.getId().equals(profileUser.getId()));
         model.addAttribute("canManageProfile",
-                currentUser != null && currentUser.getId().equals(profileUser.getId()));
+        currentUser != null && currentUser.getId().equals(profileUser.getId()));
         model.addAttribute("canEdit",
                 currentUser != null && currentUser.getId().equals(profileUser.getId()));
         model.addAttribute("canDelete",
@@ -221,7 +221,7 @@ public class ProfileController {
 
         loadProfileData(profileUser, currentUser, model, request);
 
-        // 👇 AÑADE ESTO
+
         String currentPath = request.getRequestURI();
         model.addAttribute("currentPath", currentPath);
 

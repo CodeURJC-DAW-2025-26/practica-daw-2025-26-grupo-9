@@ -179,7 +179,16 @@
                               <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
                               <button type="submit" class="btn btn-sm text-danger" title="Eliminar">Eliminar</button>
                             </form>
-                          {{/canDelete}}
+                            {{/canDelete}}
+
+                            {{^canDelete}}
+                              {{#isAdminView}}
+                              <form action="/admin/posts/delete/{{id}}" method="post" style="display:inline;">
+                                <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
+                                <button type="submit" class="btn btn-sm text-danger" title="Eliminar (Admin)">Eliminar</button>
+                              </form>
+                              {{/isAdminView}}
+                            {{/canDelete}}
                         </div>
 
                           <a href="/posts/{{id}}" class="text-decoration-none text-dark">
@@ -272,6 +281,15 @@
                                             <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
                                             <button type="submit" class="btn btn-sm text-danger" title="Eliminar">Eliminar</button>
                                           </form>
+                                          {{/canDelete}}
+
+                                          {{^canDelete}}
+                                            {{#isAdminView}}
+                                            <form action="/admin/comments/delete/{{id}}" method="post" style="display:inline;">
+                                              <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
+                                              <button type="submit" class="btn btn-sm text-danger" title="Eliminar (Admin)">Eliminar</button>
+                                            </form>
+                                            {{/isAdminView}}
                                           {{/canDelete}}
                                         </div>
                                       </li>

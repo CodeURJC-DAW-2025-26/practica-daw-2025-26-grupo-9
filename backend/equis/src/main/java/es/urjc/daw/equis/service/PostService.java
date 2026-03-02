@@ -64,8 +64,8 @@ public class PostService {
         }
         postRepository.save(post);
     }
-
-    public void edit(Post post, MultipartFile picture, Long category_id, String content, String removePicture)
+    
+     public void edit(Post post, MultipartFile picture, Long category_id, String content, String removePicture)
             throws IOException {
 
         // content
@@ -111,11 +111,19 @@ public class PostService {
         public long countByCategory(Category category) {
         return postRepository.countByCategory(category);
     }
-        public Page<Post> getFeed(Pageable pageable) {
-            return postRepository.findAllByOrderByDateDesc(pageable);
-        }
+    public Page<Post> getFeed(Pageable pageable) {
+        return postRepository.findAllByOrderByDateDesc(pageable);
+    }
 
     public Post findById(Long id) {
         return postRepository.findById(id).orElse(null);
     }
+
+    public void deleteById(Long id) {
+    if (!postRepository.existsById(id)) {
+        throw new IllegalArgumentException("Post no encontrado con id: " + id);
+    }
+    postRepository.deleteById(id);
+}
+
 }

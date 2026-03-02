@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -24,6 +25,8 @@ import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import es.urjc.daw.equis.service.CategoryService;
+import es.urjc.daw.equis.service.CommentService;
+import es.urjc.daw.equis.service.PostService;
 import es.urjc.daw.equis.model.Category;
 
 @Controller
@@ -31,11 +34,17 @@ public class AdminController {
 
     private final UserService userService;
     private final CategoryService categoryService;
+    private final CommentService commentService;
+    private final PostService postService;
 
     public AdminController(UserService userService,
-                           CategoryService categoryService) {
+                        CategoryService categoryService,
+                        CommentService commentService,
+                        PostService postService) {
         this.userService = userService;
         this.categoryService = categoryService;
+        this.commentService = commentService;
+        this.postService = postService;
     }
 
     @GetMapping("/admin")
@@ -155,6 +164,20 @@ public class AdminController {
         }
 
         return "redirect:/admin";
+    }
+
+    @PostMapping("/admin/posts/delete/{id}")
+    public String deletePostAsAdmin(@PathVariable Long id,
+                                    @RequestHeader(value = "Referer", required = false) String referer) {
+        postService.deleteById(id);
+        return "redirect:" + (referer != null ? referer : "/admin");
+    }
+
+    @PostMapping("/admin/comments/delete/{id}")
+    public String deleteCommentAsAdmin(@PathVariable Long id,
+                                    @RequestHeader(value = "Referer", required = false) String referer) {
+        commentService.deleteComment(id);
+        return "redirect:" + (referer != null ? referer : "/admin");
     }
     
 }
