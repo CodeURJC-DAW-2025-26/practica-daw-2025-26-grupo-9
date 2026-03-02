@@ -18,7 +18,7 @@ public class UserController {
     private final UserService userService;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final LikeRepository likeRepository; // <- añadido
+    private final LikeRepository likeRepository; 
 
     public UserController(UserService userService,
                           PostRepository postRepository,
@@ -27,7 +27,7 @@ public class UserController {
         this.userService = userService;
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
-        this.likeRepository = likeRepository; // <- añadido
+        this.likeRepository = likeRepository;
     }
 
 
