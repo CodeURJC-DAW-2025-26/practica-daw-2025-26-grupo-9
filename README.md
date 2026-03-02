@@ -100,23 +100,25 @@ Diagram showing how to navigate between the different pages of the application:
 📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=x91MPoITQ3I)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web.
 
-### **Instrucciones de Ejecución**
+### **Execution Instructions**
 
-#### **Requisitos Previos**
-- **Java**: versión 21 o superior
-- **Maven**: versión 3.8 o superior
-- **MySQL**: versión 8.0 o superior
-- **Git**: para clonar el repositorio
+#### **Prerequisites**
+- **Java**: version 21 or higher
+- **Maven**: version 21 or higher
+- **MySQL**: version 8.0 or higher
+- **Git**: to clone the repository
 
-#### **Pasos para ejecutar la aplicación**
+#### **Steps to execute the application**
 
-1. **Clonar el repositorio**
+1. **Clone the repository**
    ```bash
-   git clone https://github.com/[usuario]/[nombre-repositorio].git
-   cd [nombre-repositorio]
+   git clone https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9.git
+   cd practica-daw-2025-26-grupo-9
    ```
-
-2. **AQUÍ INDICAR LO SIGUIENTES PASOS**
+2. **It is recomended to install Java, Maven and Spring Boot extensions in VSCode.**
+3. **Download MySQL and MySQL Workbench (use "password" as your password). Create a schema named "equis".**
+4. **Execute the code.**
+5. **Introduce this URL in your browser (it will tell you its not secure, ignore it): https://localhost:8443/**
 
 #### **Test credentials**
 - **Admin user**: usuario: `admin@equis.com`, contraseña: `admin`
