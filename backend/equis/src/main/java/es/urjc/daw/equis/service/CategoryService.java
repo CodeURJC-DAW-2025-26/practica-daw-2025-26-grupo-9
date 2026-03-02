@@ -24,15 +24,15 @@ import es.urjc.daw.equis.repository.PostRepository;
 @Service
 public class CategoryService {
 
-        private final CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
 
     public CategoryService(CategoryRepository categoryRepository,
-                                PostRepository postRepository,
-                                CommentRepository commentRepository,
-                                LikeRepository likeRepository) {
+            PostRepository postRepository,
+            CommentRepository commentRepository,
+            LikeRepository likeRepository) {
         this.categoryRepository = categoryRepository;
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
@@ -110,35 +110,36 @@ public class CategoryService {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        // (Opcional) Proteger "General" si no quieres borrarla
+        // Protect "General" category when trying to delete
         if ("General".equalsIgnoreCase(category.getName())) {
             throw new IllegalArgumentException("No se puede eliminar la categoría General");
         }
 
-        // 1) Obtener posts de la categoría
+        // 1) Get posts from the category
         var posts = postRepository.findByCategoryId(categoryId);
 
         for (var post : posts) {
 
-            // 2) Obtener comments del post
+            // 2) Get comments for the post
             var comments = commentRepository.findByPostId(post.getId());
 
-            // 3) Borrar likes de cada comment (si existe FK likes.comment_id)
+            // 3) Delete likes from each comment (if the likes.comment_id foreign key
+            // exists)
             for (var c : comments) {
                 likeRepository.deleteByCommentId(c.getId());
             }
 
-            // 4) Borrar comments del post
+            // 4) Delete post comments
             commentRepository.deleteByPostId(post.getId());
 
-            // 5) Borrar likes del post (si existe FK likes.post_id)
+            // 5) Delete likes from the post (if the likes.post_id foreign key exists)
             likeRepository.deleteByPostId(post.getId());
         }
 
-        // 6) Borrar posts
+        // 6) Delete posts
         postRepository.deleteByCategoryId(categoryId);
 
-        // 7) Borrar categoría
+        // 7) Delete category
         categoryRepository.deleteById(categoryId);
     }
 
@@ -147,42 +148,42 @@ public class CategoryService {
         return postRepository.findByCategoryId(id);
     }
 
-@Transactional
-public Category updateCategory(Long id,
-                                String name,
-                                String description,
-                                MultipartFile image)
-        throws Exception {
+    @Transactional
+    public Category updateCategory(Long id,
+            String name,
+            String description,
+            MultipartFile image)
+            throws Exception {
 
-    Category category = categoryRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
 
-    // Actualizar campos básicos
-    category.setName(name.trim());
-    category.setDescription(description);
+        // Update basic fields
+        category.setName(name.trim());
+        category.setDescription(description);
 
-    // Actualizar imagen solo si se sube nueva
-    if (image != null && !image.isEmpty()) {
+        // Update image only if a new one is uploaded
+        if (image != null && !image.isEmpty()) {
 
-        String contentType = image.getContentType();
+            String contentType = image.getContentType();
 
-        // Validar PNG o JPG
-        if (!"image/png".equals(contentType) &&
-            !"image/jpeg".equals(contentType)) {
-            throw new IllegalArgumentException("Solo se permiten PNG o JPG");
+            // Validate PNG o JPG
+            if (!"image/png".equals(contentType) &&
+                    !"image/jpeg".equals(contentType)) {
+                throw new IllegalArgumentException("Solo se permiten PNG o JPG");
+            }
+
+            category.setPicture(new javax.sql.rowset.serial.SerialBlob(image.getBytes()));
+            category.setImageType(contentType);
         }
 
-        category.setPicture(new javax.sql.rowset.serial.SerialBlob(image.getBytes()));
-        category.setImageType(contentType); // ← ESTO FALTABA
+        return categoryRepository.save(category);
     }
-
-    return categoryRepository.save(category);
-}
 
     @Transactional
     public void createCategory(String name,
-                            String description,
-                            MultipartFile image) {
+            String description,
+            MultipartFile image) {
 
         try {
 
@@ -204,9 +205,9 @@ public Category updateCategory(Long id,
 
                 String contentType = image.getContentType();
 
-                // Validar solo PNG y JPG
+                // Validate only PNG y JPG
                 if (!"image/png".equals(contentType) &&
-                    !"image/jpeg".equals(contentType)) {
+                        !"image/jpeg".equals(contentType)) {
                     throw new IllegalArgumentException("Solo se permiten imágenes PNG o JPG");
                 }
 

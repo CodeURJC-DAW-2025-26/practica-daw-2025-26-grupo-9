@@ -26,11 +26,11 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login(
-        @RequestParam(required = false) String error,
-        @RequestParam(required = false) String blocked,
-        Model model) {
+            @RequestParam(required = false) String error,
+            @RequestParam(required = false) String blocked,
+            Model model) {
         model.addAttribute("error", error != null);
-    model.addAttribute("blocked", blocked != null);
+        model.addAttribute("blocked", blocked != null);
         return "sign-in";
     }
 
@@ -42,8 +42,9 @@ public class AuthController {
 
     @PostMapping("/register")
     public String processRegister(@ModelAttribute User user,
-                                @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
-                                @RequestParam(value = "coverImage", required = false) MultipartFile coverImage) throws IOException, SQLException {
+            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
+            @RequestParam(value = "coverImage", required = false) MultipartFile coverImage)
+            throws IOException, SQLException {
 
         user.setRoles(List.of("ROLE_USER"));
         userService.register(user, profileImage, coverImage);

@@ -12,7 +12,7 @@ import es.urjc.daw.equis.model.User;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
 
-    // Para likes en posts
+    // For likes on posts
     Optional<Like> findByUserAndPost(User user, Post post);
 
     boolean existsByUserAndPost(User user, Post post);
@@ -22,8 +22,7 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     @Transactional
     void deleteByUserAndPost(User user, Post post);
 
-
-    // Para likes en comentarios
+    // For likes on comments
     Optional<Like> findByUserAndComment(User user, Comment comment);
 
     boolean existsByUserAndComment(User user, Comment comment);
@@ -33,9 +32,9 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     @Transactional
     void deleteByUserAndComment(User user, Comment comment);
 
-
-     // Para al eliminar una categoria poder eliminar el contenido
+    // For when deleting a category, be able to delete the content
     void deleteByPostId(Long postId);
+
     void deleteByCommentId(Long commentId);
 
     void deleteByPostCategoryId(Long categoryId);

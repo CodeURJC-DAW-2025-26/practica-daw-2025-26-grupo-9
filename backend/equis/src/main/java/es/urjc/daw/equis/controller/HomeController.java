@@ -36,9 +36,9 @@ public class HomeController {
     private final CategoryRepository categoryRepository;
 
     public HomeController(PostRepository postRepository,
-                          UserRepository userRepository,
-                          LikeRepository likeRepository,
-                          CategoryRepository categoryRepository) {
+            UserRepository userRepository,
+            LikeRepository likeRepository,
+            CategoryRepository categoryRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.likeRepository = likeRepository;
@@ -47,13 +47,14 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model,
-                   @RequestParam(name = "page", defaultValue = "1") int page,
-                   HttpServletRequest request) {
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            HttpServletRequest request) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         int size = 10;
-        if (page < 1) page = 1;
+        if (page < 1)
+            page = 1;
 
         List<Post> allPosts = postRepository.findAll();
         List<Post> ordered = applyAlgorithm(allPosts);
@@ -81,14 +82,14 @@ public class HomeController {
         model.addAttribute("hasNext", pageResult.hasNext());
         model.addAttribute("currentUser", currentUser);
 
-        
         List<Category> cats = categoryRepository.findAll();
         cats.forEach(c -> c.setPostsCount(postRepository.countByCategoryId(c.getId())));
 
         model.addAttribute("categories", cats);
         model.addAttribute("topCategories", topCategories(5));
 
-        String currentPath = request.getRequestURI() + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
+        String currentPath = request.getRequestURI()
+                + (request.getQueryString() != null ? "?" + request.getQueryString() : "");
         model.addAttribute("currentPath", currentPath);
 
         return "index";
@@ -178,8 +179,7 @@ public class HomeController {
         return new PageImpl<>(
                 content,
                 PageRequest.of(Math.max(page1Based - 1, 0), size),
-                ordered.size()
-        );
+                ordered.size());
     }
 
     private List<Category> topCategories(int limit) {

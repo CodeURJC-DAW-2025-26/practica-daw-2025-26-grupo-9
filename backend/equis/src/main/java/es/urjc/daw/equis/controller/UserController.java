@@ -18,18 +18,17 @@ public class UserController {
     private final UserService userService;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final LikeRepository likeRepository; 
+    private final LikeRepository likeRepository;
 
     public UserController(UserService userService,
-                          PostRepository postRepository,
-                          CommentRepository commentRepository,
-                          LikeRepository likeRepository) {
+            PostRepository postRepository,
+            CommentRepository commentRepository,
+            LikeRepository likeRepository) {
         this.userService = userService;
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
         this.likeRepository = likeRepository;
     }
-
 
     @GetMapping(value = "/users/{id}/profile-picture")
     @ResponseBody
@@ -46,5 +45,4 @@ public class UserController {
                 .body(image);
     }
 
-    
 }

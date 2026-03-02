@@ -13,7 +13,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Page<Post> findAllByOrderByDateDesc(Pageable pageable);
 
-    // para perfil y no index
+    // For profile and not index
     Page<Post> findByUserIdOrderByDateDesc(Long userId, Pageable pageable);
 
     long countByUserId(Long userId);
@@ -23,7 +23,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByCategory(Category category);
 
     long countByCategory(Category category);
-    
+
     List<Post> findByCategoryId(Long categoryId);
 
     void deleteByCategoryId(Long categoryId);

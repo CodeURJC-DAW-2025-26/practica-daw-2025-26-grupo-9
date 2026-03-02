@@ -22,35 +22,32 @@ public class EmailService {
     private final Mustache.Compiler mustacheCompiler;
 
     public EmailService(JavaMailSender mailSender,
-                        Mustache.Compiler mustacheCompiler) {
+            Mustache.Compiler mustacheCompiler) {
         this.mailSender = mailSender;
         this.mustacheCompiler = mustacheCompiler;
     }
 
     public void sendTemplateEmail(String to,
-                                  String subject,
-                                  String templateName,
-                                  Map<String, Object> model) {
+            String subject,
+            String templateName,
+            Map<String, Object> model) {
 
         try {
 
-            // Cargar template desde resources/templates
+            // Load template from resources/templates
             var template = mustacheCompiler.compile(
                     new String(
-                        getClass()
-                        .getResourceAsStream("/templates/" + templateName + ".html")
-                        .readAllBytes(),
-                        StandardCharsets.UTF_8
-                    )
-            );
+                            getClass()
+                                    .getResourceAsStream("/templates/" + templateName + ".html")
+                                    .readAllBytes(),
+                            StandardCharsets.UTF_8));
 
             String htmlContent = template.execute(model);
 
             MimeMessage message = mailSender.createMimeMessage();
             message.setHeader("Content-Type", "text/html; charset=UTF-8");
 
-            MimeMessageHelper helper =
-                    new MimeMessageHelper(message, true, "UTF-8");
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
             helper.setTo(to);
             helper.setSubject(subject);
@@ -62,20 +59,18 @@ public class EmailService {
             e.printStackTrace();
         }
     }
-    
+
     @Async
     public void sendWelcomeEmail(User user) {
 
-    Map<String, Object> model = Map.of(
-        "name", user.getName(),
-        "email", user.getEmail()
-    );
+        Map<String, Object> model = Map.of(
+                "name", user.getName(),
+                "email", user.getEmail());
 
-    sendTemplateEmail(
-        user.getEmail(),
-        "Welcome to Equis!",
-        "welcome",
-        model
-    );
-}
+        sendTemplateEmail(
+                user.getEmail(),
+                "Welcome to Equis!",
+                "welcome",
+                model);
+    }
 }

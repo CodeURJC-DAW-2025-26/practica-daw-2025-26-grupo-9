@@ -27,7 +27,8 @@ public class CSRFHandlerConfiguration implements WebMvcConfigurer {
                 Object handler,
                 ModelAndView modelAndView) throws Exception {
 
-            if (modelAndView == null) return;
+            if (modelAndView == null)
+                return;
 
             CsrfToken csrf = (CsrfToken) request.getAttribute("_csrf");
 

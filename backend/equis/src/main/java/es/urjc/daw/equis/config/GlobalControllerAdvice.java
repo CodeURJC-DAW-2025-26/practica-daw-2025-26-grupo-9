@@ -23,7 +23,8 @@ public class GlobalControllerAdvice {
     private final CategoryRepository categoryRepository;
     private final PostRepository postRepository;
 
-    public GlobalControllerAdvice(UserRepository userRepository, CategoryRepository categoryRepository, PostRepository postRepository) {
+    public GlobalControllerAdvice(UserRepository userRepository, CategoryRepository categoryRepository,
+            PostRepository postRepository) {
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
         this.postRepository = postRepository;
@@ -44,8 +45,7 @@ public class GlobalControllerAdvice {
                         u.getName(),
                         u.getEmail(),
                         u.isActive(),
-                        u.getNickname()
-                ))
+                        u.getNickname()))
                 .orElse(null);
     }
 
@@ -53,14 +53,15 @@ public class GlobalControllerAdvice {
     public boolean isAdmin(@ModelAttribute("currentUser") CurrentUserDTO currentUser) {
         return currentUser != null;
     }
+
     /**
-     * Categorías fijas disponibles para seleccionar al crear un post.
-     * Se ordenan por nombre (con "General" primero si existe).
+     * Fixed categories available for selection when creating a post.
+     * They are ordered by name (with "General" first if it exists).
      */
     @ModelAttribute("allcategories")
     public List<Category> categories1() {
         List<Category> cats = categoryRepository.findAll();
-        // Precalcular el número de posts por categoría (para mostrar conteos en la UI)
+        // Pre-calculate the number of posts per category (to display counts in the UI)
         cats.forEach(c -> c.setPostsCount(postRepository.countByCategoryId(c.getId())));
         cats.sort(Comparator.comparing((Category c) -> !"General".equalsIgnoreCase(c.getName()))
                 .thenComparing(Category::getName, String.CASE_INSENSITIVE_ORDER));
@@ -68,13 +69,13 @@ public class GlobalControllerAdvice {
     }
 
     /**
-     * Categorías fijas disponibles para seleccionar al crear un post.
-     * Se ordenan por nombre (con "General" primero si existe).
+     * Fixed categories available for selection when creating a post.
+     * They are sorted by name (with "General" first if it exists).
      */
     @ModelAttribute("categories")
     public List<Category> categories() {
         List<Category> cats = categoryRepository.findAll();
-        // Precalcular el número de posts por categoría (para mostrar conteos en la UI)
+        // Pre-calculate the number of posts per category (to display counts in the UI)
         cats.forEach(c -> c.setPostsCount(postRepository.countByCategoryId(c.getId())));
         cats.sort(Comparator.comparing((Category c) -> !"General".equalsIgnoreCase(c.getName()))
                 .thenComparing(Category::getName, String.CASE_INSENSITIVE_ORDER));
@@ -82,16 +83,16 @@ public class GlobalControllerAdvice {
     }
 
     /**
-     * sd-active en cada pagina
+     * sd-active in each page
      */
     @ModelAttribute
-public void addActivePageAttributes(HttpServletRequest request, org.springframework.ui.Model model) {
+    public void addActivePageAttributes(HttpServletRequest request, org.springframework.ui.Model model) {
 
-    String uri = request.getRequestURI();
+        String uri = request.getRequestURI();
 
-    model.addAttribute("homeActive", uri.equals("/"));
-    model.addAttribute("profileActive", uri.startsWith("/profile"));
-    model.addAttribute("adminActive", uri.startsWith("/admin"));
-    model.addAttribute("categoriesActive", uri.startsWith("/categories"));
-}
+        model.addAttribute("homeActive", uri.equals("/"));
+        model.addAttribute("profileActive", uri.startsWith("/profile"));
+        model.addAttribute("adminActive", uri.startsWith("/admin"));
+        model.addAttribute("categoriesActive", uri.startsWith("/categories"));
+    }
 }

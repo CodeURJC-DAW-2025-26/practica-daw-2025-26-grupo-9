@@ -16,7 +16,6 @@ public class CurrentUserDTO {
         this.nickname = nickname;
     }
 
-
     public String getNickname() {
         return nickname;
     }
@@ -25,8 +24,19 @@ public class CurrentUserDTO {
         this.nickname = nickname;
     }
 
-    public Long getId() { return id; }
-    public String getName() { return name; }
-    public String getEmail() { return email; }
-    public boolean isActive() { return active; }
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
 }

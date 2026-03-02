@@ -30,7 +30,7 @@
     <!-- SIDEBAR -->
     {{> partials/sidebar}}
 
-    <!-- CONTENIDO -->
+    <!-- CONTENT -->
     <div class="col-md-9 d-flex justify-content-center align-items-center min-vh-100">
       <div class="col-md-6">
         <div class="content">
@@ -54,51 +54,39 @@
             {{/successMessage}}
 
             <!-- FORM -->
-            <form action="/admin/categories/edit/{{category.id}}"
-                  method="post"
-                  enctype="multipart/form-data">
+            <form action="/admin/categories/edit/{{category.id}}" method="post" enctype="multipart/form-data">
 
               <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
 
-              <!-- Nombre -->
+              <!-- Name -->
               <div class="form-group">
                 <label>Nombre</label>
-                <input type="text"
-                       name="name"
-                       class="form-control"
-                       value="{{category.name}}"
-                       required>
+                <input type="text" name="name" class="form-control" value="{{category.name}}" required>
               </div>
 
-              <!-- Descripción -->
+              <!-- Description -->
               <div class="form-group">
                 <label>Descripción</label>
-                <textarea name="description"
-                          class="form-control"
-                          rows="3"
-                          placeholder="Describe la categoría...">{{category.description}}</textarea>
+                <textarea name="description" class="form-control" rows="3"
+                  placeholder="Describe la categoría...">{{category.description}}</textarea>
               </div>
 
-              <!-- Imagen actual -->
+              <!-- Current image -->
               {{#category.picture}}
               <div class="form-group text-center">
                 <label>Imagen actual</label><br>
-                <img src="/categories/{{category.id}}/image"
-                     class="img-fluid rounded shadow-sm"
-                     style="max-height:150px;">
+                <img src="/categories/{{category.id}}/image" class="img-fluid rounded shadow-sm"
+                  style="max-height:150px;">
               </div>
               {{/category.picture}}
 
-              <!-- Nueva imagen -->
+              <!-- New image -->
               <div class="form-group">
                 <label>Nueva imagen</label>
-                <input type="file"
-                       name="image"
-                       class="form-control-file"
-                       accept="image/*">
+                <input type="file" name="image" class="form-control-file" accept="image/*">
               </div>
 
-              <!-- BOTONES -->
+              <!-- BUTTONS -->
               <div class="d-flex justify-content-between align-items-center mt-4">
                 <a href="/admin" class="btn btn-secondary btn-sm">
                   Cancelar
@@ -125,4 +113,5 @@
   <script src="/assets/js/components/components.js"></script>
 
 </body>
+
 </html>

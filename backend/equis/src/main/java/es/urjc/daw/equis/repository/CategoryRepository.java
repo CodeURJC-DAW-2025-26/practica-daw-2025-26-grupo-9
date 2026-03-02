@@ -8,5 +8,6 @@ import es.urjc.daw.equis.model.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     Optional<Category> findByNameIgnoreCase(String name);
+
     boolean existsByNameIgnoreCase(String name);
 }

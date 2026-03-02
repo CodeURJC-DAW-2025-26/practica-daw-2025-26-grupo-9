@@ -47,9 +47,9 @@ public class PostController {
     private CategoryService categoryService;
 
     public PostController(PostRepository postRepository,
-                          LikeRepository likeRepository,
-                          UserRepository userRepository,
-                          CommentRepository commentRepository) {
+            LikeRepository likeRepository,
+            UserRepository userRepository,
+            CommentRepository commentRepository) {
         this.postRepository = postRepository;
         this.likeRepository = likeRepository;
         this.userRepository = userRepository;
@@ -58,10 +58,10 @@ public class PostController {
 
     @PostMapping("/newPost")
     public String newPost(@RequestParam String content,
-                        @RequestParam Long category_id,
-                        @RequestParam(required = false) MultipartFile picture,
-                        @RequestParam(required = false) String redirect,
-                        Authentication auth) throws Exception {
+            @RequestParam Long category_id,
+            @RequestParam(required = false) MultipartFile picture,
+            @RequestParam(required = false) String redirect,
+            Authentication auth) throws Exception {
 
         if (auth == null || auth.getName().equals("anonymousUser")) {
             return "redirect:/login";
@@ -90,7 +90,7 @@ public class PostController {
             return safeRedirect(redirect, "/");
         }
 
-        // Solo el dueño o admin puede borrar
+        // Only the owner or admin can delete
         if (post.getUser().equals(currentUser)) {
             postService.deleteById(id);
         }
@@ -113,7 +113,7 @@ public class PostController {
 
         User currentUser = userService.findByEmail(auth.getName()).orElse(null);
         if (!post.getUser().equals(currentUser)) {
-            // si no es dueño, no puede editar
+            // if it is not the owner, can not edit
             return "redirect:/posts/" + id;
         }
 
@@ -122,7 +122,7 @@ public class PostController {
         model.addAttribute("post", post);
         model.addAttribute("categories", categories);
 
-        // CSRF tokens para el formulario
+        // CSRF tokens for the form
         CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
         model.addAttribute("csrfParameterName", csrfToken.getParameterName());
         model.addAttribute("csrfToken", csrfToken.getToken());
@@ -134,12 +134,12 @@ public class PostController {
 
     @PostMapping("/{id}/editPost")
     public String editPost(@RequestParam(required = false) String content,
-                        @PathVariable("id") Long post_id,
-                        @RequestParam(required = false) Long category_id,
-                        @RequestParam(required = false) MultipartFile picture,
-                        @RequestParam(required = false) String redirect,
-                        @RequestParam(required = false) String removePicture,
-                        Authentication auth) throws Exception {
+            @PathVariable("id") Long post_id,
+            @RequestParam(required = false) Long category_id,
+            @RequestParam(required = false) MultipartFile picture,
+            @RequestParam(required = false) String redirect,
+            @RequestParam(required = false) String removePicture,
+            Authentication auth) throws Exception {
 
         if (auth == null || auth.getName().equals("anonymousUser")) {
             return "redirect:/login";
@@ -150,11 +150,10 @@ public class PostController {
             return safeRedirect(redirect, "/");
         }
 
-        postService.edit(post, picture,category_id, content,removePicture);
+        postService.edit(post, picture, category_id, content, removePicture);
 
         return safeRedirect(redirect, "/");
     }
-
 
     @GetMapping("/post/{id}/image")
     public ResponseEntity<byte[]> getPostImage(@PathVariable Long id) throws Exception {
@@ -174,11 +173,10 @@ public class PostController {
                 .body(imageBytes);
     }
 
-
     @GetMapping("/{id}/like")
     public String togglePostLike(@PathVariable Long id,
-                                Authentication auth,
-                                @RequestParam(required = false) String redirect) {
+            Authentication auth,
+            @RequestParam(required = false) String redirect) {
 
         if (auth == null || auth.getName().equals("anonymousUser")) {
             return "redirect:/login";
@@ -199,17 +197,15 @@ public class PostController {
                             like.setUser(user);
                             like.setPost(post);
                             likeRepository.save(like);
-                        }
-                );
+                        });
 
         return safeRedirect(redirect, "/");
     }
 
-
     @GetMapping("/comments/{id}/like")
     public String toggleCommentLike(@PathVariable Long id,
-                                    Authentication auth,
-                                    @RequestParam(required = false) String redirect) {
+            Authentication auth,
+            @RequestParam(required = false) String redirect) {
 
         if (auth == null || auth.getName().equals("anonymousUser")) {
             return "redirect:/login";
@@ -230,17 +226,16 @@ public class PostController {
                             like.setUser(user);
                             like.setComment(comment);
                             likeRepository.save(like);
-                        }
-                );
+                        });
 
         return safeRedirect(redirect, "/");
     }
 
     @PostMapping("/{postId}/comments")
     public String addComment(@PathVariable Long postId,
-                            @RequestParam String content,
-                            Authentication auth,
-                            @RequestParam(required = false) String redirect) {
+            @RequestParam String content,
+            Authentication auth,
+            @RequestParam(required = false) String redirect) {
 
         if (auth == null || auth.getName().equals("anonymousUser")) {
             return "redirect:/login";
@@ -263,12 +258,11 @@ public class PostController {
         return safeRedirect(redirect, "/");
     }
 
-
     @PostMapping("/comments/{id}/edit")
     public String editComment(@PathVariable Long id,
-                            @RequestParam String content,
-                            Authentication auth,
-                            @RequestParam(required = false) String redirect) {
+            @RequestParam String content,
+            Authentication auth,
+            @RequestParam(required = false) String redirect) {
 
         if (auth == null || auth.getName().equals("anonymousUser")) {
             return "redirect:/login";
@@ -291,10 +285,9 @@ public class PostController {
         return safeRedirect(redirect, "/");
     }
 
-
     @PostMapping("/comments/{id}/delete")
     public String deleteComment(@PathVariable Long id,
-                                Authentication auth) {
+            Authentication auth) {
 
         if (auth == null || auth.getName().equals("anonymousUser")) {
             return "redirect:/login";
@@ -309,7 +302,7 @@ public class PostController {
 
         boolean isOwner = comment.getUser().getId().equals(user.getId());
         boolean isAdmin = user.getRoles() != null &&
-                          user.getRoles().contains("ADMIN");
+                user.getRoles().contains("ADMIN");
 
         if (!isOwner && !isAdmin) {
             return "redirect:/";
@@ -322,12 +315,13 @@ public class PostController {
 
     @GetMapping("/{id}")
     public String viewPost(@PathVariable Long id,
-                        Model model,
-                        Authentication auth,
-                        HttpServletRequest request){
+            Model model,
+            Authentication auth,
+            HttpServletRequest request) {
 
         Post post = postService.findById(id);
-        if (post == null) return "redirect:/";
+        if (post == null)
+            return "redirect:/";
 
         User currentUser = null;
         if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
@@ -353,7 +347,6 @@ public class PostController {
         String currentPath = request.getRequestURI();
         model.addAttribute("currentPath", currentPath);
 
-        // 🔥 ESTO FALTABA
         CsrfToken token = (CsrfToken) request.getAttribute("_csrf");
         if (token != null) {
             model.addAttribute("_csrf", token);
@@ -363,12 +356,13 @@ public class PostController {
     }
 
     private String safeRedirect(String redirect, String fallback) {
-    if (redirect == null || redirect.isBlank()) return "redirect:" + fallback;
+        if (redirect == null || redirect.isBlank())
+            return "redirect:" + fallback;
 
-    // Solo permitimos rutas internas (evita http(s):// y open redirects)
-    if (redirect.startsWith("/") && !redirect.startsWith("//")) {
-        return "redirect:" + redirect;
+        // We only allow internal paths
+        if (redirect.startsWith("/") && !redirect.startsWith("//")) {
+            return "redirect:" + redirect;
+        }
+        return "redirect:" + fallback;
     }
-    return "redirect:" + fallback;
-}
 }

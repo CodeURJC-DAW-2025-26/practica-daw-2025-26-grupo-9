@@ -13,8 +13,8 @@
         <form class="d-inline form-inline w-100 px-4" action="/search" method="get">
           <div class="input-group">
             <input type="text" class="form-control search-input" name="q"
-                   placeholder="Search for people, companies, events and more..."
-                   aria-label="Search" aria-describedby="search-addon">
+              placeholder="Search for people, companies, events and more..." aria-label="Search"
+              aria-describedby="search-addon">
             <div class="input-group-append">
               <button class="btn search-button" type="submit"><i class='bx bx-search'></i></button>
             </div>
@@ -23,8 +23,8 @@
       </li>
 
       <li class="nav-item">
-        <a href="/messages" class="nav-link nav-icon nav-links message-drop drop-w-tooltip"
-           data-placement="bottom" data-title="Messages">
+        <a href="/messages" class="nav-link nav-icon nav-links message-drop drop-w-tooltip" data-placement="bottom"
+          data-title="Messages">
           <img src="/assets/images/icons/navbar/message.png" class="message-dropdown f-nav-icon" alt="navbar icon">
         </a>
       </li>
@@ -39,10 +39,8 @@
       <li class="nav-item s-nav ml-auto">
         <a href="/profile" class="nav-link nav-links">
           <div class="menu-user-image">
-            <img src="/user/{{id}}/profile-image"
-                class="menu-user-img ml-1"
-                alt="Menu Image"
-                onerror="this.onerror=null;this.src='/assets/images/users/user-4.jpg';">
+            <img src="/user/{{id}}/profile-image" class="menu-user-img ml-1" alt="Menu Image"
+              onerror="this.onerror=null;this.src='/assets/images/users/user-4.jpg';">
           </div>
         </a>
       </li>
@@ -50,11 +48,8 @@
       <li class="nav-item s-nav nav-icon">
         <form action="/logout" method="post" style="margin:0;">
           <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
-          <button type="submit"
-                  style="border:0;background:transparent;padding:0;cursor:pointer;">
-            <img src="/assets/images/icons/navbar/logout.png"
-                class="nav-settings"
-                alt="Logout">
+          <button type="submit" style="border:0;background:transparent;padding:0;cursor:pointer;">
+            <img src="/assets/images/icons/navbar/logout.png" class="nav-settings" alt="Logout">
           </button>
         </form>
       </li>

@@ -38,9 +38,9 @@ public class AdminController {
     private final PostService postService;
 
     public AdminController(UserService userService,
-                        CategoryService categoryService,
-                        CommentService commentService,
-                        PostService postService) {
+            CategoryService categoryService,
+            CommentService commentService,
+            PostService postService) {
         this.userService = userService;
         this.categoryService = categoryService;
         this.commentService = commentService;
@@ -58,17 +58,15 @@ public class AdminController {
         Pageable pageable = PageRequest.of(
                 page,
                 size,
-                Sort.by(Sort.Order.asc("name").ignoreCase())
-        );
+                Sort.by(Sort.Order.asc("name").ignoreCase()));
 
         Page<User> usersPage = userService.findAll(pageable);
 
-        // Marcar admin actual
+        // Mark current admin
         usersPage.getContent().forEach(user -> {
             if (principal != null) {
                 user.setCurrentAdmin(
-                    user.getEmail().equals(principal.getName())
-                );
+                        user.getEmail().equals(principal.getName()));
             }
         });
 
@@ -82,10 +80,8 @@ public class AdminController {
         model.addAttribute("pages",
                 IntStream.range(0, usersPage.getTotalPages())
                         .boxed()
-                        .toList()
-        );
+                        .toList());
 
-        // 🔥 ESTO ES LO QUE FALTA
         CsrfToken csrf = (CsrfToken) request.getAttribute("_csrf");
         model.addAttribute("_csrf", csrf);
 
@@ -119,7 +115,7 @@ public class AdminController {
     @GetMapping("/admin/categories/edit/{id}")
     public String editCategoryForm(@PathVariable Long id, Model model) {
         model.addAttribute("category",
-            categoryService.getByIdOrThrow(id));
+                categoryService.getByIdOrThrow(id));
         return "editCategory";
     }
 
@@ -168,16 +164,16 @@ public class AdminController {
 
     @PostMapping("/admin/posts/delete/{id}")
     public String deletePostAsAdmin(@PathVariable Long id,
-                                    @RequestHeader(value = "Referer", required = false) String referer) {
+            @RequestHeader(value = "Referer", required = false) String referer) {
         postService.deleteById(id);
         return "redirect:" + (referer != null ? referer : "/admin");
     }
 
     @PostMapping("/admin/comments/delete/{id}")
     public String deleteCommentAsAdmin(@PathVariable Long id,
-                                    @RequestHeader(value = "Referer", required = false) String referer) {
+            @RequestHeader(value = "Referer", required = false) String referer) {
         commentService.deleteComment(id);
         return "redirect:" + (referer != null ? referer : "/admin");
     }
-    
+
 }

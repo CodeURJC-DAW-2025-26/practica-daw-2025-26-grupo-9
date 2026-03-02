@@ -26,10 +26,10 @@
 
     <div class="row newsfeed-size">
 
-      <!-- SIDEBAR IZQUIERDA -->
+      <!-- LEFT SIDEBAR -->
       {{> partials/sidebar}}
 
-      <!-- CONTENIDO CENTRAL -->
+      <!-- CENTRAL CONTENT -->
       <div class="col-md-8 second-section" id="page-content-wrapper">
 
         <div class="groups bg-white shadow-sm p-4 rounded mb-4">
@@ -43,8 +43,7 @@
 
           <!-- Header -->
           <div class="media text-muted pt-3">
-            <img src="/user/{{post.user.id}}/profile-image"
-                 class="mr-3 post-user-image">
+            <img src="/user/{{post.user.id}}/profile-image" class="mr-3 post-user-image">
             <div class="media-body pb-3 mb-0 small lh-125">
               <div class="d-flex justify-content-between align-items-center w-100">
                 <a href="/users/{{post.user.id}}" class="text-gray-dark post-user-name">
@@ -55,43 +54,43 @@
             </div>
           </div>
 
-          <!-- Formulario de edición -->
+          <!-- Edit form -->
           <form action="/posts/{{post.id}}/editPost" method="post" enctype="multipart/form-data">
             <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
 
-            <!-- Contenido -->
+            <!-- Content -->
             <div class="form-group mt-3">
               <textarea name="content" class="form-control" rows="4">{{post.content}}</textarea>
             </div>
 
-            <!-- Categoría -->
+            <!-- Category -->
             <div class="form-group">
-                <select class="form-control" name="category_id">
-                    {{#categories}}
-                    <option value="{{id}}">{{name}}</option>
-                    {{/categories}}
-                </select>
+              <select class="form-control" name="category_id">
+                {{#categories}}
+                <option value="{{id}}">{{name}}</option>
+                {{/categories}}
+              </select>
             </div>
 
-            <!-- Imagen -->
+            <!-- Image -->
             <div class="form-group mt-3">
               <label class="btn btn-link">
                 Cambiar imagen
                 <input type="file" name="picture" accept="image/*" hidden>
               </label>
               {{#post.picture}}
-                <div class="mt-2">
-                  <p>Imagen actual:</p>
-                  <img src="/posts/post/{{post.id}}/image" alt="post image" class="post-content">
-                  <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="removePicture" id="removePicture">
-                    <label class="form-check-label" for="removePicture">Eliminar imagen</label>
-                  </div>
+              <div class="mt-2">
+                <p>Imagen actual:</p>
+                <img src="/posts/post/{{post.id}}/image" alt="post image" class="post-content">
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" name="removePicture" id="removePicture">
+                  <label class="form-check-label" for="removePicture">Eliminar imagen</label>
                 </div>
+              </div>
               {{/post.picture}}
             </div>
 
-            <!-- Botones -->
+            <!-- Buttons -->
             <div class="form-group text-right mt-4">
               <button type="submit" class="btn btn-success">Guardar cambios</button>
               <a href="/posts/{{post.id}}" class="btn btn-secondary">Cancelar</a>
@@ -110,4 +109,5 @@
   <script src="/assets/js/popper/popper.min.js"></script>
   <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
 </body>
+
 </html>

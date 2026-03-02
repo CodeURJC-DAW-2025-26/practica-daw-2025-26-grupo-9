@@ -30,7 +30,7 @@ public class PostService {
     private final LikeRepository likeRepository;
 
     public PostService(PostRepository postRepository,
-                    LikeRepository likeRepository) {
+            LikeRepository likeRepository) {
         this.postRepository = postRepository;
         this.likeRepository = likeRepository;
     }
@@ -42,38 +42,39 @@ public class PostService {
         }
     }
 
-    public void save(Post post, MultipartFile picture,Authentication auth, Long category_id, String content) throws IOException{
-        //asigno el contenido
+    public void save(Post post, MultipartFile picture, Authentication auth, Long category_id, String content)
+            throws IOException {
+        // Assign the content
         post.setContent(content);
-        // asignacion del usuario correspondiente
+        // Assign the corresponding user
         User user = userService.findByEmail(auth.getName()).orElse(null);
         post.setUser(user);
 
-        // asignacion de la categoria
+        // Assign the category
         Category cateory = categoryService.findById(category_id);
         post.setCategory(cateory);
         System.out.println("asigna todo menos foto");
-        //asignacion de la imagen si es que la hay
+        // Assign the image if it exists
         if (picture != null && !picture.isEmpty()) {
-        try {
-            post.setPicture(new SerialBlob(picture.getBytes()));
-        } catch (Exception e) {
-            throw new IOException("Failed to create image blob", e);
-        }
-        System.out.println("asigna foto");
+            try {
+                post.setPicture(new SerialBlob(picture.getBytes()));
+            } catch (Exception e) {
+                throw new IOException("Failed to create image blob", e);
+            }
+            System.out.println("asigna foto");
         }
         postRepository.save(post);
     }
-    
-     public void edit(Post post, MultipartFile picture, Long category_id, String content, String removePicture)
+
+    public void edit(Post post, MultipartFile picture, Long category_id, String content, String removePicture)
             throws IOException {
 
-        // content
+        // Content
         if (content != null && !content.isBlank()) {
             post.setContent(content);
         }
 
-        // Categoría
+        // Category
         if (category_id != null) {
             Category category = categoryService.findById(category_id);
             if (category != null) {
@@ -81,12 +82,12 @@ public class PostService {
             }
         }
 
-        // Eliminar imagen si el checkbox estaba marcado
+        // Delete the image if the checkbox was checked
         if (removePicture != null) {
             post.setPicture(null);
         }
 
-        // si hay nueva imagen cambiarla
+        // Change it if there is a new image
         if (picture != null && !picture.isEmpty()) {
             try {
                 post.setPicture(new SerialBlob(picture.getBytes()));
@@ -95,9 +96,8 @@ public class PostService {
             }
         }
 
-        // Guardar los cambios
+        // Save changes
         postRepository.save(post);
-
 
     }
 
@@ -108,9 +108,11 @@ public class PostService {
     public List<Post> findByCategory(Category category) {
         return postRepository.findByCategory(category);
     }
-        public long countByCategory(Category category) {
+
+    public long countByCategory(Category category) {
         return postRepository.countByCategory(category);
     }
+
     public Page<Post> getFeed(Pageable pageable) {
         return postRepository.findAllByOrderByDateDesc(pageable);
     }
@@ -120,10 +122,10 @@ public class PostService {
     }
 
     public void deleteById(Long id) {
-    if (!postRepository.existsById(id)) {
-        throw new IllegalArgumentException("Post no encontrado con id: " + id);
+        if (!postRepository.existsById(id)) {
+            throw new IllegalArgumentException("Post no encontrado con id: " + id);
+        }
+        postRepository.deleteById(id);
     }
-    postRepository.deleteById(id);
-}
 
 }

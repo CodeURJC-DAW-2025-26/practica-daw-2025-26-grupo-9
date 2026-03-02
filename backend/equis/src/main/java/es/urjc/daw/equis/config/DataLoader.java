@@ -24,23 +24,23 @@ import es.urjc.daw.equis.repository.CommentRepository;
 import es.urjc.daw.equis.repository.CategoryRepository;
 import es.urjc.daw.equis.repository.LikeRepository;
 
-
 @Configuration
 public class DataLoader {
 
     @Bean
     CommandLineRunner loadData(UserRepository userRepo,
-                               PostRepository postRepo,
-                               CommentRepository commentRepo,
-                               CategoryRepository categoryRepo,
-                               LikeRepository likeRepo,
-                               PasswordEncoder encoder) {
+            PostRepository postRepo,
+            CommentRepository commentRepo,
+            CategoryRepository categoryRepo,
+            LikeRepository likeRepo,
+            PasswordEncoder encoder) {
 
         return args -> {
 
-            if (userRepo.count() > 0) return;
+            if (userRepo.count() > 0)
+                return;
 
-            // 👤 USERS
+            // USERS
             User admin = createUser("admin@equis.com", "Admin", "Root",
                     "el-bicho", "Administrador del sistema",
                     "static/assets/images/users/user-2.jpg",
@@ -63,8 +63,7 @@ public class DataLoader {
 
             userRepo.saveAll(List.of(admin, user1, user2, user3));
 
-
-            // 📂 CATEGORIES
+            // CATEGORIES
 
             Category tech = createCategory("Tecnología",
                     "Todo sobre programación",
@@ -78,15 +77,13 @@ public class DataLoader {
                     "Contenido random",
                     "static/assets/images/groups/category-3.jpg");
 
-            Category general = createCategory("General",    
+            Category general = createCategory("General",
                     "Contenido para el feed sin categoria",
                     "static/assets/images/groups/category-3.jpg");
 
-
             categoryRepo.saveAll(List.of(tech, sports, memes, general));
 
-
-            // 📝 POSTS (sin likes ahora)
+            // POSTS
             Post p1 = createPost("Primer post 🔥", admin, tech);
             Post p2 = createPost("Spring Boot funcionando 🚀", user3, tech);
             Post p3 = createPost("Hoy entreno pierna 💀", user2, sports);
@@ -95,17 +92,17 @@ public class DataLoader {
 
             postRepo.saveAll(List.of(p1, p2, p3, p4, p5));
 
-            // 💬 COMMENTS (sin likes ahora)
-            Comment c1  = createComment("Esto ya va fino 😌", user1, p1);
-            Comment c2  = createComment("Confirmo 😂", user2, p4);
-            Comment c3  = createComment("Spring nunca falla", admin, p2);
-            Comment c4  = createComment("Pierna = dolor eterno", user3, p3);
-            Comment c5  = createComment("Hibernate siempre gana", admin, p5);
+            // COMMENTS
+            Comment c1 = createComment("Esto ya va fino 😌", user1, p1);
+            Comment c2 = createComment("Confirmo 😂", user2, p4);
+            Comment c3 = createComment("Spring nunca falla", admin, p2);
+            Comment c4 = createComment("Pierna = dolor eterno", user3, p3);
+            Comment c5 = createComment("Hibernate siempre gana", admin, p5);
 
-            Comment c6  = createComment("Buen post 👌", user2, p1);
-            Comment c7  = createComment("Totalmente de acuerdo", user3, p1);
-            Comment c8  = createComment("JAJAJA real", user1, p4);
-            Comment c9  = createComment("Murcia supremacy 😌", user2, p4);
+            Comment c6 = createComment("Buen post 👌", user2, p1);
+            Comment c7 = createComment("Totalmente de acuerdo", user3, p1);
+            Comment c8 = createComment("JAJAJA real", user1, p4);
+            Comment c9 = createComment("Murcia supremacy 😌", user2, p4);
             Comment c10 = createComment("Spring Boot >>> todo", user3, p2);
 
             Comment c11 = createComment("Hibernate trauma unlocked 😭", user1, p5);
@@ -115,12 +112,11 @@ public class DataLoader {
             Comment c15 = createComment("Código limpio o nada", user3, p2);
 
             commentRepo.saveAll(List.of(
-                c1, c2, c3, c4, c5,
-                c6, c7, c8, c9, c10,
-                c11, c12, c13, c14, c15
-            ));
+                    c1, c2, c3, c4, c5,
+                    c6, c7, c8, c9, c10,
+                    c11, c12, c13, c14, c15));
 
-            // ❤️ LIKES POR DEFECTO
+            // LIKES BY DEFAULT
             Like l1 = createPostLike(user1, p1);
             Like l2 = createPostLike(user2, p1);
             Like l3 = createPostLike(user3, p2);
@@ -134,11 +130,9 @@ public class DataLoader {
             Like l10 = createCommentLike(user1, c10);
 
             likeRepo.saveAll(List.of(
-                l1, l2, l3, l4, l5,
-                l6, l7, l8, l9, l10
-            ));
+                    l1, l2, l3, l4, l5,
+                    l6, l7, l8, l9, l10));
 
-            System.out.println("🔥 Datos masivos creados");
         };
     }
 
@@ -147,9 +141,9 @@ public class DataLoader {
     // =========================
 
     private User createUser(String email, String name, String surname,
-                            String nickname, String description,
-                            String imageURL,
-                            String password, List<String> roles) {
+            String nickname, String description,
+            String imageURL,
+            String password, List<String> roles) {
 
         User u = new User();
         u.setEmail(email);
@@ -164,26 +158,25 @@ public class DataLoader {
 
         // Cover image by default
         u.setCoverPicture(
-            loadImageAsBlob("static/assets/images/users/cover/cover-1.gif")
-        );
+                loadImageAsBlob("static/assets/images/users/cover/cover-1.gif"));
 
         return u;
     }
 
     private Category createCategory(String name,
-                                    String description,
-                                    String imagePath) {
+            String description,
+            String imagePath) {
 
         Category c = new Category();
 
         c.setName(name);
         c.setDescription(description);
 
-        // Cargar imagen real desde resources
+        // Load real image from resources
         Blob imageBlob = loadImageAsBlob(imagePath);
         c.setPicture(imageBlob);
 
-        // Detectar tipo según extensión
+        // Detect type by extension
         if (imagePath.endsWith(".png")) {
             c.setImageType("image/png");
         } else if (imagePath.endsWith(".jpg") || imagePath.endsWith(".jpeg")) {
@@ -202,7 +195,7 @@ public class DataLoader {
             byte[] bytes = is.readAllBytes();
             return new SerialBlob(bytes);
         } catch (Exception e) {
-            System.err.println("⚠ No se pudo cargar imagen: " + path);
+            System.err.println("⚠ Image could not be loaded: " + path);
             return null;
         }
     }

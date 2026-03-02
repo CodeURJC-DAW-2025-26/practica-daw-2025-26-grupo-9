@@ -30,7 +30,7 @@
     <!-- SIDEBAR -->
     {{> partials/sidebar}}
 
-    <!-- CONTENIDO -->
+    <!-- CONTENT -->
     <div class="col-md-9 d-flex justify-content-center align-items-center min-vh-100">
       <div class="col-md-6">
         <div class="content">
@@ -54,41 +54,30 @@
             {{/successMessage}}
 
             <!-- FORM -->
-            <form action="/admin/categories/new"
-                  method="post"
-                  enctype="multipart/form-data">
+            <form action="/admin/categories/new" method="post" enctype="multipart/form-data">
 
               <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
 
-              <!-- Nombre -->
+              <!-- Name -->
               <div class="form-group">
                 <label>Nombre</label>
-                <input type="text"
-                       name="name"
-                       class="form-control"
-                       placeholder="Ej: Tecnología"
-                       required>
+                <input type="text" name="name" class="form-control" placeholder="Ej: Tecnología" required>
               </div>
 
-              <!-- Descripción -->
+              <!-- Description -->
               <div class="form-group">
                 <label>Descripción</label>
-                <textarea name="description"
-                          class="form-control"
-                          rows="3"
-                          placeholder="Describe esta categoría..."></textarea>
+                <textarea name="description" class="form-control" rows="3"
+                  placeholder="Describe esta categoría..."></textarea>
               </div>
 
-              <!-- Imagen -->
+              <!-- Image -->
               <div class="form-group">
                 <label>Imagen</label>
-                <input type="file"
-                       name="image"
-                       class="form-control-file"
-                       accept="image/*">
+                <input type="file" name="image" class="form-control-file" accept="image/*">
               </div>
 
-              <!-- BOTONES -->
+              <!-- BUTTONS -->
               <div class="d-flex justify-content-between align-items-center mt-4">
                 <a href="/admin" class="btn btn-secondary btn-sm">
                   Cancelar
@@ -115,4 +104,5 @@
   <script src="/assets/js/components/components.js"></script>
 
 </body>
+
 </html>

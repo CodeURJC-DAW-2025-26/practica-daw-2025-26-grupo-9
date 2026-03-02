@@ -14,17 +14,18 @@ public class Like {
     @JoinColumn(name = "user_id")
     private User user;
 
-    // 🔹 LIKE A POST
+    // LIKE A POST
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
 
-    // 🔹 LIKE A COMMENT
+    // LIKE A COMMENT
     @ManyToOne
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    public Like() {}
+    public Like() {
+    }
 
     public Like(User user, Post post) {
         this.user = user;

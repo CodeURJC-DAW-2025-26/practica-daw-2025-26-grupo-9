@@ -33,8 +33,8 @@ public class ProfileController {
     private final CommentService commentService;
 
     public ProfileController(UserService userService,
-                             PostService postService,
-                             CommentService commentService) {
+            PostService postService,
+            CommentService commentService) {
         this.userService = userService;
         this.postService = postService;
         this.commentService = commentService;
@@ -48,9 +48,9 @@ public class ProfileController {
     }
 
     private void loadProfileData(User profileUser,
-                                 User currentUser,
-                                 Model model,
-                                 HttpServletRequest request) {
+            User currentUser,
+            Model model,
+            HttpServletRequest request) {
 
         boolean isAdmin = currentUser != null
                 && currentUser.getRoles() != null
@@ -62,12 +62,11 @@ public class ProfileController {
         model.addAttribute("isOwnProfile",
                 currentUser != null && currentUser.getId().equals(profileUser.getId()));
         model.addAttribute("canManageProfile",
-        currentUser != null && currentUser.getId().equals(profileUser.getId()));
+                currentUser != null && currentUser.getId().equals(profileUser.getId()));
         model.addAttribute("canEdit",
                 currentUser != null && currentUser.getId().equals(profileUser.getId()));
         model.addAttribute("canDelete",
                 currentUser != null && currentUser.getId().equals(profileUser.getId()));
-        
 
         Pageable pageable = PageRequest.of(0, 10);
         var postsPage = postService.getPostsByUserId(profileUser.getId(), pageable);
@@ -93,8 +92,8 @@ public class ProfileController {
 
     @GetMapping("/profile")
     public String profile(Model model,
-                        Principal principal,
-                        HttpServletRequest request) {
+            Principal principal,
+            HttpServletRequest request) {
 
         if (principal == null) {
             return "redirect:/login";
@@ -107,7 +106,6 @@ public class ProfileController {
 
         loadProfileData(currentUser, currentUser, model, request);
 
-        // 👇 AÑADE ESTO
         String currentPath = request.getRequestURI();
         model.addAttribute("currentPath", currentPath);
 
@@ -117,8 +115,8 @@ public class ProfileController {
     // GET EDIT PROFILE
     @GetMapping("/profile/edit")
     public String editProfile(Model model,
-                              Principal principal,
-                              HttpServletRequest request) {
+            Principal principal,
+            HttpServletRequest request) {
 
         if (principal == null) {
             return "redirect:/login";
@@ -137,14 +135,14 @@ public class ProfileController {
     // POST EDIT PROFILE
     @PostMapping("/profile/edit")
     public String updateProfile(@RequestParam String name,
-                                @RequestParam String surname,
-                                @RequestParam String email,
-                                @RequestParam(required = false) String password,
-                                @RequestParam(required = false) String description,
-                                @RequestParam(required = false) MultipartFile profileImage,
-                                @RequestParam(required = false) MultipartFile coverImage,
-                                Principal principal,
-                                Model model)
+            @RequestParam String surname,
+            @RequestParam String email,
+            @RequestParam(required = false) String password,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) MultipartFile profileImage,
+            @RequestParam(required = false) MultipartFile coverImage,
+            Principal principal,
+            Model model)
             throws IOException, SQLException {
 
         if (principal == null) {
@@ -160,8 +158,7 @@ public class ProfileController {
                     password,
                     description,
                     profileImage,
-                    coverImage
-            );
+                    coverImage);
             return "redirect:/profile";
 
         } catch (IllegalArgumentException ex) {
@@ -171,7 +168,6 @@ public class ProfileController {
             return "editProfile";
         }
     }
-
 
     // GET PROFILE IMAGE
     @GetMapping("/user/{id}/profile-image")
@@ -207,10 +203,10 @@ public class ProfileController {
 
     @GetMapping("/users/{id}")
     public String viewUserProfile(@PathVariable Long id,
-                                @RequestParam(required = false) String from,
-                                Principal principal,
-                                Model model,
-                                HttpServletRequest request) {
+            @RequestParam(required = false) String from,
+            Principal principal,
+            Model model,
+            HttpServletRequest request) {
 
         User profileUser = userService.getByIdOrThrow(id);
 
@@ -220,7 +216,6 @@ public class ProfileController {
         }
 
         loadProfileData(profileUser, currentUser, model, request);
-
 
         String currentPath = request.getRequestURI();
         model.addAttribute("currentPath", currentPath);
@@ -240,7 +235,7 @@ public class ProfileController {
     // POST DELETE PROFILE
     @PostMapping("/profile/delete")
     public String deleteProfile(Principal principal,
-                                HttpServletRequest request) {
+            HttpServletRequest request) {
 
         if (principal == null) {
             return "redirect:/login";

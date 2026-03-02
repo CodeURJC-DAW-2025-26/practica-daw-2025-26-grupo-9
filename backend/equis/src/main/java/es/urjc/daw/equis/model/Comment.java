@@ -21,8 +21,7 @@ public class Comment {
     @Column(nullable = false)
     private LocalDateTime date;
 
-    private static final DateTimeFormatter FORMATTER =
-            DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
@@ -38,7 +37,8 @@ public class Comment {
     @Transient
     private boolean owner;
 
-    public Comment() {}
+    public Comment() {
+    }
 
     public Comment(String content) {
         this.content = content;
@@ -53,30 +53,61 @@ public class Comment {
     // GETTERS / SETTERS
     // ============================
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+    public String getContent() {
+        return content;
+    }
 
-    public List<Like> getLikes() { return likes; }
-    public void setLikes(List<Like> likes) { this.likes = likes; }
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-    public long getLikesCount() { return likesCount; }
-    public void setLikesCount(long likesCount) { this.likesCount = likesCount; }
+    public List<Like> getLikes() {
+        return likes;
+    }
 
-    public LocalDateTime getDate() { return date; }
-    public void setDate(LocalDateTime date) { this.date = date; }
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
+    }
 
-    public Post getPost() { return post; }
-    public void setPost(Post post) { this.post = post; }
+    public long getLikesCount() {
+        return likesCount;
+    }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public void setLikesCount(long likesCount) {
+        this.likesCount = likesCount;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public String getCreatedAtHuman() {
         return this.date.format(FORMATTER);
     }
-
 
     public boolean isOwner() {
         return owner;

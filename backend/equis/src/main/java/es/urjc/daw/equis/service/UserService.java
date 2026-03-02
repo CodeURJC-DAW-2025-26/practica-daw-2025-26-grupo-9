@@ -23,75 +23,78 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-   
+
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
     }
 
-   @Transactional
-public User register(User user,
-                     MultipartFile profileImage,
-                     MultipartFile coverImage) throws IOException, SQLException {
+    @Transactional
+    public User register(User user,
+            MultipartFile profileImage,
+            MultipartFile coverImage) throws IOException, SQLException {
 
-    if (user == null) {
-        throw new IllegalArgumentException("User cannot be null");
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+
+        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be empty");
+        }
+
+        if (user.getEncodedPassword() == null || user.getEncodedPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be empty");
+        }
+
+        String normalizedEmail = normalizeEmail(user.getEmail());
+        user.setEmail(normalizedEmail);
+
+        if (userRepository.findByEmail(normalizedEmail).isPresent()) {
+            throw new IllegalArgumentException("Email already in use");
+        }
+
+        user.setEncodedPassword(passwordEncoder.encode(user.getEncodedPassword()));
+
+        // PROFILE IMAGE
+        if (profileImage != null && !profileImage.isEmpty()) {
+            user.setProfilePicture(bytesToBlob(profileImage.getBytes()));
+        } else {
+            var is = getClass().getResourceAsStream("/static/assets/images/avatardefault.png");
+            if (is == null)
+                throw new IllegalStateException("Missing /static/assets/images/avatardefault.png");
+            user.setProfilePicture(bytesToBlob(is.readAllBytes()));
+        }
+
+        // COVER IMAGE
+        if (coverImage != null && !coverImage.isEmpty()) {
+            user.setCoverPicture(bytesToBlob(coverImage.getBytes()));
+        } else {
+            var is = getClass().getResourceAsStream("/static/assets/images/coverdefault.jpg");
+            if (is == null)
+                throw new IllegalStateException("Missing /static/assets/images/coverdefault.jpg");
+            user.setCoverPicture(bytesToBlob(is.readAllBytes()));
+        }
+
+        User savedUser = userRepository.save(user);
+
+        try {
+            emailService.sendWelcomeEmail(savedUser);
+        } catch (Exception e) {
+            System.err.println("Error sending welcome email: " + e.getMessage());
+        }
+
+        return savedUser;
     }
-
-    if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
-        throw new IllegalArgumentException("Email cannot be empty");
-    }
-
-    if (user.getEncodedPassword() == null || user.getEncodedPassword().trim().isEmpty()) {
-        throw new IllegalArgumentException("Password cannot be empty");
-    }
-
-    String normalizedEmail = normalizeEmail(user.getEmail());
-    user.setEmail(normalizedEmail);
-
-    if (userRepository.findByEmail(normalizedEmail).isPresent()) {
-        throw new IllegalArgumentException("Email already in use");
-    }
-
-    user.setEncodedPassword(passwordEncoder.encode(user.getEncodedPassword()));
-
-    // PROFILE IMAGE
-    if (profileImage != null && !profileImage.isEmpty()) {
-        user.setProfilePicture(bytesToBlob(profileImage.getBytes()));
-    } else {
-        var is = getClass().getResourceAsStream("/static/assets/images/avatardefault.png");
-        if (is == null) throw new IllegalStateException("Missing /static/assets/images/avatardefault.png");
-        user.setProfilePicture(bytesToBlob(is.readAllBytes()));
-    }
-
-    // COVER IMAGE
-    if (coverImage != null && !coverImage.isEmpty()) {
-        user.setCoverPicture(bytesToBlob(coverImage.getBytes()));
-    } else {
-        var is = getClass().getResourceAsStream("/static/assets/images/coverdefault.jpg");
-        if (is == null) throw new IllegalStateException("Missing /static/assets/images/coverdefault.jpg");
-        user.setCoverPicture(bytesToBlob(is.readAllBytes()));
-    }
-
-    User savedUser = userRepository.save(user);
-
-    try {
-        emailService.sendWelcomeEmail(savedUser);
-    } catch (Exception e) {
-        System.err.println("Error sending welcome email: " + e.getMessage());
-    }
-
-    return savedUser;
-}
 
     @Transactional(readOnly = true)
     public Optional<User> findByEmail(String email) {
-        if (email == null) return Optional.empty();
+        if (email == null)
+            return Optional.empty();
         return userRepository.findByEmail(normalizeEmail(email));
     }
 
- //QUERY METHODS
+    // QUERY METHODS
 
     @Transactional(readOnly = true)
     public User getByEmailOrThrow(String email) {
@@ -105,17 +108,17 @@ public User register(User user,
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 
-//UPDATE PROFILE
+    // UPDATE PROFILE
 
     @Transactional
     public User updateProfile(String currentEmail,
-                              String name,
-                              String surname,
-                              String newEmail,
-                              String rawPassword,
-                              String description,
-                              MultipartFile profileImage,
-                              MultipartFile coverImage) throws IOException, SQLException {
+            String name,
+            String surname,
+            String newEmail,
+            String rawPassword,
+            String description,
+            MultipartFile profileImage,
+            MultipartFile coverImage) throws IOException, SQLException {
 
         User user = getByEmailOrThrow(currentEmail);
 
@@ -153,7 +156,7 @@ public User register(User user,
         return userRepository.save(user);
     }
 
-//IMAGE HELPERS
+    // IMAGE HELPERS
 
     @Transactional(readOnly = true)
     public byte[] getProfilePictureBytes(Long userId) throws SQLException {
@@ -167,7 +170,7 @@ public User register(User user,
         return blobToBytes(user.getCoverPicture());
     }
 
- //PRIVATE UTILITIES
+    // PRIVATE UTILITIES
 
     private String normalizeEmail(String email) {
         return email.trim().toLowerCase();
@@ -178,7 +181,8 @@ public User register(User user,
     }
 
     private byte[] blobToBytes(Blob blob) throws SQLException {
-        if (blob == null) return null;
+        if (blob == null)
+            return null;
         return blob.getBytes(1, (int) blob.length());
     }
 
@@ -205,7 +209,7 @@ public User register(User user,
         User currentAdmin = userRepository.findByEmail(currentAdminEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Admin not found"));
 
-        // 🔒 Evitar que el admin se bloquee a sí mismo
+        // Prevent the admin from blocking themselves
         if (user.getId().equals(currentAdmin.getId())) {
             throw new IllegalArgumentException("No puedes bloquearte a ti mismo");
         }

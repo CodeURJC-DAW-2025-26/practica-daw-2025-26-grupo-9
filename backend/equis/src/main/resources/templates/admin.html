@@ -19,161 +19,156 @@
 </head>
 
 <body class="newsfeed">
-<div class="container-fluid" id="wrapper">
-    <!-- NAVBAR -->
-    {{> partials/navbar}}
+    <div class="container-fluid" id="wrapper">
+        <!-- NAVBAR -->
+        {{> partials/navbar}}
 
-    <div class="row newsfeed-size">
+        <div class="row newsfeed-size">
 
-        <!-- SIDEBAR -->
-        {{> partials/sidebar}}
+            <!-- SIDEBAR -->
+            {{> partials/sidebar}}
 
-        <!-- CONTENIDO -->
-        <div class="col-md-10 second-section" id="page-content-wrapper">
+            <!-- CONTENIDO -->
+            <div class="col-md-10 second-section" id="page-content-wrapper">
 
-            <!-- HEADER -->
-            <div class="mb-4">
-                <div class="btn-group d-flex top-links-fg">
-                    <a href="#" class="btn btn-quick-links mr-3 ql-active">
-                        <img src="/assets/images/icons/theme/group-white.png" class="mr-2" alt="icon">
-                        <span class="fs-8">ADMINISTRADOR</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- ================= CATEGORÍAS ================= -->
-
-            <div class="groups bg-white shadow-sm p-4 mb-5">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5>Categorías</h5>
-                    <a href="/admin/categories/new" class="btn btn-sm btn-primary">Crear</a>
+                <!-- HEADER -->
+                <div class="mb-4">
+                    <div class="btn-group d-flex top-links-fg">
+                        <a href="#" class="btn btn-quick-links mr-3 ql-active">
+                            <img src="/assets/images/icons/theme/group-white.png" class="mr-2" alt="icon">
+                            <span class="fs-8">ADMINISTRADOR</span>
+                        </a>
+                    </div>
                 </div>
 
-                <div class="row">
-                    {{#categories}}
-                    <div class="col-md-3 col-sm-6 mb-4">
-                        <div class="card group-card shadow-sm h-100">
-                            <a href="/categories/{{id}}">
-                                <img src="/categories/{{id}}/image"
-                                    class="card-img-top group-card-image"
-                                    alt="Category image">
-                            </a>
+                <!-- ================= CATEGORIES ================= -->
 
-                            <div class="card-body text-center">
-                                <h6 class="card-title">{{name}}</h6>
+                <div class="groups bg-white shadow-sm p-4 mb-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5>Categorías</h5>
+                        <a href="/admin/categories/new" class="btn btn-sm btn-primary">Crear</a>
+                    </div>
 
-                                <small class="text-muted d-block mb-2">
-                                    {{postsCount}} posts
-                                </small>
-
-                                <div class="d-flex justify-content-center gap-2">
-
-                                <!-- BOTÓN EDITAR -->
-                                <a href="/admin/categories/edit/{{id}}"
-                                class="btn btn-sm btn-outline-primary">
-                                    Editar
+                    <div class="row">
+                        {{#categories}}
+                        <div class="col-md-3 col-sm-6 mb-4">
+                            <div class="card group-card shadow-sm h-100">
+                                <a href="/categories/{{id}}">
+                                    <img src="/categories/{{id}}/image" class="card-img-top group-card-image"
+                                        alt="Category image">
                                 </a>
 
-                                <!-- BOTÓN ELIMINAR -->
-                                {{^general}}
-                                <form action="/admin/categories/delete/{{id}}"
-                                    method="post"
-                                    style="display:inline;">
-                                    <input type="hidden" name="_csrf" value="{{_csrf.token}}">
-                                    <button type="submit"
-                                            class="btn btn-sm btn-outline-danger"
-                                            onclick="return confirm('¿Eliminar categoría y TODO su contenido?');">
-                                        Eliminar
-                                    </button>
-                                </form>
-                                {{/general}}
+                                <div class="card-body text-center">
+                                    <h6 class="card-title">{{name}}</h6>
 
-                            </div>
+                                    <small class="text-muted d-block mb-2">
+                                        {{postsCount}} posts
+                                    </small>
 
+                                    <div class="d-flex justify-content-center gap-2">
+
+                                        <!-- EDIT BUTTON -->
+                                        <a href="/admin/categories/edit/{{id}}" class="btn btn-sm btn-outline-primary">
+                                            Editar
+                                        </a>
+
+                                        <!-- DELETE BUTTON -->
+                                        {{^general}}
+                                        <form action="/admin/categories/delete/{{id}}" method="post"
+                                            style="display:inline;">
+                                            <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                onclick="return confirm('¿Eliminar categoría y TODO su contenido?');">
+                                                Eliminar
+                                            </button>
+                                        </form>
+                                        {{/general}}
+
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
+                        {{/categories}}
+
+                        {{^categories}}
+                        <div class="col-12 text-center text-muted">
+                            No hay categorías registradas.
+                        </div>
+                        {{/categories}}
                     </div>
-                    {{/categories}}
-
-                    {{^categories}}
-                    <div class="col-12 text-center text-muted">
-                        No hay categorías registradas.
-                    </div>
-                    {{/categories}}
-                </div>
-            </div>
-
-            <!-- ================= USUARIOS ================= -->
-
-            <div class="groups bg-white shadow-sm p-4">
-
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5>Usuarios</h5>
                 </div>
 
-                <div class="row">
-                    {{#users}}
-                    <div class="col-md-3 col-sm-6 mb-4">
-                        <div class="card group-card shadow-sm h-100">
-                            <a href="/users/{{id}}?from=admin">
-                                <img src="/users/{{id}}/profile-picture"
-                                    class="card-img-top group-card-image"
-                                    alt="User image">
-                            </a>
+                <!-- ================= USERS ================= -->
 
-                            <div class="card-body text-center">
-                                <h6 class="card-title">{{name}}</h6>
-                                {{^currentAdmin}}
+                <div class="groups bg-white shadow-sm p-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5>Usuarios</h5>
+                    </div>
+
+                    <div class="row">
+                        {{#users}}
+                        <div class="col-md-3 col-sm-6 mb-4">
+                            <div class="card group-card shadow-sm h-100">
+                                <a href="/users/{{id}}?from=admin">
+                                    <img src="/users/{{id}}/profile-picture" class="card-img-top group-card-image"
+                                        alt="User image">
+                                </a>
+
+                                <div class="card-body text-center">
+                                    <h6 class="card-title">{{name}}</h6>
+                                    {{^currentAdmin}}
                                     <form action="/admin/users/toggle/{{id}}" method="post" style="display:inline;">
                                         <input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}">
                                         <button type="submit"
-                                                class="btn btn-sm {{#active}}btn-success{{/active}}{{^active}}btn-danger{{/active}}">
-                                            
+                                            class="btn btn-sm {{#active}}btn-success{{/active}}{{^active}}btn-danger{{/active}}">
+
                                             {{#active}}Activo{{/active}}
                                             {{^active}}Bloqueado{{/active}}
 
                                         </button>
                                     </form>
-                                {{/currentAdmin}}
+                                    {{/currentAdmin}}
+                                </div>
                             </div>
                         </div>
+                        {{/users}}
+
+                        {{^users}}
+                        <div class="col-12 text-center text-muted">
+                            No hay usuarios disponibles.
+                        </div>
+                        {{/users}}
                     </div>
-                    {{/users}}
 
-                    {{^users}}
-                    <div class="col-12 text-center text-muted">
-                        No hay usuarios disponibles.
-                    </div>
-                    {{/users}}
-                </div>
+                    <!-- ================= PAGINATION ================= -->
 
-                <!-- ================= PAGINACIÓN ================= -->
+                    {{#totalPages}}
+                    <div class="mt-4 text-center">
 
-                {{#totalPages}}
-                <div class="mt-4 text-center">
-
-                    {{#pages}}
-                        <a href="/admin?page={{.}}"
-                           class="btn btn-sm btn-light {{#isCurrent}}{{/isCurrent}}">
+                        {{#pages}}
+                        <a href="/admin?page={{.}}" class="btn btn-sm btn-light {{#isCurrent}}{{/isCurrent}}">
                             {{.}}
                         </a>
-                    {{/pages}}
+                        {{/pages}}
+
+                    </div>
+                    {{/totalPages}}
 
                 </div>
-                {{/totalPages}}
 
             </div>
-
         </div>
     </div>
-</div>
 
-<!-- JS -->
-<script src="/assets/js/jquery/jquery-3.3.1.min.js"></script>
-<script src="/assets/js/popper/popper.min.js"></script>
-<script src="/assets/js/bootstrap/bootstrap.min.js"></script>
-<script src="/assets/js/app.js"></script>
-<script src="/assets/js/components/components.js"></script>
+    <!-- JS -->
+    <script src="/assets/js/jquery/jquery-3.3.1.min.js"></script>
+    <script src="/assets/js/popper/popper.min.js"></script>
+    <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/components/components.js"></script>
 
 </body>
+
 </html>

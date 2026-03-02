@@ -22,8 +22,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         private final PasswordEncoder passwordEncoder;
 
         public CustomAuthenticationProvider(
-                @Lazy UserService userService,
-                PasswordEncoder passwordEncoder) {
+                        @Lazy UserService userService,
+                        PasswordEncoder passwordEncoder) {
 
                 this.userService = userService;
                 this.passwordEncoder = passwordEncoder;
@@ -31,41 +31,40 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         @Override
         public Authentication authenticate(Authentication authentication)
-                throws AuthenticationException {
+                        throws AuthenticationException {
 
-        String email = authentication.getName();
-        String rawPassword = authentication.getCredentials() == null
-                ? null
-                : authentication.getCredentials().toString();
+                String email = authentication.getName();
+                String rawPassword = authentication.getCredentials() == null
+                                ? null
+                                : authentication.getCredentials().toString();
 
-        User user = userService.findByEmail(email)
-                .orElseThrow(() -> new BadCredentialsException("Invalid credentials"));
+                User user = userService.findByEmail(email)
+                                .orElseThrow(() -> new BadCredentialsException("Invalid credentials"));
 
-        // 🔥 BLOQUEO REAL
-        if (!user.isActive()) {
-                throw new org.springframework.security.authentication.DisabledException("Account is blocked");
-        }
+                // Real block
+                if (!user.isActive()) {
+                        throw new org.springframework.security.authentication.DisabledException("Account is blocked");
+                }
 
-        if (rawPassword == null ||
-                !passwordEncoder.matches(rawPassword, user.getEncodedPassword())) {
+                if (rawPassword == null ||
+                                !passwordEncoder.matches(rawPassword, user.getEncodedPassword())) {
 
-                throw new BadCredentialsException("Invalid credentials");
-        }
+                        throw new BadCredentialsException("Invalid credentials");
+                }
 
-        List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
-                .map(SimpleGrantedAuthority::new)
-                .toList();
+                List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
+                                .map(SimpleGrantedAuthority::new)
+                                .toList();
 
-        return new UsernamePasswordAuthenticationToken(
-                user,   // 👈 mejor devolver el objeto User completo
-                null,
-                authorities
-        );
+                return new UsernamePasswordAuthenticationToken(
+                                user,
+                                null,
+                                authorities);
         }
 
         @Override
         public boolean supports(Class<?> authentication) {
                 return UsernamePasswordAuthenticationToken.class
-                        .isAssignableFrom(authentication);
+                                .isAssignableFrom(authentication);
         }
 }

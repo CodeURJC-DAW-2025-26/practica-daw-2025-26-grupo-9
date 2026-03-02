@@ -19,7 +19,8 @@ public class CommentService {
     private final PostRepository postRepository;
     private final LikeRepository likeRepository;
 
-    public CommentService(CommentRepository commentRepository, PostRepository postRepository, LikeRepository likeRepository) {
+    public CommentService(CommentRepository commentRepository, PostRepository postRepository,
+            LikeRepository likeRepository) {
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
         this.likeRepository = likeRepository;
@@ -71,10 +72,12 @@ public class CommentService {
         }
         commentRepository.deleteById(commentId);
     }
+
     @Transactional(readOnly = true)
     public long countByPostId(Long postId) {
         return commentRepository.countByPostId(postId);
     }
+
     @Transactional
     public void deleteCommentsByPost(Long postId) {
         // Useful if you delete posts manually or for moderation

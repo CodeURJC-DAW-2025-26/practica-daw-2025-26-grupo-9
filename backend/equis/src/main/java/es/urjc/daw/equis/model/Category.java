@@ -14,7 +14,7 @@ public class Category {
 
     @Column(unique = true, nullable = false)
     private String name;
-    
+
     private String description;
 
     @Lob
@@ -25,20 +25,19 @@ public class Category {
     private List<Post> posts;
 
     @Column(name = "image_type")
-    private String imageType;   
+    private String imageType;
 
     @Transient
     private long postsCount;
 
-    public Category() {}
+    public Category() {
+    }
 
     public Category(String name, String description, Blob picture) {
         this.name = name;
         this.description = description;
         this.picture = picture;
     }
-
-    // GETTERS / SETTERS
 
     public String getImageType() {
         return imageType;
@@ -53,20 +52,47 @@ public class Category {
         return "General".equalsIgnoreCase(this.name);
     }
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public Blob getPicture() { return picture; }
-    public void setPicture(Blob picture) { this.picture = picture; }
+    public String getDescription() {
+        return description;
+    }
 
-    public List<Post> getPosts() { return posts; }
-    public void setPosts(List<Post> posts) { this.posts = posts; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public long getPostsCount() { return postsCount; }
-    public void setPostsCount(long postsCount) { this.postsCount = postsCount; }
+    public Blob getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Blob picture) {
+        this.picture = picture;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public long getPostsCount() {
+        return postsCount;
+    }
+
+    public void setPostsCount(long postsCount) {
+        this.postsCount = postsCount;
+    }
 }

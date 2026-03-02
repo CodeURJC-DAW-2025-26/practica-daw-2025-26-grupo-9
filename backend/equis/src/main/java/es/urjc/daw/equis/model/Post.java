@@ -22,8 +22,7 @@ public class Post {
     @Column(nullable = false)
     private LocalDateTime date;
 
-    private static final DateTimeFormatter FORMATTER =
-            DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @Lob
     private Blob picture;
@@ -42,7 +41,8 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
-    public Post() {}
+    public Post() {
+    }
 
     public Post(String content, Blob picture) {
         this.content = content;
@@ -56,15 +56,29 @@ public class Post {
 
     // GETTERS / SETTERS
 
-    public Long getId() { return id; }
-
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
-    public Long getPostId() {
-    return this.id;
+    public Long getId() {
+        return id;
     }
-    public List<Like> getLikes() { return likes; }
-    public void setLikes(List<Like> likes) { this.likes = likes; }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Long getPostId() {
+        return this.id;
+    }
+
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
+    }
 
     public long getLikesCount() {
         return likesCount;
@@ -74,20 +88,45 @@ public class Post {
         this.likesCount = likesCount;
     }
 
-    public LocalDateTime getDate() { return date; }
-    public void setDate(LocalDateTime date) { this.date = date; }
+    public LocalDateTime getDate() {
+        return date;
+    }
 
-    public Blob getPicture() { return picture; }
-    public void setPicture(Blob picture) { this.picture = picture; }
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public Blob getPicture() {
+        return picture;
+    }
 
-    public Category getCategory() { return category; }
-    public void setCategory(Category category) { this.category = category; }
+    public void setPicture(Blob picture) {
+        this.picture = picture;
+    }
 
-    public List<Comment> getComments() { return comments; }
-    public void setComments(List<Comment> comments) { this.comments = comments; }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
     public String getCreatedAtHuman() {
         return this.date.format(FORMATTER);

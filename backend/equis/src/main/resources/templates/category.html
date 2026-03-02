@@ -11,32 +11,34 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-  <a class="navbar-brand" href="/">Equis</a>
-  <div class="ml-auto">
-    <a class="btn btn-sm btn-outline-primary" href="/categories">Categorías</a>
-    <a class="btn btn-sm btn-outline-secondary" href="/profile">Perfil</a>
-    <a class="btn btn-sm btn-outline-danger" href="/logout">Salir</a>
-  </div>
-</nav>
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <a class="navbar-brand" href="/">Equis</a>
+    <div class="ml-auto">
+      <a class="btn btn-sm btn-outline-primary" href="/categories">Categorías</a>
+      <a class="btn btn-sm btn-outline-secondary" href="/profile">Perfil</a>
+      <a class="btn btn-sm btn-outline-danger" href="/logout">Salir</a>
+    </div>
+  </nav>
 
-<div class="container mt-4">
-  <div class="row">
-    <div class="col-md-8">
-      <h4 class="mb-1">{{category.name}}</h4>
-      {{#category.description}}
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-8">
+        <h4 class="mb-1">{{category.name}}</h4>
+        {{#category.description}}
         <p class="text-muted">{{category.description}}</p>
-      {{/category.description}}
+        {{/category.description}}
 
-      <div class="mt-3">
-        {{#posts}}
+        <div class="mt-3">
+          {{#posts}}
           <div class="card mb-3">
             <div class="card-body">
               <div class="d-flex justify-content-between">
                 <a href="/users/{{user.id}}"><strong>{{user.nickname}}</strong></a>
                 <span class="text-muted small">{{createdAtHuman}}</span>
               </div>
-              <a href="/posts/{{id}}" class="text-decoration-none text-dark"><p class="mt-2 mb-2">{{content}}</p></a>
+              <a href="/posts/{{id}}" class="text-decoration-none text-dark">
+                <p class="mt-2 mb-2">{{content}}</p>
+              </a>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="text-muted small">
                   ❤️ {{likesCount}} · 💬 {{commentsCount}}
@@ -45,32 +47,34 @@
               </div>
             </div>
           </div>
-        {{/posts}}
+          {{/posts}}
 
-        {{^posts}}
+          {{^posts}}
           <div class="alert alert-secondary">No hay publicaciones en esta categoría.</div>
-        {{/posts}}
+          {{/posts}}
 
-        {{#hasNext}}
-          <a class="btn btn-outline-secondary btn-block" href="/categories/{{category.id}}?page={{nextPage}}">Cargar más</a>
-        {{/hasNext}}
+          {{#hasNext}}
+          <a class="btn btn-outline-secondary btn-block" href="/categories/{{category.id}}?page={{nextPage}}">Cargar
+            más</a>
+          {{/hasNext}}
+        </div>
       </div>
-    </div>
 
-    <div class="col-md-4">
-      <h6 class="text-muted">Más populares</h6>
-      <ul class="list-group">
-        {{#topCategories}}
+      <div class="col-md-4">
+        <h6 class="text-muted">Más populares</h6>
+        <ul class="list-group">
+          {{#topCategories}}
           <li class="list-group-item">
             <a href="/categories/{{id}}">{{name}}</a> <span class="text-muted small">({{postsCount}})</span>
           </li>
-        {{/topCategories}}
-      </ul>
+          {{/topCategories}}
+        </ul>
+      </div>
     </div>
   </div>
-</div>
 
-<script src="/assets/js/jquery/jquery.min.js"></script>
-<script src="/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/jquery/jquery.min.js"></script>
+  <script src="/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

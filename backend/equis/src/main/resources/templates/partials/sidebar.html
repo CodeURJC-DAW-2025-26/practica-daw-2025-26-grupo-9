@@ -3,7 +3,8 @@
   <div class="card newsfeed-user-card h-100">
     <ul class="list-group list-group-flush newsfeed-left-sidebar">
 
-      <li class="list-group-item d-flex justify-content-between align-items-center {{#homeActive}}sd-active{{/homeActive}}">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center {{#homeActive}}sd-active{{/homeActive}}">
         <a href="/" class="sidebar-item">
           <img src="/assets/images/icons/left-sidebar/home-icon-silhouette.png" alt="Home icon">
           Inicio
@@ -11,7 +12,8 @@
       </li>
 
       {{#currentUser}}
-      <li class="list-group-item d-flex justify-content-between align-items-center {{#profileActive}}sd-active{{/profileActive}}">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center {{#profileActive}}sd-active{{/profileActive}}">
         <a href="/users/{{id}}" class="sidebar-item">
           <img src="/assets/images/icons/left-sidebar/Person.png" alt="Profile icon">
           Perfil
@@ -20,7 +22,8 @@
       {{/currentUser}}
 
       {{#isAdmin}}
-      <li class="list-group-item d-flex justify-content-between align-items-center {{#adminActive}}sd-active{{/adminActive}}">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center {{#adminActive}}sd-active{{/adminActive}}">
         <a href="/admin" class="sidebar-item">
           <img src="/assets/images/icons/left-sidebar/group.png" alt="Admin icon">
           Administrador
@@ -28,14 +31,16 @@
       </li>
       {{/isAdmin}}
 
-      <li class="list-group-item d-flex justify-content-between align-items-center {{#categoriesActive}}sd-active{{/categoriesActive}}">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center {{#categoriesActive}}sd-active{{/categoriesActive}}">
         <a href="/categories" class="sidebar-item">
           <img src="/assets/images/icons/left-sidebar/team.png" alt="Categories icon">
           Categorías
         </a>
       </li>
 
-      <li class="list-group-item d-flex justify-content-between align-items-center {{#statsActive}}sd-active{{/statsActive}}">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center {{#statsActive}}sd-active{{/statsActive}}">
         <a href="/stats" class="sidebar-item">
           <img src="/assets/images/icons/left-sidebar/news.png" alt="Stats icon">
           Estadísticas
