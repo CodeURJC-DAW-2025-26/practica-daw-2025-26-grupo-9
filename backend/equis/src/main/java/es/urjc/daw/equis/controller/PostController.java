@@ -73,6 +73,31 @@ public class PostController {
         return safeRedirect(redirect, "/");
     }
 
+    @PostMapping("/{id}/delete")
+    public String deletePost(
+            @PathVariable Long id,
+            Authentication auth,
+            @RequestParam(required = false) String redirect) {
+
+        if (auth == null || auth.getName().equals("anonymousUser")) {
+            return "redirect:/login";
+        }
+
+        Post post = postService.findById(id);
+        User currentUser = userService.findByEmail(auth.getName()).orElse(null);
+
+        if (post == null || currentUser == null) {
+            return safeRedirect(redirect, "/");
+        }
+
+        // Solo el dueño o admin puede borrar
+        if (post.getUser().equals(currentUser)) {
+            postService.deleteById(id);
+        }
+
+        return safeRedirect(redirect, "/");
+    }
+
     @GetMapping("/{id}/editPost")
     public String editPostForm(
             @PathVariable Long id,
