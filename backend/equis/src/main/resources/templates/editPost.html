@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="/assets/images/logo-16x16.png" />
+  <title>eQuis - Editar Post</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Major+Mono+Display" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@2.0.1/css/boxicons.min.css" rel="stylesheet">
+
+  <!-- Styles -->
+  <link href="/assets/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/css/style.css" rel="stylesheet">
+  <link href="/assets/css/components.css" rel="stylesheet">
+  <link href="/assets/css/media.css" rel="stylesheet">
+</head>
+
+<body class="newsfeed">
+  <div class="container-fluid" id="wrapper">
+
+    <!-- NAVBAR -->
+    {{> partials/navbar}}
+
+    <div class="row newsfeed-size">
+
+      <!-- SIDEBAR IZQUIERDA -->
+      {{> partials/sidebar}}
+
+      <!-- CONTENIDO CENTRAL -->
+      <div class="col-md-8 second-section" id="page-content-wrapper">
+
+        <div class="groups bg-white shadow-sm p-4 rounded mb-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Editar Publicación</h5>
+            <a href="/posts/{{post.id}}" class="btn btn-sm btn-outline-secondary">Cancelar</a>
+          </div>
+        </div>
+
+        <div class="post border-bottom p-3 bg-white w-shadow mb-4">
+
+          <!-- Header -->
+          <div class="media text-muted pt-3">
+            <img src="/user/{{post.user.id}}/profile-image"
+                 class="mr-3 post-user-image">
+            <div class="media-body pb-3 mb-0 small lh-125">
+              <div class="d-flex justify-content-between align-items-center w-100">
+                <a href="/users/{{post.user.id}}" class="text-gray-dark post-user-name">
+                  {{post.user.nickname}}
+                </a>
+              </div>
+              <span class="d-block">{{post.createdAtHuman}} <i class='bx bx-globe ml-3'></i></span>
+            </div>
+          </div>
+
+          <!-- Formulario de edición -->
+          <form action="/posts/{{post.id}}/editPost" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="{{csrfParameterName}}" value="{{csrfToken}}">
+
+            <!-- Contenido -->
+            <div class="form-group mt-3">
+              <textarea name="content" class="form-control" rows="4">{{post.content}}</textarea>
+            </div>
+
+            <!-- Categoría -->
+            <div class="form-group">
+                <select class="form-control" name="category_id">
+                    {{#categories}}
+                    <option value="{{id}}">{{name}}</option>
+                    {{/categories}}
+                </select>
+            </div>
+
+            <!-- Imagen -->
+            <div class="form-group mt-3">
+              <label class="btn btn-link">
+                Cambiar imagen
+                <input type="file" name="picture" accept="image/*" hidden>
+              </label>
+              {{#post.picture}}
+                <div class="mt-2">
+                  <p>Imagen actual:</p>
+                  <img src="/posts/post/{{post.id}}/image" alt="post image" class="post-content">
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="removePicture" id="removePicture">
+                    <label class="form-check-label" for="removePicture">Eliminar imagen</label>
+                  </div>
+                </div>
+              {{/post.picture}}
+            </div>
+
+            <!-- Botones -->
+            <div class="form-group text-right mt-4">
+              <button type="submit" class="btn btn-success">Guardar cambios</button>
+              <a href="/posts/{{post.id}}" class="btn btn-secondary">Cancelar</a>
+            </div>
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="/assets/js/jquery/jquery-3.3.1.min.js"></script>
+  <script src="/assets/js/popper/popper.min.js"></script>
+  <script src="/assets/js/bootstrap/bootstrap.min.js"></script>
+</body>
+</html>

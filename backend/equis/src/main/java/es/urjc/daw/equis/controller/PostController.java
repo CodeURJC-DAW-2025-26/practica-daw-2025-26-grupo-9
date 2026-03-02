@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import es.urjc.daw.equis.model.Category;
 import es.urjc.daw.equis.model.Comment;
 import es.urjc.daw.equis.model.Like;
 import es.urjc.daw.equis.model.Post;
@@ -20,7 +21,10 @@ import es.urjc.daw.equis.repository.LikeRepository;
 import es.urjc.daw.equis.repository.PostRepository;
 import es.urjc.daw.equis.repository.UserRepository;
 import es.urjc.daw.equis.service.PostService;
+import es.urjc.daw.equis.service.UserService;
+import es.urjc.daw.equis.service.CategoryService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.websocket.server.PathParam;
 
 import org.springframework.ui.Model;
 
@@ -35,6 +39,12 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     public PostController(PostRepository postRepository,
                           LikeRepository likeRepository,
@@ -59,6 +69,63 @@ public class PostController {
 
         Post post = new Post();
         postService.save(post, picture, auth, category_id, content);
+
+        return safeRedirect(redirect, "/");
+    }
+
+    @GetMapping("/{id}/editPost")
+    public String editPostForm(
+            @PathVariable Long id,
+            Model model,
+            Authentication auth,
+            HttpServletRequest request) {
+
+        Post post = postService.findById(id);
+        if (post == null) {
+
+            return "redirect:/profile";
+        }
+
+        User currentUser = userService.findByEmail(auth.getName()).orElse(null);
+        if (!post.getUser().equals(currentUser)) {
+            // si no es dueño, no puede editar
+            return "redirect:/posts/" + id;
+        }
+
+        List<Category> categories = categoryService.findAll();
+
+        model.addAttribute("post", post);
+        model.addAttribute("categories", categories);
+
+        // CSRF tokens para el formulario
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
+        model.addAttribute("csrfParameterName", csrfToken.getParameterName());
+        model.addAttribute("csrfToken", csrfToken.getToken());
+
+        model.addAttribute("currentUser", currentUser);
+
+        return "editPost";
+    }
+
+    @PostMapping("/{id}/editPost")
+    public String editPost(@RequestParam(required = false) String content,
+                        @PathVariable("id") Long post_id,
+                        @RequestParam(required = false) Long category_id,
+                        @RequestParam(required = false) MultipartFile picture,
+                        @RequestParam(required = false) String redirect,
+                        @RequestParam(required = false) String removePicture,
+                        Authentication auth) throws Exception {
+
+        if (auth == null || auth.getName().equals("anonymousUser")) {
+            return "redirect:/login";
+        }
+
+        Post post = postService.findById(post_id);
+        if (post == null) {
+            return safeRedirect(redirect, "/");
+        }
+
+        postService.edit(post, picture,category_id, content,removePicture);
 
         return safeRedirect(redirect, "/");
     }

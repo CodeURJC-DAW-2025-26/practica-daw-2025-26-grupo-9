@@ -65,21 +65,57 @@ public class PostService {
         postRepository.save(post);
     }
 
+    public void edit(Post post, MultipartFile picture, Long category_id, String content, String removePicture)
+            throws IOException {
+
+        // content
+        if (content != null && !content.isBlank()) {
+            post.setContent(content);
+        }
+
+        // Categoría
+        if (category_id != null) {
+            Category category = categoryService.findById(category_id);
+            if (category != null) {
+                post.setCategory(category);
+            }
+        }
+
+        // Eliminar imagen si el checkbox estaba marcado
+        if (removePicture != null) {
+            post.setPicture(null);
+        }
+
+        // si hay nueva imagen cambiarla
+        if (picture != null && !picture.isEmpty()) {
+            try {
+                post.setPicture(new SerialBlob(picture.getBytes()));
+            } catch (Exception e) {
+                throw new IOException("Error al procesar la imagen", e);
+            }
+        }
+
+        // Guardar los cambios
+        postRepository.save(post);
+
+
+    }
+
     public Page<Post> getPostsByUserId(Long userId, Pageable pageable) {
         return postRepository.findByUserIdOrderByDateDesc(userId, pageable);
     }
 
-public List<Post> findByCategory(Category category) {
-    return postRepository.findByCategory(category);
-}
-    public long countByCategory(Category category) {
-    return postRepository.countByCategory(category);
-}
-    public Page<Post> getFeed(Pageable pageable) {
-        return postRepository.findAllByOrderByDateDesc(pageable);
+    public List<Post> findByCategory(Category category) {
+        return postRepository.findByCategory(category);
     }
+        public long countByCategory(Category category) {
+        return postRepository.countByCategory(category);
+    }
+        public Page<Post> getFeed(Pageable pageable) {
+            return postRepository.findAllByOrderByDateDesc(pageable);
+        }
 
-public Post findById(Long id) {
-    return postRepository.findById(id).orElse(null);
-}
+    public Post findById(Long id) {
+        return postRepository.findById(id).orElse(null);
+    }
 }

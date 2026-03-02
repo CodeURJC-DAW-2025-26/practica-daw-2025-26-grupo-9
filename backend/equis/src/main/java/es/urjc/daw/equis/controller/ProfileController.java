@@ -63,6 +63,11 @@ public class ProfileController {
                 currentUser != null && currentUser.getId().equals(profileUser.getId()));
         model.addAttribute("canManageProfile",
                 currentUser != null && currentUser.getId().equals(profileUser.getId()));
+        model.addAttribute("canEdit",
+                currentUser != null && currentUser.getId().equals(profileUser.getId()));
+        model.addAttribute("canDelete",
+                currentUser != null && currentUser.getId().equals(profileUser.getId()));
+        
 
         Pageable pageable = PageRequest.of(0, 10);
         var postsPage = postService.getPostsByUserId(profileUser.getId(), pageable);
