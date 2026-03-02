@@ -202,6 +202,19 @@ In addition to general improvements, I was responsible for implementing the like
 |4| [Create LikeRepository.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/92ca883afdc37f2eb7cdb490285bca0dfa8f9fbc)  | [welcome.html](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/resources/templates/welcome.html)   |
 |5| [Create like entity](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/de5cf7c223372dbe743bb82c318eab982ba77077)  | [Like.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/model/Like.java)   |
 
+#### **Alumno 5 - Cassiel Seth Mayorca Heirisman**
+
+Creacion e interrelacion de entidades, gestion de imagenes, creacion y edicion de posts
+
+| Nº    | Commits      | Files      |
+|:------------: |:------------:| :------------:|
+|1| [Editar Post y visualizacion de imagen](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/5845b536cdf1ee1fafc0c0c47cc8fe10c8b8e743)  | [PostController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/controller/PostController.java)   |
+|2| [Implementacion newPost y gestion de imagen](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/3e16baf0e8efb30284e0079deb22f85621903c05)  | [PostController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/controller/PostController.java)   |
+|3| [Relacion de entidades](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/e96a3b75da1fa9941ad71cb426e20e2042d6b2e4)  | [Category.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/model/Category.java) [Comment.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/model/User.java)    |
+|4| [Creacion category y comment](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/982e003380405c03ea203789bd38933cf0a9294f)  | [Category.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/model/Category.java) [Comment.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/model/Comment.java)  |
+|5| [Pequeños cambios de visualización](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/c5b697e521164839f7308453ff2fc7b24d49d0c9)  | [Index.html](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/resources/templates/index.html)   |
+
+
 ---
 
 ## 🛠 **Práctica 2: Incorporación de una API REST a la aplicación web, despliegue con Docker y despliegue remoto**
