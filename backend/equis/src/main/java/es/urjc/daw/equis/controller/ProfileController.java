@@ -167,6 +167,7 @@ public class ProfileController {
         }
     }
 
+
     // GET PROFILE IMAGE
     @GetMapping("/user/{id}/profile-image")
     public ResponseEntity<byte[]> getProfileImage(@PathVariable Long id)
@@ -219,10 +220,12 @@ public class ProfileController {
         String currentPath = request.getRequestURI();
         model.addAttribute("currentPath", currentPath);
 
-        boolean fromAdmin = "admin".equals(from);
+        boolean isAdminView = "admin".equals(from);
 
-        model.addAttribute("adminActive", fromAdmin);
-        model.addAttribute("profileActive", !fromAdmin);
+        model.addAttribute("isAdminView", isAdminView);
+        model.addAttribute("adminActive", isAdminView);
+        model.addAttribute("profileActive", !isAdminView);
+
         model.addAttribute("homeActive", false);
         model.addAttribute("categoriesActive", false);
 

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import es.urjc.daw.equis.model.User;
+import es.urjc.daw.equis.dto.CurrentUserDTO;
 import es.urjc.daw.equis.model.Category;
 import es.urjc.daw.equis.repository.CategoryRepository;
 import es.urjc.daw.equis.repository.UserRepository;
@@ -29,7 +30,7 @@ public class GlobalControllerAdvice {
     }
 
     @ModelAttribute("currentUser")
-    public User currentUser() {
+    public CurrentUserDTO currentUser() {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -37,14 +38,33 @@ public class GlobalControllerAdvice {
             return null;
         }
 
-        return userRepository.findByEmail(auth.getName()).orElse(null);
+        return userRepository.findByEmail(auth.getName())
+                .map(u -> new CurrentUserDTO(
+                        u.getId(),
+                        u.getName(),
+                        u.getEmail(),
+                        u.isActive(),
+                        u.getNickname()
+                ))
+                .orElse(null);
     }
 
     @ModelAttribute("isAdmin")
-    public boolean isAdmin(@ModelAttribute("currentUser") User currentUser) {
-        return currentUser != null
-                && currentUser.getRoles() != null
-                && (currentUser.getRoles().contains("ROLE_ADMIN") || currentUser.getRoles().contains("ADMIN"));
+    public boolean isAdmin(@ModelAttribute("currentUser") CurrentUserDTO currentUser) {
+        return currentUser != null;
+    }
+    /**
+     * Categorías fijas disponibles para seleccionar al crear un post.
+     * Se ordenan por nombre (con "General" primero si existe).
+     */
+    @ModelAttribute("allcategories")
+    public List<Category> categories1() {
+        List<Category> cats = categoryRepository.findAll();
+        // Precalcular el número de posts por categoría (para mostrar conteos en la UI)
+        cats.forEach(c -> c.setPostsCount(postRepository.countByCategoryId(c.getId())));
+        cats.sort(Comparator.comparing((Category c) -> !"General".equalsIgnoreCase(c.getName()))
+                .thenComparing(Category::getName, String.CASE_INSENSITIVE_ORDER));
+        return cats;
     }
 
     /**
