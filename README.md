@@ -100,16 +100,6 @@ Diagram showing how to navigate between the different pages of the application:
 📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=x91MPoITQ3I)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web.
 
-### **Navegación y Capturas de Pantalla**
-
-#### **Diagrama de Navegación**
-
-Solo si ha cambiado.
-
-#### **Capturas de Pantalla Actualizadas**
-
-Solo si han cambiado.
-
 ### **Instrucciones de Ejecución**
 
 #### **Requisitos Previos**
@@ -128,9 +118,9 @@ Solo si han cambiado.
 
 2. **AQUÍ INDICAR LO SIGUIENTES PASOS**
 
-#### **Credenciales de prueba**
-- **Usuario Admin**: usuario: `admin`, contraseña: `admin`
-- **Usuario Registrado**: usuario: `user`, contraseña: `user`
+#### **Test credentials**
+- **Admin user**: usuario: `admin@equis.com`, contraseña: `admin`
+- **Registered user**: usuario: `user@equis.com`, contraseña: `user`
 
 ### **Database Entities Diagram**
 
@@ -138,13 +128,11 @@ Entity-Relationship diagram showing entities, attributes, and relationships:
 
 ![Entity-Relationship Diagram](images/database-diagram.png)
 
-### **Diagrama de Clases y Templates**
+### **Templates and Class Diagram**
 
-Diagrama de clases de la aplicación con diferenciación por colores o secciones:
+Application class diagram with differentiation by colors:
 
-![Diagrama de Clases](images/classes-diagram.png)
-
-> [Descripción opcional del diagrama y relaciones principales]
+![Class Diagram](images/templates-classes-diagram.jpg)
 
 ### **Participación de Miembros en la Práctica 1**
 
