@@ -97,7 +97,7 @@ Diagram showing how to navigate between the different pages of the application:
 ## 🛠 **Práctica 1: Web con HTML generado en servidor y AJAX**
 
 ### **Vídeo de Demostración**
-📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=x91MPoITQ3I)**
+📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=x91MPoITQ3I)](https://youtu.be/0gTMMrFujZE)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web.
 
 ### **Execution Instructions**
