@@ -27,7 +27,9 @@ public class SecurityConfig {
                                 "/register",
                                 "/error",
                                 "/user/*/profile-image",
-                                "/posts/post/*/image")
+                                "/posts/post/*/image",
+                                "/api/**"   //Cambiarlo luego
+                            )
                         .permitAll()
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
