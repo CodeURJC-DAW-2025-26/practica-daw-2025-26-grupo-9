@@ -2,23 +2,55 @@ package es.urjc.daw.equis.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
 
+	@Bean
+	@Order(1)
+	public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
+        http
+				.securityMatcher("/api/**");
+
+		http
+				    .csrf(csrf -> csrf.disable())
+                    .authorizeHttpRequests(authorize -> authorize
+						// PUBLIC ENDPOINTS
+						.anyRequest().permitAll());
+
+		// Disable Form login Authentication
+		http.formLogin(formLogin -> formLogin.disable());
+
+		// Disable CSRF protection (it is difficult to implement in REST APIs)
+		http.csrf(csrf -> csrf.disable());
+
+		// Disable Basic Authentication
+		http.httpBasic(httpBasic -> httpBasic.disable());
+
+		// Stateless session
+		http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+		return http.build();
+    
+    }
+
     @Bean
-    public SecurityFilterChain filterChain(
+	@Order(2)
+    public SecurityFilterChain webFilterChain(
             HttpSecurity http,
             CustomAuthenticationProvider customAuthenticationProvider) throws Exception {
 
         http.authenticationProvider(customAuthenticationProvider);
 
         http
-                .csrf(csrf -> csrf.disable())   //Cambiarlo luego
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/",
@@ -28,8 +60,7 @@ public class SecurityConfig {
                                 "/register",
                                 "/error",
                                 "/user/*/profile-image",
-                                "/posts/post/*/image",
-                                "/api/**"   //Cambiarlo luego
+                                "/posts/post/*/image"
                             )
                         .permitAll()
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
