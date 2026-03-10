@@ -20,14 +20,31 @@ public class UserRestController {
         this.userMapper = userMapper;
     }
 
+    // =========================
+    // GET USER
+    // =========================
+
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
 
         User user = userService.getByIdOrThrow(id);
-
         UserDTO dto = userMapper.toDTO(user);
 
         return ResponseEntity.ok(dto);
     }
 
+    // =========================
+    // DELETE USER
+    // =========================
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UserDTO> deleteUser(@PathVariable Long id) {
+
+        User user = userService.getByIdOrThrow(id);
+        UserDTO dto = userMapper.toDTO(user);
+
+        userService.deleteUserById(id);
+
+        return ResponseEntity.ok(dto);
+    }
 }

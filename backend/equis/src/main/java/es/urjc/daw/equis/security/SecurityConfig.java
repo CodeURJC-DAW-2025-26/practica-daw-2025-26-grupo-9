@@ -18,6 +18,7 @@ public class SecurityConfig {
         http.authenticationProvider(customAuthenticationProvider);
 
         http
+                .csrf(csrf -> csrf.disable())   //Cambiarlo luego
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/",

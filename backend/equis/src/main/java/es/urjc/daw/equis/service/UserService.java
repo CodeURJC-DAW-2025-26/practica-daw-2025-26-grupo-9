@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.repository.UserRepository;
+import es.urjc.daw.equis.repository.LikeRepository;
 
 @Service
 public class UserService {
@@ -23,11 +24,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final LikeRepository likeRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService,
+            LikeRepository likeRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+        this.likeRepository = likeRepository;
     }
 
     @Transactional
@@ -198,6 +202,14 @@ public class UserService {
         Long userId = user.getId();
 
         userRepository.deleteById(userId);
+    }
+
+    @Transactional
+    public void deleteUserById(Long id) {
+
+        likeRepository.deleteByUserId(id);
+
+        userRepository.deleteById(id);
     }
 
     @Transactional
