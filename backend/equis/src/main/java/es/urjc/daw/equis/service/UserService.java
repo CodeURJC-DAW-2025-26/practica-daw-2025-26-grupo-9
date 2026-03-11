@@ -3,6 +3,7 @@ package es.urjc.daw.equis.service;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -109,7 +110,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getByIdOrThrow(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
     }
 
     // UPDATE PROFILE
