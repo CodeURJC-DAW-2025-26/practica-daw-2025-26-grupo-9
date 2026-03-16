@@ -181,7 +181,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public void createCategory(String name,
+    public Category createCategory(String name,
             String description,
             MultipartFile image) {
 
@@ -216,9 +216,10 @@ public class CategoryService {
             }
 
             categoryRepository.save(category);
-
+            return category;
         } catch (Exception e) {
             throw new RuntimeException("Error creando categoría", e);
         }
+        
     }
 }
