@@ -3,13 +3,11 @@ package es.urjc.daw.equis.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
@@ -58,7 +56,11 @@ public class SecurityConfig {
                                 "/favicon.ico",
                                 "/login",
                                 "/register",
-                                "/error",
+                                "/error-login",
+                                "/error-403",
+                                "/error-404",
+                                "/error-500",
+                                "/error-general",
                                 "/user/*/profile-image",
                                 "/posts/post/*/image"
                             )
@@ -69,22 +71,20 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/profile", true)
-                        .failureHandler((request, response, exception) -> {
+                        .failureUrl("/error-login")
+                        .permitAll()
+                )
 
-                            if (exception instanceof org.springframework.security.authentication.DisabledException) {
-                                response.sendRedirect("/login?blocked");
-                            } else {
-                                response.sendRedirect("/login?error");
-                            }
-
-                        })
-                        .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
-                        .permitAll());
+                        .permitAll()
+                );
+                http.exceptionHandling(exception -> exception
+                    .accessDeniedPage("/error-403")
+                );
 
         return http.build();
     }

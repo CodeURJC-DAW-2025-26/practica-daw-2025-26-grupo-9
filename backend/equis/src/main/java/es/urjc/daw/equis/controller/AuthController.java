@@ -29,6 +29,7 @@ public class AuthController {
             @RequestParam(required = false) String error,
             @RequestParam(required = false) String blocked,
             Model model) {
+
         model.addAttribute("error", error != null);
         model.addAttribute("blocked", blocked != null);
         return "sign-in";
@@ -41,13 +42,24 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String processRegister(@ModelAttribute User user,
+    public String processRegister(
+            @ModelAttribute User user,
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
-            @RequestParam(value = "coverImage", required = false) MultipartFile coverImage)
-            throws IOException, SQLException {
+            @RequestParam(value = "coverImage", required = false) MultipartFile coverImage,
+            Model model) throws IOException, SQLException {
+
+        if (userService.findByEmail(user.getEmail()).isPresent()) {
+            return "error-register";
+        }
 
         user.setRoles(List.of("ROLE_USER"));
-        userService.register(user, profileImage, coverImage);
-        return "redirect:/login";
+
+        try {
+            userService.register(user, profileImage, coverImage);
+            return "redirect:/login";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error-register";
+        }
     }
 }
