@@ -16,26 +16,18 @@ import es.urjc.daw.equis.model.Comment;
 import es.urjc.daw.equis.model.Like;
 import es.urjc.daw.equis.model.Post;
 import es.urjc.daw.equis.model.User;
-import es.urjc.daw.equis.repository.CommentRepository;
-import es.urjc.daw.equis.repository.LikeRepository;
-import es.urjc.daw.equis.repository.PostRepository;
-import es.urjc.daw.equis.repository.UserRepository;
 import es.urjc.daw.equis.service.PostService;
 import es.urjc.daw.equis.service.UserService;
 import es.urjc.daw.equis.service.CategoryService;
+import es.urjc.daw.equis.service.CommentService;
+import es.urjc.daw.equis.service.LikeService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.websocket.server.PathParam;
 
 import org.springframework.ui.Model;
 
 @Controller
 @RequestMapping("/posts")
 public class PostController {
-
-    private final PostRepository postRepository;
-    private final LikeRepository likeRepository;
-    private final UserRepository userRepository;
-    private final CommentRepository commentRepository;
 
     @Autowired
     private PostService postService;
@@ -46,14 +38,14 @@ public class PostController {
     @Autowired
     private CategoryService categoryService;
 
-    public PostController(PostRepository postRepository,
-            LikeRepository likeRepository,
-            UserRepository userRepository,
-            CommentRepository commentRepository) {
-        this.postRepository = postRepository;
-        this.likeRepository = likeRepository;
-        this.userRepository = userRepository;
-        this.commentRepository = commentRepository;
+    @Autowired
+    private LikeService likeService;
+
+    @Autowired
+    private CommentService commentService;
+
+    public PostController() {
+
     }
 
     @PostMapping("/newPost")
@@ -158,7 +150,7 @@ public class PostController {
     @GetMapping("/post/{id}/image")
     public ResponseEntity<byte[]> getPostImage(@PathVariable Long id) throws Exception {
 
-        Post post = postRepository.findById(id).orElse(null);
+        Post post = postService.findById(id);
 
         if (post == null || post.getPicture() == null) {
             return ResponseEntity.notFound().build();
@@ -182,23 +174,14 @@ public class PostController {
             return "redirect:/login";
         }
 
-        User user = userRepository.findByEmail(auth.getName()).orElse(null);
-        Post post = postRepository.findById(id).orElse(null);
+        User user = userService.findByEmail(auth.getName()).orElse(null);
+        Post post = postService.findById(id);
 
         if (user == null || post == null) {
             return safeRedirect(redirect, "/");
         }
 
-        likeRepository.findByUserAndPost(user, post)
-                .ifPresentOrElse(
-                        likeRepository::delete,
-                        () -> {
-                            Like like = new Like();
-                            like.setUser(user);
-                            like.setPost(post);
-                            likeRepository.save(like);
-                        });
-
+        likeService.togglePostLike(user, post);
         return safeRedirect(redirect, "/");
     }
 
@@ -211,22 +194,14 @@ public class PostController {
             return "redirect:/login";
         }
 
-        User user = userRepository.findByEmail(auth.getName()).orElse(null);
-        Comment comment = commentRepository.findById(id).orElse(null);
+        User user = userService.findByEmail(auth.getName()).orElse(null);
+        Comment comment = commentService.findById(id).orElse(null);
 
         if (user == null || comment == null) {
             return safeRedirect(redirect, "/");
         }
 
-        likeRepository.findByUserAndComment(user, comment)
-                .ifPresentOrElse(
-                        likeRepository::delete,
-                        () -> {
-                            Like like = new Like();
-                            like.setUser(user);
-                            like.setComment(comment);
-                            likeRepository.save(like);
-                        });
+        likeService.toggleCommentLike(user, comment);
 
         return safeRedirect(redirect, "/");
     }
@@ -241,8 +216,8 @@ public class PostController {
             return "redirect:/login";
         }
 
-        Post post = postRepository.findById(postId).orElse(null);
-        User user = userRepository.findByEmail(auth.getName()).orElse(null);
+        Post post = postService.findById(postId);
+        User user = userService.findByEmail(auth.getName()).orElse(null);
 
         if (post == null || user == null) {
             return safeRedirect(redirect, "/");
@@ -253,7 +228,7 @@ public class PostController {
         comment.setPost(post);
         comment.setUser(user);
 
-        commentRepository.save(comment);
+        commentService.save(comment);
 
         return safeRedirect(redirect, "/");
     }
@@ -268,8 +243,8 @@ public class PostController {
             return "redirect:/login";
         }
 
-        Comment comment = commentRepository.findById(id).orElse(null);
-        User user = userRepository.findByEmail(auth.getName()).orElse(null);
+        Comment comment = commentService.findById(id).orElse(null);
+        User user = userService.findByEmail(auth.getName()).orElse(null);
 
         if (comment == null || user == null) {
             return "redirect:/";
@@ -280,7 +255,7 @@ public class PostController {
         }
 
         comment.setContent(content);
-        commentRepository.save(comment);
+        commentService.save(comment);
 
         return safeRedirect(redirect, "/");
     }
@@ -293,8 +268,8 @@ public class PostController {
             return "redirect:/login";
         }
 
-        Comment comment = commentRepository.findById(id).orElse(null);
-        User user = userRepository.findByEmail(auth.getName()).orElse(null);
+        Comment comment = commentService.findById(id).orElse(null);
+        User user = userService.findByEmail(auth.getName()).orElse(null);
 
         if (comment == null || user == null) {
             return "redirect:/";
@@ -308,7 +283,7 @@ public class PostController {
             return "redirect:/";
         }
 
-        commentRepository.delete(comment);
+        commentService.delete(comment);
 
         return "redirect:/";
     }
@@ -325,14 +300,14 @@ public class PostController {
 
         User currentUser = null;
         if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
-            currentUser = userRepository.findByEmail(auth.getName()).orElse(null);
+            currentUser = userService.findByEmail(auth.getName()).orElse(null);
         }
 
-        post.setLikesCount(likeRepository.countByPost(post));
+        post.setLikesCount(likeService.countByPost(post));
 
         if (post.getComments() != null) {
             for (Comment c : post.getComments()) {
-                c.setLikesCount(likeRepository.countByComment(c));
+                c.setLikesCount(likeService.countByComment(c));
                 boolean isOwner = currentUser != null
                         && c.getUser() != null
                         && c.getUser().getId().equals(currentUser.getId());

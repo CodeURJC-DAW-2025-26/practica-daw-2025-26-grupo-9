@@ -1,6 +1,7 @@
 package es.urjc.daw.equis.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,11 @@ public class CommentService {
     public List<Comment> findByPostId(Long postId) {
         return commentRepository.findByPostId(postId);
     }
+
+    public Optional<Comment> findById(Long commentId){
+        return commentRepository.findById(commentId);
+    }
+
 
     @Transactional(readOnly = true)
     public List<Comment> getCommentsByPost(Long postId) {
@@ -82,5 +88,13 @@ public class CommentService {
     public void deleteCommentsByPost(Long postId) {
         // Useful if you delete posts manually or for moderation
         commentRepository.deleteByPostId(postId);
+    }
+
+    public Comment save(Comment comment){
+        return commentRepository.save(comment);
+    }
+
+    public void delete(Comment comment){
+        commentRepository.delete(comment);
     }
 }
