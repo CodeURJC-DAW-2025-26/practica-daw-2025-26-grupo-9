@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -21,28 +22,35 @@ import es.urjc.daw.equis.model.Category;
 import es.urjc.daw.equis.model.Comment;
 import es.urjc.daw.equis.model.Post;
 import es.urjc.daw.equis.model.User;
-import es.urjc.daw.equis.repository.CategoryRepository;
-import es.urjc.daw.equis.repository.LikeRepository;
-import es.urjc.daw.equis.repository.PostRepository;
-import es.urjc.daw.equis.repository.UserRepository;
+import es.urjc.daw.equis.service.CategoryService;
+import es.urjc.daw.equis.service.LikeService;
+import es.urjc.daw.equis.service.PostService;
+import es.urjc.daw.equis.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class HomeController {
 
-    private final PostRepository postRepository;
-    private final UserRepository userRepository;
-    private final LikeRepository likeRepository;
-    private final CategoryRepository categoryRepository;
 
-    public HomeController(PostRepository postRepository,
-            UserRepository userRepository,
-            LikeRepository likeRepository,
-            CategoryRepository categoryRepository) {
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
-        this.likeRepository = likeRepository;
-        this.categoryRepository = categoryRepository;
+    @Autowired
+    private final PostService postService;
+
+    @Autowired
+    private final UserService userService;
+
+    @Autowired
+    private final CategoryService categoryService;
+
+    @Autowired
+    private final LikeService likeService;
+
+
+
+    public HomeController(CategoryService categoryService, LikeService likeService, PostService postService, UserService userService){
+        this.postService = postService;
+        this.userService = userService;
+        this.categoryService = categoryService;
+        this.likeService = likeService;
     }
 
     @GetMapping("/")
@@ -56,12 +64,12 @@ public class HomeController {
         if (page < 1)
             page = 1;
 
-        List<Post> allPosts = postRepository.findAll();
+        List<Post> allPosts = postService.findAllPosts();
         List<Post> ordered = applyAlgorithm(allPosts);
 
         User currentUser = null;
         if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
-            currentUser = userRepository.findByEmail(auth.getName()).orElse(null);
+            currentUser = userService.findByEmail(auth.getName()).orElse(null);
         }
 
         for (Post post : ordered) {
@@ -82,8 +90,8 @@ public class HomeController {
         model.addAttribute("hasNext", pageResult.hasNext());
         model.addAttribute("currentUser", currentUser);
 
-        List<Category> cats = categoryRepository.findAll();
-        cats.forEach(c -> c.setPostsCount(postRepository.countByCategoryId(c.getId())));
+        List<Category> cats = categoryService.findAll();
+        cats.forEach(c -> c.setPostsCount(postService.countByCategoryId(c.getId())));
 
         model.addAttribute("categories", cats);
         model.addAttribute("topCategories", topCategories(5));
@@ -107,7 +115,7 @@ public class HomeController {
             return "redirect:/login";
         }
 
-        List<Post> allPosts = postRepository.findAll();
+        List<Post> allPosts = postService.findAllPosts();
         List<Post> ordered = applyAlgorithm(allPosts);
         List<Post> top = ordered.stream().limit(5).toList();
 
@@ -123,7 +131,7 @@ public class HomeController {
 
         model.addAttribute("labels", mapper.writeValueAsString(labels));
         model.addAttribute("likes", mapper.writeValueAsString(likes));
-        model.addAttribute("currentUser", userRepository.findByEmail(auth.getName()).orElse(null));
+        model.addAttribute("currentUser", userService.findByEmail(auth.getName()).orElse(null));
         model.addAttribute("statsActive", true);
 
         return "stats";
@@ -135,12 +143,12 @@ public class HomeController {
 
         copy.forEach(post -> {
 
-            long realLikes = likeRepository.countByPost(post);
+            long realLikes = likeService.countByPost(post);
             post.setLikesCount(realLikes);
 
             if (post.getComments() != null) {
                 post.getComments().forEach(comment -> {
-                    long commentLikes = likeRepository.countByComment(comment);
+                    long commentLikes = likeService.countByComment(comment);
                     comment.setLikesCount(commentLikes);
                 });
             }
@@ -157,7 +165,7 @@ public class HomeController {
 
     private long calculateScore(Post post) {
 
-        long likes = likeRepository.countByPost(post);
+        long likes = likeService.countByPost(post);
         long comments = post.getComments() != null ? post.getComments().size() : 0;
 
         long hoursSincePost = 0;
@@ -183,8 +191,8 @@ public class HomeController {
     }
 
     private List<Category> topCategories(int limit) {
-        List<Category> cats = categoryRepository.findAll();
-        cats.forEach(c -> c.setPostsCount(postRepository.countByCategoryId(c.getId())));
+        List<Category> cats = categoryService.findAll();
+        cats.forEach(c -> c.setPostsCount(postService.countByCategoryId(c.getId())));
         cats.sort((c1, c2) -> Long.compare(c2.getPostsCount(), c1.getPostsCount()));
         return cats.stream().limit(limit).toList();
     }

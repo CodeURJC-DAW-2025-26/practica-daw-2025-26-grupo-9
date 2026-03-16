@@ -128,4 +128,13 @@ public class PostService {
         postRepository.deleteById(id);
     }
 
+    public List<Post> findAllPosts(){
+        return postRepository.findAll();
+    }
+
+    public Long countByCategoryId(Long categoryId){
+        return postRepository.countByCategoryId(categoryId);
+    }
+
+
 }

@@ -27,4 +27,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByCategoryId(Long categoryId);
 
     void deleteByCategoryId(Long categoryId);
+
+    List<Post> findAll();
 }
