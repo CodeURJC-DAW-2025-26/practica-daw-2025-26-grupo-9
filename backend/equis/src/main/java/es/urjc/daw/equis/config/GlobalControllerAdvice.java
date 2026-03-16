@@ -50,8 +50,17 @@ public class GlobalControllerAdvice {
     }
 
     @ModelAttribute("isAdmin")
-    public boolean isAdmin(@ModelAttribute("currentUser") CurrentUserDTO currentUser) {
-        return currentUser != null;
+    public boolean isAdmin() {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || !auth.isAuthenticated() || auth.getName().equals("anonymousUser")) {
+            return false;
+        }
+
+        return auth.getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("ADMIN"));
     }
 
     /**
@@ -91,7 +100,7 @@ public class GlobalControllerAdvice {
         String uri = request.getRequestURI();
 
         model.addAttribute("homeActive", uri.equals("/"));
-        model.addAttribute("profileActive", uri.startsWith("/profile"));
+        model.addAttribute("profileActive", uri.startsWith("/users"));
         model.addAttribute("adminActive", uri.startsWith("/admin"));
         model.addAttribute("categoriesActive", uri.startsWith("/categories"));
     }
