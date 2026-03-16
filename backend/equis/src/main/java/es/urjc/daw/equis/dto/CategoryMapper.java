@@ -1,12 +1,14 @@
 package es.urjc.daw.equis.dto;
-import es.urjc.daw.equis.model.Category;
-public class CategoryMapper {
 
-    public static CategoryDTO toDTO(Category c) {
-        return new CategoryDTO(
-            c.getId(),
-            c.getName(),
-            c.getDescription()
-        );
-    }
+import java.util.List;
+
+import org.mapstruct.Mapper;
+
+import es.urjc.daw.equis.model.Category;
+
+@Mapper(componentModel = "spring")
+public interface CategoryMapper {
+    CategoryDTO toDTO(Category category);
+    List <CategoryDTO> toDTOs(List<Category> categories);
+    Category toDomain(CategoryDTO categoryDTO);
 }
