@@ -2,6 +2,7 @@ package es.urjc.daw.equis.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.sql.rowset.serial.SerialBlob;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.core.Authentication;
 
@@ -103,6 +105,12 @@ public class PostService {
 
     public Page<Post> getPostsByUserId(Long userId, Pageable pageable) {
         return postRepository.findByUserIdOrderByDateDesc(userId, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Post getByIdOrThrow(Long id) {
+        return postRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Post not found"));
     }
 
     public List<Post> findByCategory(Category category) {
