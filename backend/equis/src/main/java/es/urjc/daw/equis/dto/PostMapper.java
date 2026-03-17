@@ -9,6 +9,7 @@ import es.urjc.daw.equis.model.Post;
 public interface PostMapper {
 
     @Mapping(target = "createdAt", expression = "java(post.getCreatedAtHuman())")
+    @Mapping(target = "likesCount", source = "likesCount")
 
     // user
     @Mapping(target = "userId", source = "user.id")

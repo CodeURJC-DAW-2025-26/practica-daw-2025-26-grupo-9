@@ -39,7 +39,7 @@ public class PostRestController {
             @RequestParam(defaultValue = "10") int size) {
 
         Page<Post> postsPage = postService.getFeed(PageRequest.of(page, size));
-
+        
         List<PostDTO> posts = postsPage.getContent()
                 .stream()
                 .map(postMapper::toDTO)
@@ -54,11 +54,7 @@ public class PostRestController {
     @GetMapping("/{id}")
     public ResponseEntity<PostDTO> getPost(@PathVariable Long id) {
 
-        Post post = postService.findById(id);
-
-        if (post == null) {
-            return ResponseEntity.notFound().build();
-        }
+        Post post = postService.getByIdOrThrow(id);
 
         return ResponseEntity.ok(postMapper.toDTO(post));
     }

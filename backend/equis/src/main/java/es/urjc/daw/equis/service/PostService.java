@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.core.Authentication;
 
 import es.urjc.daw.equis.model.Category;
+import es.urjc.daw.equis.model.Comment;
 import es.urjc.daw.equis.model.Post;
 import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.repository.LikeRepository;
@@ -27,6 +28,9 @@ public class PostService {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private CommentService commentService;
 
     private final PostRepository postRepository;
     private final LikeRepository likeRepository;
@@ -109,8 +113,20 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Post getByIdOrThrow(Long id) {
-        return postRepository.findById(id)
+        Post post = postRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Post not found"));
+
+        // post likes
+        enrichLikesCounts(List.of(post));
+
+        List<Comment> comments = commentService.getCommentsByPost(id);
+
+        // comments likes
+        commentService.enrichLikesCounts(comments);
+
+        post.setComments(comments);
+
+        return post;
     }
 
     public List<Post> findByCategory(Category category) {
@@ -121,8 +137,24 @@ public class PostService {
         return postRepository.countByCategory(category);
     }
 
+    @Transactional(readOnly = true)
     public Page<Post> getFeed(Pageable pageable) {
-        return postRepository.findAllByOrderByDateDesc(pageable);
+        Page<Post> page = postRepository.findAllByOrderByDateDesc(pageable);
+
+        List<Post> posts = page.getContent();
+
+        // posts likes
+        enrichLikesCounts(posts);
+
+        for (Post post : posts) {
+            List<Comment> comments = commentService.getCommentsByPost(post.getId());
+
+            commentService.enrichLikesCounts(comments);
+
+            post.setComments(comments);
+        }
+
+        return page;
     }
 
     public Post findById(Long id) {
