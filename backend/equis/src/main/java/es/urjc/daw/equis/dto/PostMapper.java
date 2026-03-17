@@ -5,11 +5,10 @@ import org.mapstruct.Mapping;
 
 import es.urjc.daw.equis.model.Post;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = CommentMapper.class)
 public interface PostMapper {
 
     @Mapping(target = "createdAt", expression = "java(post.getCreatedAtHuman())")
-    @Mapping(target = "commentsCount", expression = "java(post.getCommentsCount())")
 
     // user
     @Mapping(target = "userId", source = "user.id")
@@ -18,6 +17,8 @@ public interface PostMapper {
     // category
     @Mapping(target = "categoryId", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
+
+    @Mapping(target = "comments", source = "comments")
 
     PostDTO toDTO(Post post);
 }
