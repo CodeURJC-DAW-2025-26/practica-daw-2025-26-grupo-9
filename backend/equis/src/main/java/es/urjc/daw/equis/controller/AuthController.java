@@ -52,7 +52,7 @@ public class AuthController {
             return "error-register";
         }
 
-        user.setRoles(List.of("ROLE_USER"));
+        user.setRoles(List.of("USER"));
 
         try {
             userService.register(user, profileImage, coverImage);
