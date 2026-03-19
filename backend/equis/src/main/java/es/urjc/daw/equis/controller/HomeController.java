@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -196,4 +197,49 @@ public class HomeController {
         cats.sort((c1, c2) -> Long.compare(c2.getPostsCount(), c1.getPostsCount()));
         return cats.stream().limit(limit).toList();
     }
+
+    @GetMapping("/posts/more")
+    public String loadMorePosts(@RequestParam int page, Model model, HttpServletRequest request) {
+
+        int size = 10;
+        
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        List<Post> allPosts = postService.findAllPosts();
+        List<Post> ordered = applyAlgorithm(allPosts);
+
+        User currentUser = null;
+        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
+            currentUser = userService.findByEmail(auth.getName()).orElse(null);
+        }
+
+        for (Post post : ordered) {
+            if (post.getComments() != null) {
+                for (Comment comment : post.getComments()) {
+                    boolean isOwner = comment.getUser() != null
+                            && currentUser != null
+                            && comment.getUser().getId().equals(currentUser.getId());
+                    comment.setOwner(isOwner);
+                }
+            }
+        }
+
+        Page<Post> pageResult = sliceAsPage(ordered, page, size);
+
+        model.addAttribute("posts", pageResult.getContent());
+        model.addAttribute("currentUser", currentUser);
+
+        // Use "/" as currentPath for AJAX requests
+        model.addAttribute("currentPath", "/");
+
+        // CSRF token
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
+        if (csrfToken != null) {
+            model.addAttribute("csrfParameterName", csrfToken.getParameterName());
+            model.addAttribute("csrfToken", csrfToken.getToken());
+        }
+
+        return "fragments/posts";
+    }
+
 }
