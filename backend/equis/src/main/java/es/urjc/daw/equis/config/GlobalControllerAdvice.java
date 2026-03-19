@@ -60,7 +60,7 @@ public class GlobalControllerAdvice {
 
         return auth.getAuthorities()
                 .stream()
-                .anyMatch(a -> a.getAuthority().equals("ADMIN"));
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
     }
 
     /**

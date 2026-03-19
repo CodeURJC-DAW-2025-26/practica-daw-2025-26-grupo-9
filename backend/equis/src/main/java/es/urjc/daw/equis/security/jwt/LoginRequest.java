@@ -1,4 +1,5 @@
 package es.urjc.daw.equis.security.jwt;
+
 public class LoginRequest {
 
 	private String username;

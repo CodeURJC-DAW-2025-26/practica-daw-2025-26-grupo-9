@@ -1,5 +1,6 @@
 package es.urjc.daw.equis.security.jwt;
 
+
 import java.util.Date;
 
 import javax.crypto.SecretKey;
@@ -82,6 +83,4 @@ public class JwtTokenProvider {
 				.expiration(expiryDate)
 				.signWith(jwtSecret);
 	}
-
-	
 }

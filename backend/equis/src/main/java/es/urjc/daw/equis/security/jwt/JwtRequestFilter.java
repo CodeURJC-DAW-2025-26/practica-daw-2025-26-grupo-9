@@ -1,4 +1,6 @@
 package es.urjc.daw.equis.security.jwt;
+
+
 import java.io.IOException;
 
 import org.slf4j.Logger;
@@ -7,7 +9,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
@@ -15,7 +16,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 	
 	private static final Logger log = LoggerFactory.getLogger(JwtRequestFilter.class);
@@ -37,13 +37,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			var claims = jwtTokenProvider.validateToken(request, true);
 			var userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
 
+			log.info("Authorities: {}", userDetails.getAuthorities());
+
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
 				
 			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		} catch (Exception ex) {
-			log.info(ex.getMessage());
+			log.debug(ex.getMessage());
 		}
 
 		filterChain.doFilter(request, response);

@@ -277,7 +277,7 @@ public class PostController {
 
         boolean isOwner = comment.getUser().getId().equals(user.getId());
         boolean isAdmin = user.getRoles() != null &&
-                user.getRoles().contains("ADMIN");
+                user.getRoles().contains("ROLE_ADMIN");
 
         if (!isOwner && !isAdmin) {
             return "redirect:/";

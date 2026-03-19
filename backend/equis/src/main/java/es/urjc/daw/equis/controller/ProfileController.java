@@ -54,7 +54,7 @@ public class ProfileController {
 
         boolean isAdmin = currentUser != null
                 && currentUser.getRoles() != null
-                && currentUser.getRoles().contains("ADMIN");
+                && currentUser.getRoles().contains("ROLE_ADMIN");
 
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("profileUser", profileUser);

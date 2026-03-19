@@ -20,23 +20,14 @@ import es.urjc.daw.equis.security.jwt.JwtRequestFilter;
 import es.urjc.daw.equis.security.jwt.JwtTokenProvider;
 import es.urjc.daw.equis.security.jwt.UnauthorizedHandlerJwt;
 
+
+
 @Configuration
 public class SecurityConfig {
 
     @Autowired
     private UserDetailsService userDetailsService;
 
-	@Autowired
-	private JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
-	private JwtRequestFilter jwtRequestFilter;
-
-	@Autowired
-    public RepositoryUserDetailsService userDetailService;
-
-	@Autowired
-  	private UnauthorizedHandlerJwt unauthorizedHandlerJwt;
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
@@ -52,48 +43,52 @@ public class SecurityConfig {
 
         return authProvider;
     }
-
-	@Bean
-	@Order(1)
-	public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
-		
-		http.authenticationProvider(authenticationProvider());
-		
-		http
-			.securityMatcher("/api/**")
-			.exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandlerJwt));
-		
-		http
-			.authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers(HttpMethod.POST,"/api/v1/auth/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/v1/users/**").permitAll()
-                    .requestMatchers(HttpMethod.GET,"/api/v1/posts/**").permitAll()
-                    .requestMatchers(HttpMethod.POST,"/api/v1/posts/**").permitAll()
-                    .requestMatchers(HttpMethod.PATCH,"/api/v1/posts/**").permitAll()
-                    .requestMatchers(HttpMethod.DELETE,"/api/v1/posts/**").permitAll()
-                    .anyRequest().authenticated()
-            );
-		
-        // Disable Form login Authentication
-        http.formLogin(formLogin -> formLogin.disable());
-
-        // Disable CSRF protection (it is difficult to implement in REST APIs)
-        http.csrf(csrf -> csrf.disable());
-
-        // Disable Basic Authentication
-        http.httpBasic(httpBasic -> httpBasic.disable());
-
-        // Stateless session
-        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-		// Add JWT Token filter
-		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
-		return http.build();
-	}
+    
+    @Bean
+    public JwtRequestFilter jwtRequestFilter(
+            UserDetailsService userDetailsService,
+            JwtTokenProvider jwtTokenProvider) {
+        return new JwtRequestFilter(userDetailsService, jwtTokenProvider);
+    }
 
     @Bean
-	@Order(2)
+    @Order(1)
+    public SecurityFilterChain apiFilterChain(
+            HttpSecurity http,
+            CustomAuthenticationProvider customAuthenticationProvider,
+            JwtRequestFilter jwtRequestFilter,
+            UnauthorizedHandlerJwt unauthorizedHandlerJwt) throws Exception {
+
+        http
+            .securityMatcher("/api/**") // 👈 SOLO API
+            .authenticationProvider(customAuthenticationProvider)
+            .csrf(csrf -> csrf.disable())
+            .formLogin(form -> form.disable())
+            .httpBasic(basic -> basic.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandlerJwt))
+            .authorizeHttpRequests(auth -> auth
+
+            .requestMatchers("/api/v1/auth/login", "/api/v1/auth/refresh").permitAll()
+
+            // 🔥 PRIMERO lo específico
+            .requestMatchers("/api/v1/users/me").authenticated()
+
+            // 🔥 LUEGO lo general
+            .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PATCH, "/api/v1/users/*/active").hasRole("ADMIN")
+
+            .anyRequest().authenticated()
+        )
+            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+
+
+    @Bean
+    @Order(2)
     public SecurityFilterChain webFilterChain(
             HttpSecurity http,
             CustomAuthenticationProvider customAuthenticationProvider) throws Exception {
@@ -117,7 +112,7 @@ public class SecurityConfig {
                                 "/posts/post/*/image"
                             )
                         .permitAll()
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")

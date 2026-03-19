@@ -44,22 +44,22 @@ public class DataLoader {
             User admin = createUser("admin@equis.com", "Admin", "Root",
                     "el-bicho", "Administrador del sistema",
                     "static/assets/images/users/user-2.jpg",
-                    encoder.encode("admin"), List.of("ADMIN"));
+                    encoder.encode("admin"), List.of("ROLE_ADMIN"));
 
             User user1 = createUser("user@equis.com", "User", "Normal",
                     "murcia-power", "Usuario de prueba",
                     "static/assets/images/users/user-4.jpg",
-                    encoder.encode("user"), List.of("USER"));
+                    encoder.encode("user"), List.of("ROLE_USER"));
 
             User user2 = createUser("maria@equis.com", "Maria", "Lopez",
                     "fitness-girl", "Amante del deporte",
                     "static/assets/images/users/user-1.jpg",
-                    encoder.encode("1234"), List.of("USER"));
+                    encoder.encode("1234"), List.of("ROLE_USER"));
 
             User user3 = createUser("carlos@equis.com", "Carlos", "Perez",
                     "dev-life", "Spring Boot enjoyer",
                     "static/assets/images/users/user-3.jpg",
-                    encoder.encode("1234"), List.of("USER"));
+                    encoder.encode("1234"), List.of("ROLE_USER"));
 
             userRepo.saveAll(List.of(admin, user1, user2, user3));
 

@@ -1,38 +1,29 @@
 package es.urjc.daw.equis.controller;
 
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import es.urjc.daw.equis.security.jwt.JwtTokenProvider;
+import es.urjc.daw.equis.security.jwt.AuthResponse;
 import es.urjc.daw.equis.security.jwt.LoginRequest;
+import es.urjc.daw.equis.security.jwt.UserLoginService;
+import jakarta.servlet.http.HttpServletResponse;
+
 
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthRestController {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final UserLoginService userLoginService;
 
-    public AuthRestController(AuthenticationManager authenticationManager,
-                              JwtTokenProvider jwtTokenProvider) {
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
+    public AuthRestController(UserLoginService userLoginService) {
+        this.userLoginService = userLoginService;
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(
+            @RequestBody LoginRequest request,
+            HttpServletResponse response) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
-
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return jwtTokenProvider.generateAccessToken(userDetails);
+        return userLoginService.login(response, request);
     }
 }

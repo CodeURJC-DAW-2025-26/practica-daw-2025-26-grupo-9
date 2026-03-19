@@ -1,5 +1,6 @@
 package es.urjc.daw.equis.security.jwt;
 
+
 import java.time.Duration;
 
 public enum TokenType {
