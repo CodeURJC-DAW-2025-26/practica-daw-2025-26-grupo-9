@@ -14,11 +14,18 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import es.urjc.daw.equis.security.jwt.AuthResponse;
 import es.urjc.daw.equis.security.jwt.JwtRequestFilter;
 import es.urjc.daw.equis.security.jwt.JwtTokenProvider;
 import es.urjc.daw.equis.security.jwt.UnauthorizedHandlerJwt;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 
 
@@ -27,6 +34,9 @@ public class SecurityConfig {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private ForbiddenHandler forbiddenHandler;
 
 
 	@Bean
@@ -60,28 +70,37 @@ public class SecurityConfig {
             UnauthorizedHandlerJwt unauthorizedHandlerJwt) throws Exception {
 
         http
-            .securityMatcher("/api/**") // 👈 SOLO API
+            .securityMatcher("/api/**")
             .authenticationProvider(customAuthenticationProvider)
             .csrf(csrf -> csrf.disable())
             .formLogin(form -> form.disable())
             .httpBasic(basic -> basic.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandlerJwt))
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint(unauthorizedHandlerJwt)
+                .accessDeniedHandler(forbiddenHandler)
+            )
             .authorizeHttpRequests(auth -> auth
 
-            .requestMatchers("/api/v1/auth/login", "/api/v1/auth/refresh").permitAll()
+            //ACCESS FOR ALL 
+            .requestMatchers("/api/v1/auth/login", "/api/v1/auth/refresh", "/api/v1/auth/register").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
+            
+            //USERS
+            .requestMatchers("/api/v1/users/me").authenticated()
+            .requestMatchers("/api/v1/auth/logout").permitAll()
 
+            //CATEGORIES (ADMIN)
             .requestMatchers(HttpMethod.POST, "/api/v1/categories/**").hasRole("ADMIN")
             .requestMatchers(HttpMethod.PUT, "/api/v1/categories/**").hasRole("ADMIN")
             .requestMatchers(HttpMethod.DELETE, "/api/v1/categories/**").hasRole("ADMIN")    
-            // 🔥 PRIMERO lo específico
-            .requestMatchers("/api/v1/users/me").authenticated()
-
-            // 🔥 LUEGO lo general
+            
+            //USERS (ADMIN)
             .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasRole("ADMIN")
             .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasRole("ADMIN")
             .requestMatchers(HttpMethod.PATCH, "/api/v1/users/*/active").hasRole("ADMIN")
+
+
 
             .anyRequest().authenticated()
         )
@@ -139,6 +158,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -11,16 +11,31 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Component
 public class UnauthorizedHandlerJwt implements AuthenticationEntryPoint {
 
-  private static final Logger logger = LoggerFactory.getLogger(UnauthorizedHandlerJwt.class);
+    private static final Logger logger = LoggerFactory.getLogger(UnauthorizedHandlerJwt.class);
 
-  @Override
-  public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
-      throws IOException {
-    logger.info("Unauthorized error: {}", authException.getMessage());
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "message: %s, path: %s".formatted(authException.getMessage(), request.getServletPath()));
-  }
+    @Override
+    public void commence(HttpServletRequest request,
+                         HttpServletResponse response,
+                         AuthenticationException authException) throws IOException {
+
+        logger.info("Unauthorized error: {}", authException.getMessage());
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+
+        AuthResponse body = new AuthResponse(
+                AuthResponse.Status.FAILURE,
+                "Unauthorized",
+                authException.getMessage()
+        );
+
+        response.getWriter().write(objectMapper.writeValueAsString(body));
+    }
 }
