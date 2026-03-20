@@ -191,4 +191,16 @@ public class PostRestController {
 
         return ResponseEntity.ok(dto);
     }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<List<PostDTO>> getTopPosts() {
+
+        List<Post> topPosts = postService.getTop5PostsByLikes();
+
+        List<PostDTO> dtos = topPosts.stream()
+                .map(postMapper::toDTO)
+                .toList();
+
+        return ResponseEntity.ok(dtos);
+    }
 }

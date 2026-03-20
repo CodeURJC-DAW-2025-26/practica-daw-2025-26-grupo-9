@@ -8,6 +8,7 @@ import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -159,6 +160,21 @@ public class PostService {
         }
 
         return page;
+    }
+
+    public List<Post> getTop5PostsByLikes() {
+
+        List<Post> posts = postRepository.findTopPostsByLikes(PageRequest.of(0, 5));
+
+        enrichLikesCounts(posts);
+
+        for (Post post : posts) {
+            List<Comment> comments = commentService.getCommentsByPost(post.getId());
+            commentService.enrichLikesCounts(comments);
+            post.setComments(comments);
+        }
+
+        return posts;
     }
 
     public Post findById(Long id) {

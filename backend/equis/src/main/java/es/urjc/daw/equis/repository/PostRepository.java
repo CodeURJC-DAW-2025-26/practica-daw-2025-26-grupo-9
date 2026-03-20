@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import es.urjc.daw.equis.model.Category;
 import es.urjc.daw.equis.model.Post;
@@ -29,4 +30,13 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     void deleteByCategoryId(Long categoryId);
 
     List<Post> findAll();
+
+    // For api statistics (posts with the most number of likes)
+    @Query("""
+    SELECT p FROM Post p
+    LEFT JOIN Like l ON l.post = p
+    GROUP BY p
+    ORDER BY COUNT(l) DESC
+    """)
+    List<Post> findTopPostsByLikes(Pageable pageable);
 }
