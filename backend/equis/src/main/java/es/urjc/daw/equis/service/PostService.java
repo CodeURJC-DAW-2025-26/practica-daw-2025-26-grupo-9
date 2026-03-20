@@ -107,6 +107,10 @@ public class PostService {
 
     }
 
+    public void update(Post post) {
+        postRepository.save(post);
+    }
+
     public Page<Post> getPostsByUserId(Long userId, Pageable pageable) {
         return postRepository.findByUserIdOrderByDateDesc(userId, pageable);
     }
