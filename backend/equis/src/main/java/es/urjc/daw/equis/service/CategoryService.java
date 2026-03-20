@@ -2,16 +2,15 @@ package es.urjc.daw.equis.service;
 
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.sql.rowset.serial.SerialBlob;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.urjc.daw.equis.model.Category;
@@ -24,6 +23,7 @@ import es.urjc.daw.equis.repository.PostRepository;
 @Service
 public class CategoryService {
 
+    @Autowired CommentService commentService;
     private final CategoryRepository categoryRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
@@ -38,7 +38,7 @@ public class CategoryService {
         this.commentRepository = commentRepository;
         this.likeRepository = likeRepository;
     }
-
+    
     @Transactional(readOnly = true)
     public List<Category> findAll() {
         return categoryRepository.findAll();

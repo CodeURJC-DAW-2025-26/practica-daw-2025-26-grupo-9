@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import es.urjc.daw.equis.model.Category;
 import es.urjc.daw.equis.service.CategoryService;
 import es.urjc.daw.equis.dto.CategoryDTO;
+import es.urjc.daw.equis.dto.CategoryExtendedDTO;
 import es.urjc.daw.equis.dto.CategoryMapper;
 
 import java.net.URI;
@@ -33,9 +34,9 @@ public class CategoryRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryDTO> getCategory(@PathVariable Long id) {
-
-        return ResponseEntity.ok(mapper.toDTO(categoryService.findById(id)));
+    public ResponseEntity<CategoryExtendedDTO> getCategory(@PathVariable Long id) {
+        Category category = categoryService.findById(id);
+        return ResponseEntity.ok(mapper.toExtendedDTO(category));
     }
     @GetMapping("/{id}/image")
     public ResponseEntity<byte[]> getCategoryImage(@PathVariable Long id) throws Exception {
