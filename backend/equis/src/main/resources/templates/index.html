@@ -177,7 +177,7 @@
                                                             <li class="media comment-form">
                                                                 {{#currentUser}}
                                                                 <a href="#" class="pull-left">
-                                                                    <img src="/user/{{id}}/profile-image"
+                                                                    <img src="/user/{{currentUser.id}}/profile-image"
                                                                         class="mr-3 post-user-image">
                                                                 </a>
                                                                 {{/currentUser}}
@@ -308,16 +308,6 @@
 <div class="text-center mt-3">
     
 </div>
-
-<div id="spinner" style="display:none; text-align:center;">
-    <p>Cargando...</p>
-</div>
-
-
-<div class="text-center mt-3">
-    
-</div>
-
 <div id="spinner" style="display:none; text-align:center;">
     <p>Cargando...</p>
 </div>
@@ -417,8 +407,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
 
-                // Insert HTML before the button
-                btn.insertAdjacentHTML('beforebegin', html);
+                document.getElementById("post-container")
+    .insertAdjacentHTML('beforeend', html);
                 
                 // Reinitialize comment listeners for new posts
                 setupCommentListeners();
@@ -430,6 +420,21 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+
+
+<script>
+document.addEventListener("submit", function (e) {
+    if (e.target.matches("form[action*='/comments']")) {
+        e.preventDefault();
+        const form = e.target;
+        const data = new FormData(form);
+        fetch(form.action, {
+            method: "POST",
+            body: data
+        }).then(() => location.reload());
+    }
+});
+</script>
 
 </body>
 
