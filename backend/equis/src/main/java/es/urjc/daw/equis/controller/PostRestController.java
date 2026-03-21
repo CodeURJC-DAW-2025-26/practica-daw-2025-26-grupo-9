@@ -14,13 +14,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import es.urjc.daw.equis.dto.CommentDTO;
+import es.urjc.daw.equis.dto.CommentMapper;
 import es.urjc.daw.equis.dto.PostDTO;
 import es.urjc.daw.equis.dto.PostMapper;
+import es.urjc.daw.equis.model.Comment;
 import es.urjc.daw.equis.model.Post;
 import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.service.PostService;
 import es.urjc.daw.equis.service.UserService;
 import es.urjc.daw.equis.service.CategoryService;
+import es.urjc.daw.equis.service.CommentService;
 import es.urjc.daw.equis.service.LikeService;
 
 @RestController
@@ -33,14 +37,20 @@ public class PostRestController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CommentMapper commentMapper;
+
     private final PostService postService;
     private final PostMapper postMapper;
     private final CategoryService categoryService;
+    private final CommentService commentService;
 
-    public PostRestController(PostService postService, PostMapper postMapper, CategoryService categoryService) {
+    public PostRestController(PostService postService, PostMapper postMapper, CommentMapper commentMapper, CategoryService categoryService, CommentService commentService) {
         this.postService = postService;
         this.postMapper = postMapper;
+        this.commentMapper = commentMapper;
         this.categoryService = categoryService;
+        this.commentService = commentService;
     }
 
     // =========================
@@ -233,5 +243,24 @@ public class PostRestController {
         likeService.togglePostLike(user, post);
 
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{postId}/comments")
+    public ResponseEntity<CommentDTO> createComment(
+            @PathVariable Long postId,
+            @RequestBody CommentDTO dto,
+            Authentication auth) {
+
+        if (auth == null || auth.getName().equals("anonymousUser")) {
+            return ResponseEntity.status(401).build();
+        }
+
+        User user = userService.findByEmail(auth.getName()).orElse(null);
+
+        Comment comment = commentService.addComment(postId, dto.content(), user);
+
+        return ResponseEntity
+                .created(URI.create("/api/v1/comments/" + comment.getId()))
+                .body(commentMapper.toDTO(comment));
     }
 }
