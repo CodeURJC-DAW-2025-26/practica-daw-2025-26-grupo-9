@@ -5,6 +5,7 @@ import java.security.Principal;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
@@ -16,12 +17,21 @@ import org.springframework.web.multipart.MultipartFile;
 import es.urjc.daw.equis.dto.PostDTO;
 import es.urjc.daw.equis.dto.PostMapper;
 import es.urjc.daw.equis.model.Post;
+import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.service.PostService;
+import es.urjc.daw.equis.service.UserService;
 import es.urjc.daw.equis.service.CategoryService;
+import es.urjc.daw.equis.service.LikeService;
 
 @RestController
 @RequestMapping("/api/v1/posts")
 public class PostRestController {
+
+    @Autowired
+    private LikeService likeService;
+
+    @Autowired
+    private UserService userService;
 
     private final PostService postService;
     private final PostMapper postMapper;
@@ -202,5 +212,26 @@ public class PostRestController {
                 .toList();
 
         return ResponseEntity.ok(dtos);
+    }
+
+    @PostMapping("/{id}/like")
+    public ResponseEntity<Void> togglePostLike(
+            @PathVariable Long id,
+            Authentication auth) {
+
+        if (auth == null || auth.getName().equals("anonymousUser")) {
+            return ResponseEntity.status(401).build();
+        }
+
+        Post post = postService.findById(id);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        User user = userService.findByEmail(auth.getName()).orElse(null);
+
+        likeService.togglePostLike(user, post);
+
+        return ResponseEntity.ok().build();
     }
 }
