@@ -84,6 +84,7 @@ public class UserRestController {
         user.setEmail(email);
         user.setEncodedPassword(password);
         user.setDescription(description);
+        user.setRoles(List.of("USER"));
 
         User savedUser = userService.register(user, profileImage, coverImage);
 

@@ -14,20 +14,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import es.urjc.daw.equis.security.jwt.AuthResponse;
 import es.urjc.daw.equis.security.jwt.JwtRequestFilter;
 import es.urjc.daw.equis.security.jwt.JwtTokenProvider;
 import es.urjc.daw.equis.security.jwt.UnauthorizedHandlerJwt;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-
 
 @Configuration
 public class SecurityConfig {
@@ -38,22 +29,19 @@ public class SecurityConfig {
     @Autowired
     private ForbiddenHandler forbiddenHandler;
 
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
 
-	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-		return authConfig.getAuthenticationManager();
-	}
-
-	@Bean
+    @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
-
         return authProvider;
     }
-    
+
     @Bean
     public JwtRequestFilter jwtRequestFilter(
             UserDetailsService userDetailsService,
@@ -82,33 +70,38 @@ public class SecurityConfig {
             )
             .authorizeHttpRequests(auth -> auth
 
-            //ACCESS FOR ALL 
-            .requestMatchers("/api/v1/auth/login", "/api/v1/auth/refresh", "/api/v1/auth/register").permitAll()
-            .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
-            
-            //USERS
-            .requestMatchers("/api/v1/users/me").authenticated()
-            .requestMatchers("/api/v1/auth/logout").permitAll()
+                // PUBLIC AUTH
+                .requestMatchers("/api/v1/auth/login", "/api/v1/auth/refresh", "/api/v1/auth/register").permitAll()
+                .requestMatchers("/api/v1/auth/logout").permitAll()
 
-            //CATEGORIES (ADMIN)
-            .requestMatchers(HttpMethod.POST, "/api/v1/categories/**").hasRole("ADMIN")
-            .requestMatchers(HttpMethod.PUT, "/api/v1/categories/**").hasRole("ADMIN")
-            .requestMatchers(HttpMethod.DELETE, "/api/v1/categories/**").hasRole("ADMIN")    
-            
-            //USERS (ADMIN)
-            .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasRole("ADMIN")
-            .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasRole("ADMIN")
-            .requestMatchers(HttpMethod.PATCH, "/api/v1/users/*/active").hasRole("ADMIN")
+                // PUBLIC CATEGORIES
+                .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
 
+                // PUBLIC USERS
+                .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/users/*/profile-picture").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/users/*/cover-picture").permitAll()
 
+                // CURRENT USER
+                .requestMatchers("/api/v1/users/me").authenticated()
 
-            .anyRequest().authenticated()
-        )
+                // ADMIN CATEGORIES
+                .requestMatchers(HttpMethod.POST, "/api/v1/categories/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/v1/categories/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/categories/**").hasRole("ADMIN")
+
+                // ADMIN USERS
+                .requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/v1/users/*").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/users/*").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PATCH, "/api/v1/users/*/active").hasRole("ADMIN")
+
+                .anyRequest().authenticated()
+            )
             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
 
     @Bean
     @Order(2)
@@ -116,49 +109,50 @@ public class SecurityConfig {
             HttpSecurity http,
             CustomAuthenticationProvider customAuthenticationProvider) throws Exception {
 
-        http.authenticationProvider(customAuthenticationProvider);
-
         http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/",
-                                "/assets/**",
-                                "/favicon.ico",
-                                "/login",
-                                "/register",
-                                "/error-login",
-                                "/error-403",
-                                "/error-404",
-                                "/error-500",
-                                "/error-general",
-                                "/user/*/profile-image",
-                                "/posts/post/*/image"
-                            )
-                        .permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/profile", true)
-                        .failureUrl("/error-login")
-                        .permitAll()
-                )
-
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                        .permitAll()
-                );
-                http.exceptionHandling(exception -> exception
-                    .accessDeniedPage("/error-403")
-                );
+            .securityMatcher("/**")
+            .authenticationProvider(customAuthenticationProvider)
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/**").denyAll()
+                .requestMatchers(
+                    "/",
+                    "/assets/**",
+                    "/favicon.ico",
+                    "/login",
+                    "/register",
+                    "/error-login",
+                    "/error-403",
+                    "/error-404",
+                    "/error-500",
+                    "/error-general",
+                    "/user/*/profile-image",
+                    "/user/*/cover-image",
+                    "/users/*/profile-picture",
+                    "/posts/post/*/image"
+                ).permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
+            )
+            .formLogin(form -> form
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/profile", true)
+                .failureUrl("/error-login")
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
+            )
+            .exceptionHandling(exception -> exception
+                .accessDeniedPage("/error-403")
+            );
 
         return http.build();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
