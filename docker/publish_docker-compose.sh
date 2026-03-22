@@ -7,10 +7,8 @@ fi
 
 USERNAME=$1
 
-docker buildx create --use
-
 docker buildx build \
   --platform linux/amd64 \
   -t $USERNAME/equisdaw-compose:latest \
   --push \
-  -f docker/docker-compose.yml .
+  -f docker-compose.yml .
