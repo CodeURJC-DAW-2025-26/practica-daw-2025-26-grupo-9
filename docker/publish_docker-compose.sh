@@ -1,4 +1,16 @@
 #!/bin/bash
 
-docker login
-docker compose -f docker/docker-compose.yml push
+if [ -z "$1" ]; then
+  echo "Uso: ./publish_docker-compose.sh usuario"
+  exit 1
+fi
+
+USERNAME=$1
+
+docker buildx create --use
+
+docker buildx build \
+  --platform linux/amd64 \
+  -t $USERNAME/equisdaw-compose:latest \
+  --push \
+  -f docker/docker-compose.yml .
