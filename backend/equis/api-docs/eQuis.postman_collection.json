@@ -789,5 +789,213 @@
       },
       "response": []
     }
+    {
+      "name": "create user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "name",
+              "value": "elena",
+              "type": "text",
+              "uuid": "6bad81b7-69b5-49b7-ae2e-6da61718a0cb"
+            },
+            {
+              "key": "surname",
+              "value": "ceinos",
+              "type": "text",
+              "uuid": "9195655c-4795-4ac7-8355-18f3c7d3b388"
+            },
+            {
+              "key": "nickname",
+              "value": "elena2",
+              "type": "text",
+              "uuid": "7d16c8fb-757b-4d9d-a09a-7978ef648f75"
+            },
+            {
+              "key": "email",
+              "value": "elena2@test.com",
+              "type": "text",
+              "uuid": "b1118101-54cb-47e0-94ff-459baeb4d134"
+            },
+            {
+              "key": "password",
+              "value": "1234",
+              "type": "text",
+              "uuid": "7716de38-1936-43aa-96d6-e141bb00d165"
+            },
+            {
+              "key": "description",
+              "value": "hola",
+              "type": "text",
+              "uuid": "1d55e629-f100-495e-8924-7a61b6e1afbc"
+            }
+          ]
+        },
+        "url": {
+          "raw": "https://localhost:8443/api/v1/users",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "8443",
+          "path": [
+            "api",
+            "v1",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"elena2@test.com\",\r\n  \"password\": \"1234\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://localhost:8443/api/v1/auth/login",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "8443",
+          "path": [
+            "api",
+            "v1",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "logout",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:8443/api/v1/auth/logout",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "8443",
+          "path": [
+            "api",
+            "v1",
+            "auth",
+            "logout"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "me",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:8443/api/v1/users/me",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "8443",
+          "path": [
+            "api",
+            "v1",
+            "users",
+            "me"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "patchme",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "surname",
+              "value": "apellidocambiado",
+              "type": "text",
+              "uuid": "ff234722-4425-4e46-b24a-f87bdc61de59"
+            }
+          ]
+        },
+        "url": {
+          "raw": "https://localhost:8443/api/v1/users/me",
+          "protocol": "https",
+          "host": [
+            "localhost"
+          ],
+          "port": "8443",
+          "path": [
+            "api",
+            "v1",
+            "users",
+            "me"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "nombrecambiado",
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    }
   ]
 }
