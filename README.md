@@ -387,17 +387,17 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 ---
 
-#### **Alumno 4 - [Nombre Completo]**
+#### **Student 4 - Sergio Rodríguez Gil**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+In addition to general tasks such as adding requests to the Postman collection and creating DTOs and mappers, I was responsible for implementing API operations related to posts and comments.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Add api operations for comment](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/b436a6745ca55fb7e41fea3503862a3d03bfc4a2) | [CommentRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/controller/CommentRestController.java)   |
+|2| [Implement POST and PUT Post](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/132cd88f46515c37992a9d929789cd12c51a226e) | [PostRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/controller/PostRestController.java)   |
+|3| [Implemented some Post operations in api](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/5a43af9820c1cf58b3bfc11e6c88b98def7e4ad0) | [PostService.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/service/PostService.java)   |
+|4| [Add api operation to like and dislike](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/451b4a749a05a9f5a4707c4fe8c85b0d5e40e0eb) | [PostRepository.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/repository/PostRepository.java)   |
+|5| [Statistics operation in api](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/3a486db6e13a49e126e16949dc535f7c69492451) | [PostMapper.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/dto/PostMapper.java)   |
 
 ---
 
