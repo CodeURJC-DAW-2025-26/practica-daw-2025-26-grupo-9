@@ -57,18 +57,15 @@ public class PostRestController {
     // GET POSTS (feed)
     // =========================
     @GetMapping
-    public ResponseEntity<List<PostDTO>> getPosts(
+    public ResponseEntity<Page<PostDTO>> getPosts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         Page<Post> postsPage = postService.getFeed(PageRequest.of(page, size));
-        
-        List<PostDTO> posts = postsPage.getContent()
-                .stream()
-                .map(postMapper::toDTO)
-                .toList();
 
-        return ResponseEntity.ok(posts);
+        Page<PostDTO> dtoPage = postsPage.map(postMapper::toDTO);
+
+        return ResponseEntity.ok(dtoPage);
     }
 
     // =========================
