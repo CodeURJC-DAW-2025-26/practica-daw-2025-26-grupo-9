@@ -81,16 +81,67 @@ Diagram showing how to navigate between the different pages of the application:
 
 ![Diagrama de Navegación](images/navigation-diagram.jpg)
 
-> [Descripción opcional del flujo de navegación: Ej: "El usuario puede acceder desde la página principal a todas las secciones mediante el menú de navegación. Los usuarios anónimos solo tienen acceso a las páginas públicas, mientras que los registrados pueden acceder a su perfil y panel de usuario."]
+### **Screenshots and Page Description**
 
-### **Capturas de Pantalla y Descripción de Páginas**
+#### **1. Main Page / Home**
 
-#### **1. Página Principal / Home**
-![Página Principal](images/home-page.png)
+![Página Principal](images/index-page.png)
 
-> [Descripción breve: Ej: "Página de inicio que muestra los productos destacados, categorías principales y un banner promocional. Incluye barra de navegación y acceso a registro/login para usuarios no autenticados."]
+> The home page displays posts along with their respective comments. From this page, you can access the admin page (if you are an admin), the profile page (if you have logged in), the categories page, and the statistics page. You can also create posts or comments from this page.
 
-#### **AQUÍ AÑADIR EL RESTO DE PÁGINAS**
+#### **2. Login Page**
+
+![Página de inicio de sesión](images/login-page.png)
+
+> This page allows the user to login as a normal user or an admin, and it also has a link to register yourself in the app.
+
+#### **3. Register Page**
+
+![Página de registro](images/register-page.png)
+
+> This page allows the user to register in the app, and it also has a link to the login page.
+
+#### **4. Statistics Page**
+
+![Página de estadísticas](images/statistics-page.png)
+
+> This page shows the top five posts with the highest number of likes.
+
+#### **5. Profile Page**
+
+![Página de perfil de usuario](images/profile-page.png)
+
+> This page shows the logged in user data, and allows the user to edit their profile, publish a post, or delete their profile.
+
+#### **6. Edit Profile Page**
+
+![Página de edición del perfil de usuario](images/edit-profile-page.png)
+
+> This page allows the user to edit specific data of their profile.
+
+#### **7. Admin Page**
+
+![Página de admin](images/admin-page.png)
+
+> This page shows the admin the users and categories in the app; and the option to create, delete or edit categories, and block or unblock users.
+
+#### **8. Create Category Page**
+
+![Página de creación de categoría](images/create-category-page.png)
+
+> This page allows the admin to create a new category.
+
+#### **9. Edit Category Page**
+
+![Página de edición de categoría](images/edit-category-page.png)
+
+> This page allows the admin to edit specific data from a existing category.
+
+#### **10. Category Page**
+
+![Página de categoría](images/category-page.png)
+
+> This page shows existing categories and the number of posts each of them has. When cliked, the image redirects to a page where only the posts of that category are shown.
 
 ---
 
