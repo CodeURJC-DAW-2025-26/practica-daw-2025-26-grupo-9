@@ -274,41 +274,68 @@ Creacion e interrelacion de entidades, gestion de imagenes, creacion y edicion d
 
 > La documentación de la API REST se encuentra en la carpeta `/api-docs` del repositorio. Se ha generado automáticamente con SpringDoc a partir de las anotaciones en el código Java.
 
-### **Diagrama de Clases y Templates Actualizado**
+### **Updated Templates and Class Diagram**
 
 Updated diagram including the @RestController components and their relationship with the shared @Service layers:
 
 ![Diagrama de Clases Actualizado](images/completed-classes-diagram.png)
 
-### **Instrucciones de Ejecución con Docker**
+### **Docker Building and Execution Instructions**
 
-#### **Requisitos previos:**
-- Docker instalado (versión 20.10 o superior)
-- Docker Compose instalado (versión 2.0 o superior)
+#### **Prerequisites:**
+- Docker installed (version 20.10 or higher)
+- Docker Compose installed (version 2.0 or higher)
 
-#### **Pasos para ejecutar con docker-compose:**
+#### **Steps if you want to deploy it yourself:**
 
-1. **Clonar el repositorio** (si no lo has hecho ya):
+1. **Clone the repository** (if you haven’t already):
    ```bash
-   git clone https://github.com/[usuario]/[repositorio].git
-   cd [repositorio]
+   git clone https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9.git
+   cd practica-daw-2025-26-grupo-9
+   ```
+2. **Login in your docker account**:
+   ```bash
+   docker login
    ```
 
-2. **AQUÍ LOS SIGUIENTES PASOS**:
-
-### **Construcción de la Imagen Docker**
-
-#### **Requisitos:**
-- Docker instalado en el sistema
-
-#### **Pasos para construir y publicar la imagen:**
-
-1. **Navegar al directorio de Docker**:
+3. **Build the Docker image**:
    ```bash
-   cd docker
+   ./docker/create_image.sh [your_docker_user_name]/equisdaw
    ```
 
-2. **AQUÍ LOS SIGUIENTES PASOS**
+4. **Publish the Docker image**:
+   ```bash
+   ./docker/publish_image.sh [your_docker_user_name]/equisdaw
+   ```
+
+5. **Publish the Docker Compose**:
+   ```bash
+   ./docker/publish_docker-compose.sh [your_docker_user_name]/equisdaw-compose [your_docker_user_name]/equisdaw
+   ```
+
+6. **Start containers locally**:
+   ```bash
+   docker compose -f docker/docker-compose.yml up
+   ```
+
+**If it fails in one of the steps, try changing the DOCKER_IMAGE=[your_docker_user_name]/equisdaw:latest variable, so that it includes your docker user.**
+
+#### **Steps if you want to download the OCI artifact directly from Docker Hub:**
+
+1. **Download and execute the app**:
+   ```bash
+   docker compose -f oci://docker.io/neokyouma/equisdaw-compose:latest up
+   ```
+   
+**You may additionally need to export some environment variables for the previous step to work**
+   ```bash
+   export DOCKER_IMAGE=neokyouma/equisdaw:latest
+   export DB_NAME=equis
+   export DB_USERNAME=root
+   export DB_PASSWORD=password
+   export DDL_AUTO=update
+   export APP_LOAD_SAMPLE_DATA=true
+   ```
 
 ### **Despliegue en Máquina Virtual**
 
@@ -337,11 +364,12 @@ Updated diagram including the @RestController components and their relationship 
 
 #### **Credenciales de Usuarios de Ejemplo**
 
-| Rol | Usuario | Contraseña |
+| Rol | User | Password |
 |:---|:---|:---|
-| Administrador | admin | admin123 |
-| Usuario Registrado | user1 | user123 |
-| Usuario Registrado | user2 | user123 |
+| Admin | admin@equis.com | admin |
+| Registered User 1 | user@equis.com | user |
+| Registered User 2 | maria@equis.com | 1234 |
+| Registered User 3 | carlos@equis.com | 1234 |
 
 ### **Participación de Miembros en la Práctica 2**
 
