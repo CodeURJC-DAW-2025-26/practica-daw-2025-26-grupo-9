@@ -276,7 +276,7 @@ Creacion e interrelacion de entidades, gestion de imagenes, creacion y edicion d
 
 ### **Diagrama de Clases y Templates Actualizado**
 
-Diagrama actualizado incluyendo los @RestController y su relación con los @Service compartidos:
+Updated diagram including the @RestController components and their relationship with the shared @Service layers:
 
 ![Diagrama de Clases Actualizado](images/completed-classes-diagram.png)
 
