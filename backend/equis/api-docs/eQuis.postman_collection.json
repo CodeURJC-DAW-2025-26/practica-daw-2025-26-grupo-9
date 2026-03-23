@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "40df5565-0b06-4148-98c3-9386237703ac",
+    "_postman_id": "e0fce2c8-0948-4a85-9a6e-2a5754cad0e3",
     "name": "eQuis",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "43045943"
@@ -104,8 +104,6 @@
           "request": {
             "method": "POST",
             "header": [],
-            "body": {
-            },
             "url": {
               "raw": "{{baseUrl}}/api/v1/categories/1/image",
               "host": [
@@ -156,9 +154,6 @@
           "request": {
             "method": "PUT",
             "header": [],
-            "body": {
-            
-            },
             "url": {
               "raw": "{{baseUrl}}/api/v1/categories/1/image",
               "host": [
@@ -260,6 +255,81 @@
           "response": []
         },
         {
+          "name": "POST User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "elena",
+                  "type": "text",
+                  "uuid": "6bad81b7-69b5-49b7-ae2e-6da61718a0cb"
+                },
+                {
+                  "key": "surname",
+                  "value": "ceinos",
+                  "type": "text",
+                  "uuid": "9195655c-4795-4ac7-8355-18f3c7d3b388"
+                },
+                {
+                  "key": "nickname",
+                  "value": "elena2",
+                  "type": "text",
+                  "uuid": "7d16c8fb-757b-4d9d-a09a-7978ef648f75"
+                },
+                {
+                  "key": "email",
+                  "value": "elena2@test.com",
+                  "type": "text",
+                  "uuid": "b1118101-54cb-47e0-94ff-459baeb4d134"
+                },
+                {
+                  "key": "password",
+                  "value": "1234",
+                  "type": "text",
+                  "uuid": "7716de38-1936-43aa-96d6-e141bb00d165"
+                },
+                {
+                  "key": "description",
+                  "value": "hola",
+                  "type": "text",
+                  "uuid": "1d55e629-f100-495e-8924-7a61b6e1afbc"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "DELETE User",
           "request": {
             "auth": {
@@ -277,6 +347,137 @@
                 "v1",
                 "users",
                 "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PATCH Current User",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "surname",
+                  "value": "apellidocambiado",
+                  "type": "text",
+                  "uuid": "ff234722-4425-4e46-b24a-f87bdc61de59"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "me"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "nombrecambiado",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BLOCK User",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "admin",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "admin@equis.com",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"active\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/users/2/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "users",
+                "2",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UNBLOCK User",
+          "request": {
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "password",
+                  "value": "admin",
+                  "type": "string"
+                },
+                {
+                  "key": "username",
+                  "value": "admin@equis.com",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"active\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/users/2/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "users",
+                "2",
+                "status"
               ]
             }
           },
@@ -399,6 +600,40 @@
                 "api",
                 "v1",
                 "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Statistics",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "uuid": "93d51f1a-5022-4228-9771-b1b4ebc7c2d0",
+                  "src": "/C:/Users/usuario/Desktop/imagenes para cover/ultra-wide-4k-aesthetic-city.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/posts/statistics",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "posts",
+                "statistics"
               ]
             }
           },
@@ -703,6 +938,50 @@
       "response": []
     },
     {
+      "name": "POST Login Admin",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"admin@equis.com\",\r\n  \"password\": \"admin\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "POST Register",
       "request": {
         "method": "POST",
@@ -750,390 +1029,6 @@
             "v1",
             "auth",
             "logout"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "GET Statistics",
-      "protocolProfileBehavior": {
-        "disableBodyPruning": true
-      },
-      "request": {
-        "method": "GET",
-        "header": [],
-        "body": {
-          "mode": "formdata",
-          "formdata": [
-            {
-              "key": "image",
-              "type": "file",
-              "uuid": "93d51f1a-5022-4228-9771-b1b4ebc7c2d0",
-              "src": "/C:/Users/usuario/Desktop/imagenes para cover/ultra-wide-4k-aesthetic-city.jpg"
-            }
-          ]
-        },
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/posts/statistics",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "api",
-            "v1",
-            "posts",
-            "statistics"
-          ]
-        }
-      },
-      "response": []
-    }
-    {
-      "name": "create user",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {},
-            "requests": {}
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "formdata",
-          "formdata": [
-            {
-              "key": "name",
-              "value": "elena",
-              "type": "text",
-              "uuid": "6bad81b7-69b5-49b7-ae2e-6da61718a0cb"
-            },
-            {
-              "key": "surname",
-              "value": "ceinos",
-              "type": "text",
-              "uuid": "9195655c-4795-4ac7-8355-18f3c7d3b388"
-            },
-            {
-              "key": "nickname",
-              "value": "elena2",
-              "type": "text",
-              "uuid": "7d16c8fb-757b-4d9d-a09a-7978ef648f75"
-            },
-            {
-              "key": "email",
-              "value": "elena2@test.com",
-              "type": "text",
-              "uuid": "b1118101-54cb-47e0-94ff-459baeb4d134"
-            },
-            {
-              "key": "password",
-              "value": "1234",
-              "type": "text",
-              "uuid": "7716de38-1936-43aa-96d6-e141bb00d165"
-            },
-            {
-              "key": "description",
-              "value": "hola",
-              "type": "text",
-              "uuid": "1d55e629-f100-495e-8924-7a61b6e1afbc"
-            }
-          ]
-        },
-        "url": {
-          "raw": "https://localhost:8443/api/v1/users",
-          "protocol": "https",
-          "host": [
-            "localhost"
-          ],
-          "port": "8443",
-          "path": [
-            "api",
-            "v1",
-            "users"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "login",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {},
-            "requests": {}
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"username\": \"elena2@test.com\",\r\n  \"password\": \"1234\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "https://localhost:8443/api/v1/auth/login",
-          "protocol": "https",
-          "host": [
-            "localhost"
-          ],
-          "port": "8443",
-          "path": [
-            "api",
-            "v1",
-            "auth",
-            "login"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "logout",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "url": {
-          "raw": "https://localhost:8443/api/v1/auth/logout",
-          "protocol": "https",
-          "host": [
-            "localhost"
-          ],
-          "port": "8443",
-          "path": [
-            "api",
-            "v1",
-            "auth",
-            "logout"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "me",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "https://localhost:8443/api/v1/users/me",
-          "protocol": "https",
-          "host": [
-            "localhost"
-          ],
-          "port": "8443",
-          "path": [
-            "api",
-            "v1",
-            "users",
-            "me"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "patchme",
-      "request": {
-        "method": "PATCH",
-        "header": [],
-        "body": {
-          "mode": "formdata",
-          "formdata": [
-            {
-              "key": "surname",
-              "value": "apellidocambiado",
-              "type": "text",
-              "uuid": "ff234722-4425-4e46-b24a-f87bdc61de59"
-            }
-          ]
-        },
-        "url": {
-          "raw": "https://localhost:8443/api/v1/users/me",
-          "protocol": "https",
-          "host": [
-            "localhost"
-          ],
-          "port": "8443",
-          "path": [
-            "api",
-            "v1",
-            "users",
-            "me"
-          ],
-          "query": [
-            {
-              "key": "name",
-              "value": "nombrecambiado",
-              "type": "text",
-              "disabled": true
-            }
-          ]
-        }
-      },
-      "response": []
-    }
-    {
-      "name": "login admin",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});"
-            ],
-            "type": "text/javascript",
-            "packages": {},
-            "requests": {}
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"username\": \"admin@equis.com\",\r\n  \"password\": \"admin\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "https://localhost:8443/api/v1/auth/login",
-          "protocol": "https",
-          "host": [
-            "localhost"
-          ],
-          "port": "8443",
-          "path": [
-            "api",
-            "v1",
-            "auth",
-            "login"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "bloquear user",
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "admin",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin@equis.com",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "PATCH",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"active\": false\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "https://localhost:8443/api/v1/admin/users/2/status",
-          "protocol": "https",
-          "host": [
-            "localhost"
-          ],
-          "port": "8443",
-          "path": [
-            "api",
-            "v1",
-            "admin",
-            "users",
-            "2",
-            "status"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "desbloquear user",
-      "request": {
-        "auth": {
-          "type": "basic",
-          "basic": [
-            {
-              "key": "password",
-              "value": "admin",
-              "type": "string"
-            },
-            {
-              "key": "username",
-              "value": "admin@equis.com",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "PATCH",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"active\": true\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "https://localhost:8443/api/v1/admin/users/2/status",
-          "protocol": "https",
-          "host": [
-            "localhost"
-          ],
-          "port": "8443",
-          "path": [
-            "api",
-            "v1",
-            "admin",
-            "users",
-            "2",
-            "status"
           ]
         }
       },
