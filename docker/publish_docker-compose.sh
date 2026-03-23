@@ -11,4 +11,4 @@ docker buildx build \
   --platform linux/amd64 \
   -t $USERNAME/equisdaw-compose:latest \
   --push \
-  -f docker-compose.yml .
+  -f docker/Dockerfile .

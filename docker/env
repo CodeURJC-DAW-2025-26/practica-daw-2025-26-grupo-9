@@ -1,2 +1,2 @@
-DOCKER_IMAGE=alvarosepu/equisdaw:latest
+DOCKER_IMAGE=neokyouma/equisdaw:latest
 DDL_AUTO=none
