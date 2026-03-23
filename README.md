@@ -278,7 +278,7 @@ Creacion e interrelacion de entidades, gestion de imagenes, creacion y edicion d
 
 Diagrama actualizado incluyendo los @RestController y su relación con los @Service compartidos:
 
-![Diagrama de Clases Actualizado](images/complete-classes-diagram.png)
+![Diagrama de Clases Actualizado](images/completed-classes-diagram.png)
 
 ### **Instrucciones de Ejecución con Docker**
 
