@@ -9,6 +9,7 @@ public record UserDTO(
     String nickname,
     String description,
     String email,
+    boolean active,
     List<String> roles
     ){}
 

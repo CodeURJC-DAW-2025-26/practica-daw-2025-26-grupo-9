@@ -8,5 +8,5 @@ import es.urjc.daw.equis.model.User;
 public interface UserMapper {
 
     UserDTO toDTO(User user);
-    
+
 }

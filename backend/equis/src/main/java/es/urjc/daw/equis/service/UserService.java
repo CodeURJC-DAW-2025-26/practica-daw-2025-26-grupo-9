@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.urjc.daw.equis.model.User;
-import es.urjc.daw.equis.repository.UserRepository;
 import es.urjc.daw.equis.repository.LikeRepository;
+import es.urjc.daw.equis.repository.UserRepository;
 
 @Service
 public class UserService {
@@ -230,6 +230,22 @@ public class UserService {
         user.setActive(!user.isActive());
 
         userRepository.save(user);
+    }
+    @Transactional
+    public User updateUserStatus(Long userId, boolean active, String currentAdminEmail) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        User currentAdmin = userRepository.findByEmail(currentAdminEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Admin not found"));
+
+        if (user.getId().equals(currentAdmin.getId())) {
+            throw new IllegalArgumentException("No puedes bloquearte a ti mismo");
+        }
+
+        user.setActive(active);
+
+        return userRepository.save(user);
     }
 
 }
