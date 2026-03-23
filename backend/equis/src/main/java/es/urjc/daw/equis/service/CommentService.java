@@ -85,7 +85,6 @@ public class CommentService {
 
     @Transactional
     public void deleteCommentsByPost(Long postId) {
-        // Useful if you delete posts manually or for moderation
         commentRepository.deleteByPostId(postId);
     }
 
