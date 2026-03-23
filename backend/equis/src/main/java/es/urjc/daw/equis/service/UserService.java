@@ -231,6 +231,7 @@ public class UserService {
 
         userRepository.save(user);
     }
+
     @Transactional
     public User updateUserStatus(Long userId, boolean active, String currentAdminEmail) {
         User user = userRepository.findById(userId)

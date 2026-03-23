@@ -33,10 +33,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     // For api statistics (posts with the most number of likes)
     @Query("""
-    SELECT p FROM Post p
-    LEFT JOIN Like l ON l.post = p
-    GROUP BY p
-    ORDER BY COUNT(l) DESC
-    """)
+            SELECT p FROM Post p
+            LEFT JOIN Like l ON l.post = p
+            GROUP BY p
+            ORDER BY COUNT(l) DESC
+            """)
     List<Post> findTopPostsByLikes(Pageable pageable);
 }

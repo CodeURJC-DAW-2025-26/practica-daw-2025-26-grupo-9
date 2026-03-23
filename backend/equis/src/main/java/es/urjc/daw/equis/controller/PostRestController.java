@@ -45,7 +45,8 @@ public class PostRestController {
     private final CategoryService categoryService;
     private final CommentService commentService;
 
-    public PostRestController(PostService postService, PostMapper postMapper, CommentMapper commentMapper, CategoryService categoryService, CommentService commentService) {
+    public PostRestController(PostService postService, PostMapper postMapper, CommentMapper commentMapper,
+            CategoryService categoryService, CommentService commentService) {
         this.postService = postService;
         this.postMapper = postMapper;
         this.commentMapper = commentMapper;
@@ -53,9 +54,7 @@ public class PostRestController {
         this.commentService = commentService;
     }
 
-    // =========================
     // GET POSTS (feed)
-    // =========================
     @GetMapping
     public ResponseEntity<Page<PostDTO>> getPosts(
             @RequestParam(defaultValue = "0") int page,
@@ -68,9 +67,7 @@ public class PostRestController {
         return ResponseEntity.ok(dtoPage);
     }
 
-    // =========================
     // GET POST BY ID
-    // =========================
     @GetMapping("/{id}")
     public ResponseEntity<PostDTO> getPost(@PathVariable Long id) {
 
@@ -79,9 +76,6 @@ public class PostRestController {
         return ResponseEntity.ok(postMapper.toDTO(post));
     }
 
-    // =========================
-    // GET POST IMAGE
-    // =========================
     @GetMapping("/{id}/image")
     public ResponseEntity<byte[]> getPostPicture(@PathVariable Long id) throws SQLException {
 
@@ -98,9 +92,6 @@ public class PostRestController {
                 .body(image);
     }
 
-    // =========================
-    // CREATE POST
-    // =========================
     @PostMapping
     public ResponseEntity<PostDTO> createPost(
             @RequestBody PostDTO dto,
@@ -142,9 +133,6 @@ public class PostRestController {
         return ResponseEntity.ok().build();
     }
 
-    // =========================
-    // PUT POST
-    // =========================
     @PutMapping("/{id}")
     public ResponseEntity<PostDTO> updatePost(
             @PathVariable Long id,
@@ -194,9 +182,6 @@ public class PostRestController {
         return ResponseEntity.ok().build();
     }
 
-    // =========================
-    // DELETE POST
-    // =========================
     @DeleteMapping("/{id}")
     public ResponseEntity<PostDTO> deletePost(@PathVariable Long id) {
 

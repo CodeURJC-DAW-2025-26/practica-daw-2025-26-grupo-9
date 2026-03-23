@@ -28,35 +28,35 @@ public class LikeService {
 
     public void togglePostLike(User user, Post post) {
 
-            likeRepository.findByUserAndPost(user, post)
+        likeRepository.findByUserAndPost(user, post)
                 .ifPresentOrElse(
-                    likeRepository::delete,
-                    () -> {
-                        Like like = new Like();
-                        like.setUser(user);
-                        like.setPost(post);
-                        likeRepository.save(like);
-                    });
-        }
+                        likeRepository::delete,
+                        () -> {
+                            Like like = new Like();
+                            like.setUser(user);
+                            like.setPost(post);
+                            likeRepository.save(like);
+                        });
+    }
 
     public void toggleCommentLike(User user, Comment comment) {
 
         likeRepository.findByUserAndComment(user, comment)
-            .ifPresentOrElse(
-                likeRepository::delete,
-                () -> {
-                    Like like = new Like();
-                    like.setUser(user);
-                    like.setComment(comment);
-                    likeRepository.save(like);
-                });
+                .ifPresentOrElse(
+                        likeRepository::delete,
+                        () -> {
+                            Like like = new Like();
+                            like.setUser(user);
+                            like.setComment(comment);
+                            likeRepository.save(like);
+                        });
     }
 
-    public long countByComment(Comment comment){
+    public long countByComment(Comment comment) {
         return likeRepository.countByComment(comment);
     }
-    
-    public long countByPost(Post post){
+
+    public long countByPost(Post post) {
         return likeRepository.countByPost(post);
     }
 

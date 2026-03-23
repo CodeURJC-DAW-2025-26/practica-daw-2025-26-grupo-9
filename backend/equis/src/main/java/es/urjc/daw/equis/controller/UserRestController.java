@@ -36,7 +36,6 @@ public class UserRestController {
         this.userMapper = userMapper;
     }
 
-    // GET USERS
     @GetMapping
     public ResponseEntity<List<UserDTO>> getUsers(
             @RequestParam(defaultValue = "0") int page,
@@ -51,7 +50,6 @@ public class UserRestController {
         return ResponseEntity.ok(users);
     }
 
-    // GET USER BY ID
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
         User user = userService.getByIdOrThrow(id);

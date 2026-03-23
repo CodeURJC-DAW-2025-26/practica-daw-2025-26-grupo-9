@@ -27,11 +27,10 @@ public class CommentRestController {
     private final UserService userService;
     private final CommentMapper commentMapper;
 
-
     public CommentRestController(CommentService commentService,
-                                 LikeService likeService,
-                                 UserService userService,
-                                 CommentMapper commentMapper) {
+            LikeService likeService,
+            UserService userService,
+            CommentMapper commentMapper) {
         this.commentService = commentService;
         this.likeService = likeService;
         this.userService = userService;
@@ -108,7 +107,7 @@ public class CommentRestController {
 
         User user = userService.findByEmail(auth.getName()).orElse(null);
 
-        // comprobar que es el dueño
+        // verify that they are the owner
         if (!comment.getUser().getId().equals(user.getId())) {
             return ResponseEntity.status(403).build();
         }

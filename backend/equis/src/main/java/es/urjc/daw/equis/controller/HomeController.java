@@ -32,7 +32,6 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 public class HomeController {
 
-
     @Autowired
     private final PostService postService;
 
@@ -45,9 +44,8 @@ public class HomeController {
     @Autowired
     private final LikeService likeService;
 
-
-
-    public HomeController(CategoryService categoryService, LikeService likeService, PostService postService, UserService userService){
+    public HomeController(CategoryService categoryService, LikeService likeService, PostService postService,
+            UserService userService) {
         this.postService = postService;
         this.userService = userService;
         this.categoryService = categoryService;
@@ -202,7 +200,7 @@ public class HomeController {
     public String loadMorePosts(@RequestParam int page, Model model, HttpServletRequest request) {
 
         int size = 10;
-        
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         List<Post> allPosts = postService.findAllPosts();

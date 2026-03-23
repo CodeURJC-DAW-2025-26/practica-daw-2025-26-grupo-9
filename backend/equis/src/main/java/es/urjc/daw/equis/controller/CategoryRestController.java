@@ -15,22 +15,23 @@ import es.urjc.daw.equis.dto.CategoryMapper;
 import java.net.URI;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/api/v1/categories")
 public class CategoryRestController {
 
-    @Autowired CategoryMapper mapper;
-    @Autowired CategoryService categoryService;
+    @Autowired
+    CategoryMapper mapper;
+    @Autowired
+    CategoryService categoryService;
 
     public CategoryRestController(CategoryService categoryService) {
-       
+
     }
 
     @GetMapping("/")
     public ResponseEntity<List<CategoryDTO>> getCategories() {
 
-        return ResponseEntity.ok(mapper.toDTOs(categoryService.findAll())) ;
+        return ResponseEntity.ok(mapper.toDTOs(categoryService.findAll()));
     }
 
     @GetMapping("/{id}")
@@ -38,6 +39,7 @@ public class CategoryRestController {
         Category category = categoryService.findById(id);
         return ResponseEntity.ok(mapper.toExtendedDTO(category));
     }
+
     @GetMapping("/{id}/image")
     public ResponseEntity<byte[]> getCategoryImage(@PathVariable Long id) throws Exception {
 
@@ -68,36 +70,36 @@ public class CategoryRestController {
             @PathVariable Long id,
             @RequestParam MultipartFile image) throws Exception {
 
-        
         return uploadImage(id, image);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryDTO> edit(@PathVariable Long id, @RequestBody CategoryDTO updatedCategoryDTO) throws Exception {
+    public ResponseEntity<CategoryDTO> edit(@PathVariable Long id, @RequestBody CategoryDTO updatedCategoryDTO)
+            throws Exception {
 
         Category category = categoryService.findById(id);
         if (mapper.toDomain(updatedCategoryDTO).getName() != null) {
             category.setName(mapper.toDomain(updatedCategoryDTO).getName());
         }
         if (mapper.toDomain(updatedCategoryDTO).getDescription() != null) {
-           category.setDescription(mapper.toDomain(updatedCategoryDTO).getDescription());
+            category.setDescription(mapper.toDomain(updatedCategoryDTO).getDescription());
         }
         URI location = URI.create("/api/v1/categories/" + category.getId());
-        MultipartFile imageFile = null; // null = no se cambia
-        categoryService.updateCategory(category.getId(),category.getName(),category.getDescription(),imageFile);
+        MultipartFile imageFile = null; // null = no change
+        categoryService.updateCategory(category.getId(), category.getName(), category.getDescription(), imageFile);
         return ResponseEntity.created(location).body(mapper.toDTO(category));
     }
 
     @PutMapping("/{id}/image")
     public ResponseEntity<Void> editImage(@PathVariable Long id, @RequestParam MultipartFile image) throws Exception {
-        
+
         return uploadImage(id, image);
     }
 
-    private ResponseEntity<Void> uploadImage(Long id,MultipartFile image) throws Exception{
+    private ResponseEntity<Void> uploadImage(Long id, MultipartFile image) throws Exception {
 
         Category category = categoryService.findById(id);
-        
+
         if (image == null || image.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
@@ -110,11 +112,11 @@ public class CategoryRestController {
         category.setPicture(new javax.sql.rowset.serial.SerialBlob(image.getBytes()));
         category.setImageType(contentType);
 
-        categoryService.updateCategory(category.getId(),category.getName(),category.getDescription(),image);
+        categoryService.updateCategory(category.getId(), category.getName(), category.getDescription(), image);
 
         return ResponseEntity.ok().build();
     }
-    
+
     @DeleteMapping("/{id}")
     public ResponseEntity<CategoryDTO> delete(@PathVariable Long id) {
 

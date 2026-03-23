@@ -56,5 +56,4 @@ public class RegisterDTO {
         this.password = password;
     }
 
-    
 }

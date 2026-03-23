@@ -38,10 +38,9 @@ public class CommentService {
         return commentRepository.findByPostId(postId);
     }
 
-    public Optional<Comment> findById(Long commentId){
+    public Optional<Comment> findById(Long commentId) {
         return commentRepository.findById(commentId);
     }
-
 
     @Transactional(readOnly = true)
     public List<Comment> getCommentsByPost(Long postId) {
@@ -90,11 +89,11 @@ public class CommentService {
         commentRepository.deleteByPostId(postId);
     }
 
-    public Comment save(Comment comment){
+    public Comment save(Comment comment) {
         return commentRepository.save(comment);
     }
 
-    public void delete(Comment comment){
+    public void delete(Comment comment) {
         commentRepository.delete(comment);
     }
 }
