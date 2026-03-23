@@ -365,11 +365,11 @@ Diagrama actualizado incluyendo los @RestController y su relación con los @Serv
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Levantar Spring con maven](https://github.com/CodeURJC-DAW-2025-26/daw-2025-26-project-base/commit/3a0f64a0b60036c0c6c0fd1290d7f4bd01a0a6ac)  | [Archivo1](URL_archivo_1)   |
-|2| [Basic controllers,security and mustache ](https://github.com/CodeURJC-DAW-2025-26/daw-2025-26-project-base/commit/23b5eceb13a154a57b792596d9ffdb5445b85833) | [Archivo2](URL_archivo_2)   |
-|3| [Encrypted pass](https://github.com/CodeURJC-DAW-2025-26/daw-2025-26-project-base/commit/be05b165ff4c1d0cfbe4aa4f386233c9d611aa3e)  | [Archivo3](URL_archivo_3)   |
-|4| [User controller to use service instead of repo]([URL_commit_4](https://github.com/CodeURJC-DAW-2025-26/daw-2025-26-project-base/commit/0baab265c178a8b0e252e9ffb92f46c637d88a82))  | [Archivo4](URL_archivo_4)   |
-|5| [Keystore and port changed]([URL_commit_5](https://github.com/CodeURJC-DAW-2025-26/daw-2025-26-project-base/commit/a18f80a9da77da081ad270afb3943a83a49cac93))  | [Archivo5](URL_archivo_5)   |
+|1| [Add custom error handler](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/tree/b80b0b4cae2b4f88cadf5718fca63da468834e9d)  | [CustomErrorController](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/b80b0b4cae2b4f88cadf5718fca63da468834e9d#diff-a666edbe0225b19137ddf5bcff61c40f33cd7de3271189d686a26b32622401a0)   |
+|2| [user rest endpoints ](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/tree/fcc66545c80cffc962804a0fffbae71d5786d29c) | [UserRestController](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/fcc66545c80cffc962804a0fffbae71d5786d29c/backend/equis/src/main/java/es/urjc/daw/equis/controller/UserRestController.java)   |
+|3| [Block users api](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/tree/dd8a51e9cfa980f473f09b9017bd33eef8125a6c)  | [AdminRestController](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/dd8a51e9cfa980f473f09b9017bd33eef8125a6c/backend/equis/src/main/java/es/urjc/daw/equis/controller/AdminRestController.java)   |
+|4| [Modified service to work with api](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/tree/dd8a51e9cfa980f473f09b9017bd33eef8125a6c/backend/equis)  | [UserService](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/service/UserService.java)   |
+|5| [Added endpoints to api docs](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/dd8a51e9cfa980f473f09b9017bd33eef8125a6c)  | [eQuis.postman.collection](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/api-docs/eQuis.postman_collection.json)   |
 
 ---
 
