@@ -1,8 +1,11 @@
 #!/bin/bash
 
 if [ -z "$1" ]; then
-  echo "Uso: ./publish_image.sh usuario/nombre-imagen"
-  exit 1
+    echo "Uso: $0 <usuario/nombre-imagen>"
+    exit 1
 fi
 
-docker push $1
+IMAGE_NAME=$1
+
+# Image Push
+docker push $IMAGE_NAME

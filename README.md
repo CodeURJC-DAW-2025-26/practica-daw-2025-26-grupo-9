@@ -389,7 +389,7 @@ Updated diagram including the @RestController components and their relationship 
 
 #### **Student 4 - Sergio Rodríguez Gil**
 
-In addition to general tasks such as adding requests to the Postman collection and creating DTOs and mappers, I was responsible for implementing API operations related to posts and comments.
+In addition to general tasks such as adding requests to the Postman collection, assisting with Docker-related tasks, and creating DTOs and mappers, I was responsible for implementing API operations related to posts and comments.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|

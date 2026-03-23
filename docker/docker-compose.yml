@@ -1,28 +1,33 @@
-version: '3.8'
-
 services:
-  db:
-    image: mysql:8
-    container_name: mysql_db
-    restart: always
-    environment:
-      MYSQL_DATABASE: equis
-      MYSQL_ROOT_PASSWORD: password
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      retries: 5
-
-  app:
+  web:
     image: ${DOCKER_IMAGE}
-    container_name: spring_app
-    depends_on:
-      db:
-        condition: service_healthy
+    platform: linux/amd64
     ports:
       - "8443:8443"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/equis?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: password
-      SPRING_JPA_HIBERNATE_DDL_AUTO: ${DDL_AUTO:-none}
+      - APP_LOAD_SAMPLE_DATA=${APP_LOAD_SAMPLE_DATA:-true}
+      - SPRING_PROFILES_ACTIVE=mysql,https
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db/${DB_NAME:-equis}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME:-root}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD:-password}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=${DDL_AUTO:-update}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-password}
+      - MYSQL_DATABASE=${DB_NAME:-equis}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+
+volumes:
+  db_data:
