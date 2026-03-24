@@ -1,7 +1,6 @@
 package es.urjc.daw.equis.controller;
 
 import java.net.URI;
-import java.security.Principal;
 import java.sql.SQLException;
 import java.util.List;
 

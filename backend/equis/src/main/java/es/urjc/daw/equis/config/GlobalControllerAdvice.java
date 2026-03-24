@@ -5,7 +5,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.dto.CurrentUserDTO;
 import es.urjc.daw.equis.model.Category;
 import es.urjc.daw.equis.repository.CategoryRepository;

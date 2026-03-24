@@ -14,7 +14,7 @@ import es.urjc.daw.equis.service.UserService;
 public class UserController {
 
     @Autowired
-    private final UserService userService;
+    private UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;

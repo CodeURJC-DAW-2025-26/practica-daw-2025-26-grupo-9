@@ -1,9 +1,7 @@
 package es.urjc.daw.equis.service;
 
-import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.nio.charset.StandardCharsets;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;

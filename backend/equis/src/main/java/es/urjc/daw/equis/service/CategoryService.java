@@ -1,8 +1,5 @@
 package es.urjc.daw.equis.service;
 
-import java.sql.Blob;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

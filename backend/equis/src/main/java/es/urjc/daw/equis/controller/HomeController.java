@@ -33,16 +33,16 @@ import jakarta.servlet.http.HttpServletRequest;
 public class HomeController {
 
     @Autowired
-    private final PostService postService;
+    private PostService postService;
 
     @Autowired
-    private final UserService userService;
+    private UserService userService;
 
     @Autowired
-    private final CategoryService categoryService;
+    private CategoryService categoryService;
 
     @Autowired
-    private final LikeService likeService;
+    private LikeService likeService;
 
     public HomeController(CategoryService categoryService, LikeService likeService, PostService postService,
             UserService userService) {

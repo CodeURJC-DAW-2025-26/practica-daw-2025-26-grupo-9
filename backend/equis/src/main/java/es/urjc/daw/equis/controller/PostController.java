@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import es.urjc.daw.equis.model.Category;
 import es.urjc.daw.equis.model.Comment;
-import es.urjc.daw.equis.model.Like;
 import es.urjc.daw.equis.model.Post;
 import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.service.PostService;

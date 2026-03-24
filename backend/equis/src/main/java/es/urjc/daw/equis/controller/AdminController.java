@@ -1,9 +1,6 @@
 package es.urjc.daw.equis.controller;
 
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Controller;

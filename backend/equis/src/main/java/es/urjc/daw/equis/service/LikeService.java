@@ -13,16 +13,10 @@ import es.urjc.daw.equis.repository.UserRepository;
 @Service
 public class LikeService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final EmailService emailService;
     private final LikeRepository likeRepository;
 
     public LikeService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService,
             LikeRepository likeRepository) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.emailService = emailService;
         this.likeRepository = likeRepository;
     }
 
