@@ -262,15 +262,15 @@ Creacion e interrelacion de entidades, gestion de imagenes, creacion y edicion d
 
 ### **Vídeo de Demostración**
 📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=x91MPoITQ3I)**
-> Vídeo mostrando las principales funcionalidades de la aplicación web.
+> Vídeo mostrando las principales funcionalidades de la aplicación web. 
 
 ### **Documentación de la API REST**
 
 #### **Especificación OpenAPI**
-📄 **[Especificación OpenAPI (YAML)](/api-docs/api-docs.yaml)**
+📄 **[Especificación OpenAPI (YAML)](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/api-docs/api-docs.yaml)**
 
 #### **Documentación HTML**
-📖 **[Documentación API REST (HTML)](https://raw.githack.com/[usuario]/[repositorio]/main/api-docs/api-docs.html)**
+📖 **[Documentación API REST (HTML)](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/api-docs/api-docs.html)**
 
 > La documentación de la API REST se encuentra en la carpeta `/api-docs` del repositorio. Se ha generado automáticamente con SpringDoc a partir de las anotaciones en el código Java.
 
@@ -356,11 +356,12 @@ Updated diagram including the @RestController components and their relationship 
    ssh -i ssh-keys/app.key vmuser@10.100.139.XXX
    ```
 
-2. **AQUÍ LOS SIGUIENTES PASOS**:
+2. **Conectarse a la red de la univerisdad mediante vpn**:
+   vpn.urjc.es / myapps
 
 ### **URL de la Aplicación Desplegada**
 
-🌐 **URL de acceso**: `https://[nombre-app].etsii.urjc.es:8443`
+🌐 **URL de acceso**: `https://10.100.139.216:8443/`
 
 #### **Credenciales de Usuarios de Ejemplo**
 
@@ -426,6 +427,21 @@ In addition to general tasks such as adding requests to the Postman collection, 
 |3| [Implemented some Post operations in api](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/5a43af9820c1cf58b3bfc11e6c88b98def7e4ad0) | [PostService.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/service/PostService.java)   |
 |4| [Add api operation to like and dislike](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/451b4a749a05a9f5a4707c4fe8c85b0d5e40e0eb) | [PostRepository.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/repository/PostRepository.java)   |
 |5| [Statistics operation in api](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/3a486db6e13a49e126e16949dc535f7c69492451) | [PostMapper.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/dto/PostMapper.java)   |
+
+---
+
+
+#### **Student 5 - David Paul Limaylla Ticlavilca**
+
+Postman collection (login, logout and register), security jwt, create DTOs and mappers and virtual machine deployment.
+
+| Nº    | Commits      | Files      |
+|:------------: |:------------:| :------------:|
+|1| [security JWT for ApiRest added](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/e1df07d097a9281ebf32b4944996a36e9b59a9b8) | [SecurityConfig.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/security/SecurityConfig.java)   |
+|2| [Login / logout / register added](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/d4b503a3a7bb7d67180adb80905517327442164b) | [AuthRestController](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/controller/AuthRestController.java)   |
+|3| [docsApi added](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/f427df51bedc79279117732c8cb38626006fb5b9) | [api-docs.html](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/api-docs/api-docs.html)   |
+|4| [HomeController fixed (use only Services)](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/189dd92e33472dc2cdf684e2ee38fdcb6a9e1c25) | [HomeController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/controller/HomeController.java)   |
+|5| [PostController fixed (uses only Services)](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/0499026b185a9d457da53f03aebd8f9d6c810c3b) | [PostController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/controller/PostController.java)   |
 
 ---
 
