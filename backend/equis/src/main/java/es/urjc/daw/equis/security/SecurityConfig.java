@@ -58,7 +58,7 @@ public class SecurityConfig {
             UnauthorizedHandlerJwt unauthorizedHandlerJwt) throws Exception {
 
         http
-            .securityMatcher("/api/**")
+            .securityMatcher("/api/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
             .authenticationProvider(customAuthenticationProvider)
             .csrf(csrf -> csrf.disable())
             .formLogin(form -> form.disable())
@@ -69,6 +69,7 @@ public class SecurityConfig {
                 .accessDeniedHandler(forbiddenHandler)
             )
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/v3/api-docs/**","/swagger-ui/**","/swagger-ui.html").permitAll()
 
                 // PUBLIC AUTH
                 .requestMatchers("/api/v1/auth/login", "/api/v1/auth/refresh", "/api/v1/auth/register").permitAll()

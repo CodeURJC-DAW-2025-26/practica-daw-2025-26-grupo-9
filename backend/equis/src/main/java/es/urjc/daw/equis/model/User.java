@@ -4,6 +4,7 @@ import java.sql.Blob;
 import java.util.Collection;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,7 @@ public class User implements UserDetails {
     private String nickname;
     private String description;
     private String email;
+    @JsonIgnore
     private String encodedPassword;
 
     @Transient
@@ -31,19 +33,23 @@ public class User implements UserDetails {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Blob profilePicture;
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Blob coverPicture;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Post> posts;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Comment> comments;
 
     public User() {
@@ -177,6 +183,7 @@ public class User implements UserDetails {
     // UserDetails
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
                 .map(SimpleGrantedAuthority::new)
@@ -184,31 +191,37 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public String getPassword() {
         return encodedPassword;
     }
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return email;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return active;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return active;
     }

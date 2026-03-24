@@ -3,6 +3,8 @@ package es.urjc.daw.equis.model;
 import java.sql.Blob;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -19,9 +21,11 @@ public class Category {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Blob picture;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Post> posts;
 
     @Column(name = "image_type")

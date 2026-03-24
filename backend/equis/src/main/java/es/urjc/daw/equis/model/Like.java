@@ -1,5 +1,5 @@
 package es.urjc.daw.equis.model;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,16 +12,19 @@ public class Like {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     // LIKE A POST
     @ManyToOne
     @JoinColumn(name = "post_id")
+    @JsonIgnore
     private Post post;
 
     // LIKE A COMMENT
     @ManyToOne
     @JoinColumn(name = "comment_id")
+    @JsonIgnore
     private Comment comment;
 
     public Like() {
