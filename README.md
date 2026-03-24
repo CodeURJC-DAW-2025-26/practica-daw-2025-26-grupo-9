@@ -373,17 +373,17 @@ Updated diagram including the @RestController components and their relationship 
 
 ### **Participación de Miembros en la Práctica 2**
 
-#### **Alumno 1 - [Nombre Completo]**
+#### **Alumno 1 - Cassiel Seth Mayorca Heirisman**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+I was responsible for implementing API operations related to categories.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [refarctor CategoryDTO, CategoryRest,CategoryMapper](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/8a12d89ce2e07c674c1ea7d1524bdd988a001f06)  | [CategoryRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/controller/CategoryRestController.java)   |
+|2| [image functionality in CategoryRest, get, post](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/329f9fa67207cfa435b7f0d3a64d4d14f6691e74)  | [CategoryRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/controller/CategoryRestController.java)   |
+|3| [put for edit in CategoryRestController](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/9f717c59ef4545f00a8385a52bf18749818ad510)  | [CategoryRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/controller/CategoryRestController.java)    |
+|4| [refactor getCategory](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/3863a19de26cc5604e16c51730a737b8aa3ec439)  | [CategoryRestController.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/controller/CategoryRestController.java)  |
+|5| [added CategoryRestController to PostmanCollection](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/afa9a1b58e77e9065eb7e54e759d3620b3621873)  | [eQuis.postman_collection.json](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/api-docs/eQuis.postman_collection.json)   |
 
 ---
 
