@@ -1,6 +1,6 @@
 services:
   web:
-    image: ${DOCKER_IMAGE}
+    image: davidsonsison/equisdaw:latest
     platform: linux/amd64
     ports:
       - "8443:8443"
