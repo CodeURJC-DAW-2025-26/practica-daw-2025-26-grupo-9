@@ -1,4 +1,4 @@
-package es.urjc.daw.equis.controller;
+package es.urjc.daw.equis.controller.rest;
 
 import java.net.URI;
 import java.security.Principal;

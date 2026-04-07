@@ -1,4 +1,4 @@
-package es.urjc.daw.equis.controller;
+package es.urjc.daw.equis.controller.rest;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,4 +1,4 @@
-package es.urjc.daw.equis.controller;
+package es.urjc.daw.equis.controller.rest;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
