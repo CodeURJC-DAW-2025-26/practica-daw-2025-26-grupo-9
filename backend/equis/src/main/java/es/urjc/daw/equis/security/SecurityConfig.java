@@ -130,7 +130,8 @@ public class SecurityConfig {
                     "/user/*/profile-image",
                     "/user/*/cover-image",
                     "/users/*/profile-picture",
-                    "/posts/post/*/image"
+                    "/posts/post/*/image",
+                    "/posts/more"
                 ).permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
