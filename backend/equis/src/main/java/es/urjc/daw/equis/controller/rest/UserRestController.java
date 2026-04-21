@@ -19,9 +19,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import es.urjc.daw.equis.dto.PostDTO;
+import es.urjc.daw.equis.dto.PostMapper;
 import es.urjc.daw.equis.dto.UserDTO;
 import es.urjc.daw.equis.dto.UserMapper;
+import es.urjc.daw.equis.dto.UserProfileDTO;
+import es.urjc.daw.equis.model.Comment;
+import es.urjc.daw.equis.model.Post;
 import es.urjc.daw.equis.model.User;
+import es.urjc.daw.equis.service.CommentService;
+import es.urjc.daw.equis.service.PostService;
 import es.urjc.daw.equis.service.UserService;
 
 @RestController
@@ -30,10 +37,17 @@ public class UserRestController {
 
     private final UserService userService;
     private final UserMapper userMapper;
+    private final PostService postService;
+    private final CommentService commentService;
+    private final PostMapper postMapper;
 
-    public UserRestController(UserService userService, UserMapper userMapper) {
+    public UserRestController(UserService userService, UserMapper userMapper, PostService postService,
+            CommentService commentService, PostMapper postMapper) {
         this.userService = userService;
         this.userMapper = userMapper;
+        this.postService = postService;
+        this.commentService = commentService;
+        this.postMapper = postMapper;
     }
 
     @GetMapping
@@ -58,9 +72,41 @@ public class UserRestController {
 
     // GET CURRENT USER
     @GetMapping("/me")
-    public ResponseEntity<UserDTO> getCurrentUser(Principal principal) {
+    public ResponseEntity<UserProfileDTO> getCurrentUser(Principal principal) {
+
         User user = userService.getByEmailOrThrow(principal.getName());
-        return ResponseEntity.ok(userMapper.toDTO(user));
+
+        List<Post> postsRaw = postService.findByUserId(user.getId());
+
+        postService.enrichLikesCounts(postsRaw);
+
+        for (Post post : postsRaw) {
+            List<Comment> comments = commentService.getCommentsByPost(post.getId());
+            commentService.enrichLikesCounts(comments);
+            post.setComments(comments);
+        }
+
+        List<PostDTO> posts = postsRaw.stream()
+                .map(postMapper::toDTO)
+                .toList();
+
+        long postsCount = postService.countByUserId(user.getId());
+        long commentsCount = commentService.countByUserId(user.getId());
+
+        UserProfileDTO dto = new UserProfileDTO(
+                user.getId(),
+                user.getName(),
+                user.getSurname(),
+                user.getNickname(),
+                user.getDescription(),
+                user.getEmail(),
+                user.isActive(),
+                user.getRoles(),
+                postsCount,
+                commentsCount,
+                posts);
+
+        return ResponseEntity.ok(dto);
     }
 
     // POST USER (REGISTER)

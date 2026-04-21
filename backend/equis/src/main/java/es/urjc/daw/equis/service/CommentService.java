@@ -83,6 +83,10 @@ public class CommentService {
         return commentRepository.countByPostId(postId);
     }
 
+    public long countByUserId(Long userId) {
+        return commentRepository.countByUserId(userId);
+    }
+
     @Transactional
     public void deleteCommentsByPost(Long postId) {
         commentRepository.deleteByPostId(postId);
@@ -95,4 +99,5 @@ public class CommentService {
     public void delete(Comment comment) {
         commentRepository.delete(comment);
     }
+
 }

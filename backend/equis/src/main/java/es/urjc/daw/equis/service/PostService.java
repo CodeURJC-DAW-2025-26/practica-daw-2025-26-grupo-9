@@ -116,6 +116,14 @@ public class PostService {
         return postRepository.findByUserIdOrderByDateDesc(userId, pageable);
     }
 
+    public long countByUserId(Long userId) {
+        return postRepository.countByUserId(userId);
+    }
+
+    public List<Post> findByUserId(Long userId) {
+        return postRepository.findByUserIdOrderByDateDesc(userId, Pageable.unpaged()).getContent();
+    }
+
     @Transactional(readOnly = true)
     public Post getByIdOrThrow(Long id) {
         Post post = postRepository.findById(id)
@@ -195,5 +203,4 @@ public class PostService {
     public Long countByCategoryId(Long categoryId) {
         return postRepository.countByCategoryId(categoryId);
     }
-
 }
