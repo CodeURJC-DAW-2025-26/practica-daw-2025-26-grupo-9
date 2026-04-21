@@ -107,8 +107,13 @@ public class CommentRestController {
 
         User user = userService.findByEmail(auth.getName()).orElse(null);
 
-        // verify that they are the owner
-        if (!comment.getUser().getId().equals(user.getId())) {
+        boolean isOwner = comment.getUser().getId().equals(user.getId());
+
+        boolean isAdmin = auth.getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isOwner && !isAdmin) {
             return ResponseEntity.status(403).build();
         }
 

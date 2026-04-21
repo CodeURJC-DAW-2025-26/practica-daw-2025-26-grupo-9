@@ -182,9 +182,24 @@ public class PostRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<PostDTO> deletePost(@PathVariable Long id) {
+    public ResponseEntity<PostDTO> deletePost(
+            @PathVariable Long id,
+            Authentication auth) {
+
+        if (auth == null || auth.getName().equals("anonymousUser")) {
+            return ResponseEntity.status(401).build();
+        }
 
         Post post = postService.getByIdOrThrow(id);
+
+        User user = userService.findByEmail(auth.getName()).orElse(null);
+
+        boolean isOwner = post.getUser().getId().equals(user.getId());
+        boolean isAdmin = user.getRoles().contains("ROLE_ADMIN");
+
+        if (!isOwner && !isAdmin) {
+            return ResponseEntity.status(403).build();
+        }
 
         PostDTO dto = postMapper.toDTO(post);
 
