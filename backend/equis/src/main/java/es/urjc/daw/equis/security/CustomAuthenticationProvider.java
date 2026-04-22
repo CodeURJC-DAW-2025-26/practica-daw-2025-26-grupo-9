@@ -41,7 +41,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 User user = userService.findByEmail(email)
                                 .orElseThrow(() -> new BadCredentialsException("Invalid credentials"));
 
-                // Real block
+                
                 if (!user.isActive()) {
                         throw new org.springframework.security.authentication.DisabledException("Account is blocked");
                 }

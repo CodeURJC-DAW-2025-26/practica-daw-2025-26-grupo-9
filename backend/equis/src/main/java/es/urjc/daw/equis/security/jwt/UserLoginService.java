@@ -74,7 +74,7 @@ public class UserLoginService {
 			}
 
 			UserDetails user = userDetailsService.loadUserByUsername(claims.getSubject());
-
+			
 			var newAccessToken = jwtTokenProvider.generateAccessToken(user);
 			response.addCookie(buildTokenCookie(TokenType.ACCESS, newAccessToken));
 

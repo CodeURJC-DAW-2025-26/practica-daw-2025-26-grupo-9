@@ -37,6 +37,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			var claims = jwtTokenProvider.validateToken(request, true);
 			var userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
 
+			if (!userDetails.isEnabled() || !userDetails.isAccountNonLocked()) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "User is blocked");
+            return;
+        }
+
 			log.info("Authorities: {}", userDetails.getAuthorities());
 
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
