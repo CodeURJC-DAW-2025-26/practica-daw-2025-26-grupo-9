@@ -49,6 +49,12 @@ public class UserLoginService {
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
+		User userEntity = userService.getByEmailOrThrow(loginRequest.getUsername());
+		if (!userEntity.isActive()) {
+			return ResponseEntity.status(403).body(
+				new AuthResponse(AuthResponse.Status.FAILURE, "User is blocked")
+			);
+		}
 		
 		String username = loginRequest.getUsername();
 		UserDetails user = userDetailsService.loadUserByUsername(username);
