@@ -11,7 +11,7 @@ COMPOSE_NAME=$1
 cd "$(dirname "$0")/.."
 
 # Export all necessary variables for docker-compose
-export DOCKER_IMAGE=neokyouma/equisdaw:latest
+export DOCKER_IMAGE=davidsonsinson/equisdaw:latest
 export DB_NAME=equis
 export DB_USERNAME=root
 export DB_PASSWORD=password
