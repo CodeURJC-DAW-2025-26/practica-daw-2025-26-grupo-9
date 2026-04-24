@@ -148,7 +148,7 @@ Diagram showing how to navigate between the different pages of the application:
 ## 🛠 **Práctica 1: Web con HTML generado en servidor y AJAX**
 
 ### **Vídeo de Demostración**
-📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=x91MPoITQ3I)](https://youtu.be/0gTMMrFujZE)**
+📹 **[Enlace al vídeo en YouTube](https://youtu.be/0gTMMrFujZE)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web.
 
 ### **Execution Instructions**
@@ -261,7 +261,7 @@ Creacion e interrelacion de entidades, gestion de imagenes, creacion y edicion d
 ## 🛠 **Práctica 2: Incorporación de una API REST a la aplicación web, despliegue con Docker y despliegue remoto**
 
 ### **Vídeo de Demostración**
-📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=x91MPoITQ3I)**
+📹 **[Enlace al vídeo en YouTube](https://www.youtube.com/watch?v=Pfl0fkQYRg0)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web. 
 
 ### **Documentación de la API REST**
@@ -324,12 +324,12 @@ Updated diagram including the @RestController components and their relationship 
 
 1. **Download and execute the app**:
    ```bash
-   docker compose -f oci://docker.io/neokyouma/equisdaw-compose:latest up
+   docker compose -f oci://docker.io/davidsonsinson/equisdaw-compose:latest up
    ```
    
 **You may additionally need to export some environment variables for the previous step to work**
    ```bash
-   export DOCKER_IMAGE=neokyouma/equisdaw:latest
+   export DOCKER_IMAGE=davidsonsinson/equisdaw:latest
    export DB_NAME=equis
    export DB_USERNAME=root
    export DB_PASSWORD=password
