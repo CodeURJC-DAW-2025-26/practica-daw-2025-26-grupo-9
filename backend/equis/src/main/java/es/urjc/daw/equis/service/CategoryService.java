@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import javax.sql.rowset.serial.SerialBlob;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +19,6 @@ import es.urjc.daw.equis.repository.PostRepository;
 @Service
 public class CategoryService {
 
-    @Autowired CommentService commentService;
     private final CategoryRepository categoryRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
@@ -39,6 +37,13 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public List<Category> findAll() {
         return categoryRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Category> findAllWithPostCounts() {
+        List<Category> categories = categoryRepository.findAll();
+        categories.forEach(c -> c.setPostsCount(postRepository.countByCategoryId(c.getId())));
+        return categories;
     }
 
     @Transactional(readOnly = true)

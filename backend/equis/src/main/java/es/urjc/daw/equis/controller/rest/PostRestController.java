@@ -4,7 +4,6 @@ import java.net.URI;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
@@ -30,27 +29,24 @@ import es.urjc.daw.equis.service.LikeService;
 @RequestMapping("/api/v1/posts")
 public class PostRestController {
 
-    @Autowired
-    private LikeService likeService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private CommentMapper commentMapper;
-
     private final PostService postService;
     private final PostMapper postMapper;
+    private final CommentMapper commentMapper;
     private final CategoryService categoryService;
     private final CommentService commentService;
+    private final LikeService likeService;
+    private final UserService userService;
 
     public PostRestController(PostService postService, PostMapper postMapper, CommentMapper commentMapper,
-            CategoryService categoryService, CommentService commentService) {
+            CategoryService categoryService, CommentService commentService,
+            LikeService likeService, UserService userService) {
         this.postService = postService;
         this.postMapper = postMapper;
         this.commentMapper = commentMapper;
         this.categoryService = categoryService;
         this.commentService = commentService;
+        this.likeService = likeService;
+        this.userService = userService;
     }
 
     // GET POSTS (feed)

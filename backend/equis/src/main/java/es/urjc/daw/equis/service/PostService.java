@@ -6,7 +6,8 @@ import java.util.NoSuchElementException;
 
 import javax.sql.rowset.serial.SerialBlob;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,22 +25,25 @@ import es.urjc.daw.equis.repository.PostRepository;
 
 @Service
 public class PostService {
-    @Autowired
-    private UserService userService;
 
-    @Autowired
-    private CategoryService categoryService;
+    private static final Logger log = LoggerFactory.getLogger(PostService.class);
 
-    @Autowired
-    private CommentService commentService;
-
+    private final UserService userService;
+    private final CategoryService categoryService;
+    private final CommentService commentService;
     private final PostRepository postRepository;
     private final LikeRepository likeRepository;
 
     public PostService(PostRepository postRepository,
-            LikeRepository likeRepository) {
+            LikeRepository likeRepository,
+            UserService userService,
+            CategoryService categoryService,
+            CommentService commentService) {
         this.postRepository = postRepository;
         this.likeRepository = likeRepository;
+        this.userService = userService;
+        this.categoryService = categoryService;
+        this.commentService = commentService;
     }
 
     public void enrichLikesCounts(List<Post> posts) {
@@ -51,24 +55,19 @@ public class PostService {
 
     public void save(Post post, MultipartFile picture, Authentication auth, Long category_id, String content)
             throws IOException {
-        // Assign the content
         post.setContent(content);
-        // Assign the corresponding user
         User user = userService.findByEmail(auth.getName()).orElse(null);
         post.setUser(user);
 
-        // Assign the category
-        Category cateory = categoryService.findById(category_id);
-        post.setCategory(cateory);
-        System.out.println("asigna todo menos foto");
-        // Assign the image if it exists
+        Category category = categoryService.findById(category_id);
+        post.setCategory(category);
+
         if (picture != null && !picture.isEmpty()) {
             try {
                 post.setPicture(new SerialBlob(picture.getBytes()));
             } catch (Exception e) {
                 throw new IOException("Failed to create image blob", e);
             }
-            System.out.println("asigna foto");
         }
         postRepository.save(post);
     }

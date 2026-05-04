@@ -3,7 +3,6 @@ package es.urjc.daw.equis.controller;
 import java.sql.Blob;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -28,23 +27,20 @@ import org.springframework.ui.Model;
 @RequestMapping("/posts")
 public class PostController {
 
-    @Autowired
-    private PostService postService;
+    private final PostService postService;
+    private final UserService userService;
+    private final CategoryService categoryService;
+    private final LikeService likeService;
+    private final CommentService commentService;
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
-    private LikeService likeService;
-
-    @Autowired
-    private CommentService commentService;
-
-    public PostController() {
-
+    public PostController(PostService postService, UserService userService,
+            CategoryService categoryService, LikeService likeService,
+            CommentService commentService) {
+        this.postService = postService;
+        this.userService = userService;
+        this.categoryService = categoryService;
+        this.likeService = likeService;
+        this.commentService = commentService;
     }
 
     @PostMapping("/newPost")

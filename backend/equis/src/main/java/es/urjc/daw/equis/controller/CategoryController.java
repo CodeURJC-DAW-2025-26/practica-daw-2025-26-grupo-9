@@ -6,7 +6,6 @@ import es.urjc.daw.equis.service.CategoryService;
 import es.urjc.daw.equis.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,11 +18,13 @@ import java.util.List;
 @Controller
 public class CategoryController {
 
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
+    private final PostService postService;
 
-    @Autowired
-    private PostService postService;
+    public CategoryController(CategoryService categoryService, PostService postService) {
+        this.categoryService = categoryService;
+        this.postService = postService;
+    }
 
     @GetMapping("/categories")
     public String getAllCategories(Model model) {

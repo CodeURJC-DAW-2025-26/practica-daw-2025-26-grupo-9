@@ -1,6 +1,5 @@
 package es.urjc.daw.equis.service;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import es.urjc.daw.equis.model.Comment;
@@ -8,15 +7,13 @@ import es.urjc.daw.equis.model.Like;
 import es.urjc.daw.equis.model.Post;
 import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.repository.LikeRepository;
-import es.urjc.daw.equis.repository.UserRepository;
 
 @Service
 public class LikeService {
 
     private final LikeRepository likeRepository;
 
-    public LikeService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService,
-            LikeRepository likeRepository) {
+    public LikeService(LikeRepository likeRepository) {
         this.likeRepository = likeRepository;
     }
 

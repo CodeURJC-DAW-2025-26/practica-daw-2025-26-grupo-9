@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.sql.rowset.serial.SerialBlob;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -26,6 +28,8 @@ import es.urjc.daw.equis.repository.LikeRepository;
 
 @Configuration
 public class DataLoader {
+
+    private static final Logger log = LoggerFactory.getLogger(DataLoader.class);
 
     @Bean
     CommandLineRunner loadData(UserRepository userRepo,
@@ -195,7 +199,7 @@ public class DataLoader {
             byte[] bytes = is.readAllBytes();
             return new SerialBlob(bytes);
         } catch (Exception e) {
-            System.err.println("⚠ Image could not be loaded: " + path);
+            log.warn("Image could not be loaded: {}", path);
             return null;
         }
     }

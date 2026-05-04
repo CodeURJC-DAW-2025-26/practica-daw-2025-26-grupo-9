@@ -3,6 +3,8 @@ package es.urjc.daw.equis.service;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -15,6 +17,8 @@ import jakarta.mail.internet.MimeMessage;
 
 @Service
 public class EmailService {
+
+    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
 
     private final JavaMailSender mailSender;
     private final Mustache.Compiler mustacheCompiler;
@@ -54,7 +58,7 @@ public class EmailService {
             mailSender.send(message);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to send email to {}: {}", to, e.getMessage(), e);
         }
     }
 

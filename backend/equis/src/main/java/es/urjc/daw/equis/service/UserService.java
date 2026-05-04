@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import javax.sql.rowset.serial.SerialBlob;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +23,8 @@ import es.urjc.daw.equis.repository.UserRepository;
 
 @Service
 public class UserService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -86,7 +90,7 @@ public class UserService {
         try {
             emailService.sendWelcomeEmail(savedUser);
         } catch (Exception e) {
-            System.err.println("Error sending welcome email: " + e.getMessage());
+            log.warn("Failed to send welcome email to {}: {}", savedUser.getEmail(), e.getMessage());
         }
 
         return savedUser;

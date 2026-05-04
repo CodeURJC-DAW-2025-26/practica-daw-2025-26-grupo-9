@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,15 +30,14 @@ public class UserLoginService {
 	private final AuthenticationManager authenticationManager;
 	private final UserDetailsService userDetailsService;
 	private final JwtTokenProvider jwtTokenProvider;
-		
-	@Autowired
-	private UserService userService;
+	private final UserService userService;
 
-
-	public UserLoginService(AuthenticationManager authenticationManager, UserDetailsService userDetailsService, JwtTokenProvider jwtTokenProvider) {
+	public UserLoginService(AuthenticationManager authenticationManager, UserDetailsService userDetailsService,
+			JwtTokenProvider jwtTokenProvider, UserService userService) {
 		this.authenticationManager = authenticationManager;
 		this.userDetailsService = userDetailsService;
 		this.jwtTokenProvider = jwtTokenProvider;
+		this.userService = userService;
 	}
 
 	public ResponseEntity<AuthResponse> login(HttpServletResponse response, LoginRequest loginRequest) {
@@ -140,7 +138,7 @@ public class UserLoginService {
 		user.setDescription(request.getDescription());
 		user.setEncodedPassword(request.getPassword());
 
-		user.setRoles(List.of("USER"));
+		user.setRoles(List.of("ROLE_USER"));
 
 		try {
 			userService.register(user, null, null);

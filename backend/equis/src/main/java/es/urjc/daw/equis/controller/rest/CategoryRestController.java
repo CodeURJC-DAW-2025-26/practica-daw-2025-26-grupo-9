@@ -2,7 +2,6 @@ package es.urjc.daw.equis.controller.rest;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
@@ -19,16 +18,15 @@ import java.util.List;
 @RequestMapping("/api/v1/categories")
 public class CategoryRestController {
 
-    @Autowired
-    CategoryMapper mapper;
-    @Autowired
-    CategoryService categoryService;
+    private final CategoryMapper mapper;
+    private final CategoryService categoryService;
 
-    public CategoryRestController(CategoryService categoryService) {
-
+    public CategoryRestController(CategoryService categoryService, CategoryMapper mapper) {
+        this.categoryService = categoryService;
+        this.mapper = mapper;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<CategoryDTO>> getCategories() {
 
         return ResponseEntity.ok(mapper.toDTOs(categoryService.findAll()));

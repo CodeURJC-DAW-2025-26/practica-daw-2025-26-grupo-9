@@ -5,7 +5,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -32,17 +31,10 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 public class HomeController {
 
-    @Autowired
-    private PostService postService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
-    private LikeService likeService;
+    private final PostService postService;
+    private final UserService userService;
+    private final CategoryService categoryService;
+    private final LikeService likeService;
 
     public HomeController(CategoryService categoryService, LikeService likeService, PostService postService,
             UserService userService) {
@@ -54,7 +46,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model,
-            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(defaultValue = "1") int page,
             HttpServletRequest request) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
