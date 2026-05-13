@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import es.urjc.daw.equis.dto.CommentDTO;
 import es.urjc.daw.equis.dto.PostDTO;
 import es.urjc.daw.equis.dto.PostMapper;
 import es.urjc.daw.equis.dto.UserDTO;
@@ -28,6 +29,7 @@ import es.urjc.daw.equis.model.Comment;
 import es.urjc.daw.equis.model.Post;
 import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.service.CommentService;
+import es.urjc.daw.equis.service.LikeService;
 import es.urjc.daw.equis.service.PostService;
 import es.urjc.daw.equis.service.UserService;
 
@@ -40,28 +42,26 @@ public class UserRestController {
     private final PostService postService;
     private final CommentService commentService;
     private final PostMapper postMapper;
+    private final LikeService likeService;
 
     public UserRestController(UserService userService, UserMapper userMapper, PostService postService,
-            CommentService commentService, PostMapper postMapper) {
+            CommentService commentService, PostMapper postMapper, LikeService likeService) {
         this.userService = userService;
         this.userMapper = userMapper;
         this.postService = postService;
         this.commentService = commentService;
         this.postMapper = postMapper;
+        this.likeService = likeService;
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getUsers(
+    public ResponseEntity<Page<UserDTO>> getUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         Page<User> usersPage = userService.findAll(PageRequest.of(page, size));
-        List<UserDTO> users = usersPage.getContent()
-                .stream()
-                .map(userMapper::toDTO)
-                .toList();
 
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(usersPage.map(userMapper::toDTO));
     }
 
     @GetMapping("/{id}")
@@ -70,24 +70,27 @@ public class UserRestController {
         return ResponseEntity.ok(userMapper.toDTO(user));
     }
 
-    // GET CURRENT USER
     @GetMapping("/me")
-    public ResponseEntity<UserProfileDTO> getCurrentUser(Principal principal) {
+    public ResponseEntity<UserProfileDTO> getCurrentUser(
+            Principal principal,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
         User user = userService.getByEmailOrThrow(principal.getName());
 
-        List<Post> postsRaw = postService.findByUserId(user.getId());
+        Page<Post> postsPage = postService.getPostsByUserId(user.getId(), PageRequest.of(page, size));
 
-        postService.enrichLikesCounts(postsRaw);
+        postService.enrichLikesCounts(postsPage.getContent());
 
-        for (Post post : postsRaw) {
+        for (Post post : postsPage.getContent()) {
             List<Comment> comments = commentService.getCommentsByPost(post.getId());
             commentService.enrichLikesCounts(comments);
             post.setComments(comments);
         }
 
-        List<PostDTO> posts = postsRaw.stream()
-                .map(postMapper::toDTO)
+        List<PostDTO> posts = postsPage.getContent()
+                .stream()
+                .map(post -> enrichPostDTO(postMapper.toDTO(post), post, user))
                 .toList();
 
         long postsCount = postService.countByUserId(user.getId());
@@ -109,7 +112,6 @@ public class UserRestController {
         return ResponseEntity.ok(dto);
     }
 
-    // POST USER (REGISTER)
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<UserDTO> createUser(
             @RequestParam String name,
@@ -139,7 +141,6 @@ public class UserRestController {
                 .body(userMapper.toDTO(savedUser));
     }
 
-    // PATCH CURRENT USER
     @PatchMapping(value = "/me", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<UserDTO> updateCurrentUser(
             Principal principal,
@@ -166,28 +167,24 @@ public class UserRestController {
         return ResponseEntity.ok(userMapper.toDTO(updatedUser));
     }
 
-    // PATCH USER ACTIVE
     @PatchMapping("/{id}/active")
     public ResponseEntity<Void> toggleUserActive(@PathVariable Long id, Principal principal) {
         userService.toggleUserActive(id, principal.getName());
         return ResponseEntity.noContent().build();
     }
 
-    // DELETE CURRENT USER
     @DeleteMapping("/me")
     public ResponseEntity<Void> deleteCurrentUser(Principal principal) {
         userService.deleteUser(principal.getName());
         return ResponseEntity.noContent().build();
     }
 
-    // DELETE USER BY ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
     }
 
-    // GET PROFILE PICTURE
     @GetMapping("/{id}/profile-picture")
     public ResponseEntity<byte[]> getProfilePicture(@PathVariable Long id) throws SQLException {
         byte[] image = userService.getProfilePictureBytes(id);
@@ -201,7 +198,6 @@ public class UserRestController {
                 .body(image);
     }
 
-    // GET COVER PICTURE
     @GetMapping("/{id}/cover-picture")
     public ResponseEntity<byte[]> getCoverPicture(@PathVariable Long id) throws SQLException {
         byte[] image = userService.getCoverPictureBytes(id);
@@ -214,4 +210,29 @@ public class UserRestController {
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(image);
     }
+
+    private PostDTO enrichPostDTO(PostDTO dto, Post post, User user) {
+        if (user == null) return dto;
+
+        List<CommentDTO> enrichedComments = dto.comments() != null
+                ? dto.comments().stream()
+                        .map(cdto -> {
+                            Comment comment = post.getComments().stream()
+                                    .filter(c -> c.getId().equals(cdto.id()))
+                                    .findFirst().orElse(null);
+                            boolean liked = comment != null && likeService.hasUserLikedComment(user, comment);
+                            return new CommentDTO(
+                                    cdto.id(), cdto.content(), cdto.createdAt(), cdto.likesCount(),
+                                    cdto.userId(), cdto.userNickname(), liked);
+                        })
+                        .toList()
+                : List.of();
+
+        return new PostDTO(
+                dto.id(), dto.content(), dto.createdAt(), dto.likesCount(),
+                dto.userId(), dto.userNickname(), dto.categoryId(), dto.categoryName(),
+                enrichedComments,
+                likeService.hasUserLikedPost(user, post));
+    }
+
 }

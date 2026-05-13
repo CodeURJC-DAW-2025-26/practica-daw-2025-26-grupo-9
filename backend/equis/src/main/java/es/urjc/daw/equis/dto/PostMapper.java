@@ -20,6 +20,7 @@ public interface PostMapper {
     @Mapping(target = "categoryName", source = "category.name")
 
     @Mapping(target = "comments", source = "comments")
+    @Mapping(target = "likedByCurrentUser", constant = "false")
 
     PostDTO toDTO(Post post);
 }

@@ -51,4 +51,14 @@ public class LikeService {
         return likeRepository.countByPost(post);
     }
 
+    public boolean hasUserLikedPost(User user, Post post) {
+        if (user == null) return false;
+        return likeRepository.existsByUserAndPost(user, post);
+    }
+
+    public boolean hasUserLikedComment(User user, Comment comment) {
+        if (user == null) return false;
+        return likeRepository.existsByUserAndComment(user, comment);
+    }
+
 }

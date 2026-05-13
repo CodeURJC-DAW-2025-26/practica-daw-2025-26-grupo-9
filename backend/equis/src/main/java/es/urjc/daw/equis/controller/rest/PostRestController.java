@@ -49,26 +49,29 @@ public class PostRestController {
         this.userService = userService;
     }
 
-    // GET POSTS (feed)
     @GetMapping
     public ResponseEntity<Page<PostDTO>> getPosts(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            Authentication auth) {
 
         Page<Post> postsPage = postService.getFeed(PageRequest.of(page, size));
 
-        Page<PostDTO> dtoPage = postsPage.map(postMapper::toDTO);
+        User user = resolveUser(auth);
+
+        Page<PostDTO> dtoPage = postsPage.map(post -> enrichPostDTO(postMapper.toDTO(post), post, user));
 
         return ResponseEntity.ok(dtoPage);
     }
 
-    // GET POST BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<PostDTO> getPost(@PathVariable Long id) {
+    public ResponseEntity<PostDTO> getPost(@PathVariable Long id, Authentication auth) {
 
         Post post = postService.getByIdOrThrow(id);
 
-        return ResponseEntity.ok(postMapper.toDTO(post));
+        User user = resolveUser(auth);
+
+        return ResponseEntity.ok(enrichPostDTO(postMapper.toDTO(post), post, user));
     }
 
     @GetMapping("/{id}/image")
@@ -205,12 +208,14 @@ public class PostRestController {
     }
 
     @GetMapping("/statistics")
-    public ResponseEntity<List<PostDTO>> getTopPosts() {
+    public ResponseEntity<List<PostDTO>> getTopPosts(Authentication auth) {
 
         List<Post> topPosts = postService.getTop5PostsByLikes();
 
+        User user = resolveUser(auth);
+
         List<PostDTO> dtos = topPosts.stream()
-                .map(postMapper::toDTO)
+                .map(post -> enrichPostDTO(postMapper.toDTO(post), post, user))
                 .toList();
 
         return ResponseEntity.ok(dtos);
@@ -253,6 +258,45 @@ public class PostRestController {
 
         return ResponseEntity
                 .created(URI.create("/api/v1/comments/" + comment.getId()))
-                .body(commentMapper.toDTO(comment));
+                .body(enrichCommentDTO(commentMapper.toDTO(comment), comment, user));
+    }
+
+    private User resolveUser(Authentication auth) {
+        if (auth == null || auth.getName().equals("anonymousUser")) {
+            return null;
+        }
+        return userService.findByEmail(auth.getName()).orElse(null);
+    }
+
+    private PostDTO enrichPostDTO(PostDTO dto, Post post, User user) {
+        if (user == null) return dto;
+
+        List<CommentDTO> enrichedComments = dto.comments() != null
+                ? dto.comments().stream()
+                        .map(cdto -> {
+                            Comment comment = post.getComments().stream()
+                                    .filter(c -> c.getId().equals(cdto.id()))
+                                    .findFirst().orElse(null);
+                            boolean liked = comment != null && likeService.hasUserLikedComment(user, comment);
+                            return new CommentDTO(
+                                    cdto.id(), cdto.content(), cdto.createdAt(), cdto.likesCount(),
+                                    cdto.userId(), cdto.userNickname(), liked);
+                        })
+                        .toList()
+                : List.of();
+
+        return new PostDTO(
+                dto.id(), dto.content(), dto.createdAt(), dto.likesCount(),
+                dto.userId(), dto.userNickname(), dto.categoryId(), dto.categoryName(),
+                enrichedComments,
+                likeService.hasUserLikedPost(user, post));
+    }
+
+    private CommentDTO enrichCommentDTO(CommentDTO dto, Comment comment, User user) {
+        if (user == null) return dto;
+        return new CommentDTO(
+                dto.id(), dto.content(), dto.createdAt(), dto.likesCount(),
+                dto.userId(), dto.userNickname(),
+                likeService.hasUserLikedComment(user, comment));
     }
 }

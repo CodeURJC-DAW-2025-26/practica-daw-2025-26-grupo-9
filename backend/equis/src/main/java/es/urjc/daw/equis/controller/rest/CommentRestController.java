@@ -87,7 +87,7 @@ public class CommentRestController {
 
         commentService.save(comment);
 
-        return ResponseEntity.ok(commentMapper.toDTO(comment));
+        return ResponseEntity.ok(enrichCommentDTO(commentMapper.toDTO(comment), comment, user));
     }
 
     @DeleteMapping("/{id}")
@@ -122,5 +122,13 @@ public class CommentRestController {
         commentService.delete(comment);
 
         return ResponseEntity.ok(dto);
+    }
+
+    private CommentDTO enrichCommentDTO(CommentDTO dto, Comment comment, User user) {
+        if (user == null) return dto;
+        return new CommentDTO(
+                dto.id(), dto.content(), dto.createdAt(), dto.likesCount(),
+                dto.userId(), dto.userNickname(),
+                likeService.hasUserLikedComment(user, comment));
     }
 }

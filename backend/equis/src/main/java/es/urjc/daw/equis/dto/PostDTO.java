@@ -16,5 +16,6 @@ public record PostDTO(
         Long categoryId,
         String categoryName,
 
-        List<CommentDTO> comments) {
+        List<CommentDTO> comments,
+        boolean likedByCurrentUser) {
 }

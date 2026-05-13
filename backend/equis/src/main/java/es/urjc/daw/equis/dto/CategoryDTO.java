@@ -4,5 +4,6 @@ public record CategoryDTO(
         Long id,
         String name,
         String description,
-        String imageUrl) {
+        String imageUrl,
+        long postsCount) {
 }

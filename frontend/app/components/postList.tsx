@@ -1,27 +1,24 @@
-import { Card } from "react-bootstrap";
 import Post from "./post";
+import type { PostDTO } from "~/dto/PostDTO";
 
-export default function PostList({
-  posts,
-}: any) {
+type PostListProps = {
+  posts: PostDTO[];
+  onLikeToggled: (postId: number, liked: boolean, newCount: number) => void;
+};
 
+export default function PostList({ posts, onLikeToggled }: PostListProps) {
   if (!posts?.length) {
     return (
-      <Card className="p-3 shadow-sm">
-        <p className="text-muted mb-0">
-          Todavía no hay posts 🙂
-        </p>
-      </Card>
+      <div className="post border-bottom p-3 bg-white w-shadow">
+        <p className="mb-0 text-muted">Todav&iacute;a no hay posts. S&eacute; la primera persona en publicar algo 🙂</p>
+      </div>
     );
   }
 
   return (
     <>
-      {posts.map((post: any) => (
-        <Post
-          key={post.id}
-          post={post}
-        />
+      {posts.map((post) => (
+        <Post key={post.id} post={post} onLikeToggled={onLikeToggled} />
       ))}
     </>
   );

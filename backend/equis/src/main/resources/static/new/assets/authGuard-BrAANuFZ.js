@@ -1,0 +1,1 @@
+import{D as e}from"./jsx-runtime-BYdpQPO7.js";import{t}from"./api-CoPMRGQi.js";async function n(n){try{return await n()}catch(n){throw n instanceof t&&n.status===401?e(`/new/login`):n}}export{n as t};

@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,7 +20,6 @@ import org.springframework.stereotype.Service;
 import es.urjc.daw.equis.dto.RegisterDTO;
 import es.urjc.daw.equis.model.User;
 import es.urjc.daw.equis.service.UserService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -26,6 +27,12 @@ import jakarta.servlet.http.HttpServletResponse;
 public class UserLoginService {
 
 	private static final Logger log = LoggerFactory.getLogger(UserLoginService.class);
+
+	@Value("${app.cookie.secure:true}")
+	private boolean cookieSecure;
+
+	@Value("${app.cookie.same-site:Lax}")
+	private String cookieSameSite;
 
 	private final AuthenticationManager authenticationManager;
 	private final UserDetailsService userDetailsService;
@@ -61,8 +68,8 @@ public class UserLoginService {
 		var newAccessToken = jwtTokenProvider.generateAccessToken(user);
 		var newRefreshToken = jwtTokenProvider.generateRefreshToken(user);
 
-		response.addCookie(buildTokenCookie(TokenType.ACCESS, newAccessToken));
-		response.addCookie(buildTokenCookie(TokenType.REFRESH, newRefreshToken));
+		response.addHeader(HttpHeaders.SET_COOKIE, buildTokenCookie(TokenType.ACCESS, newAccessToken));
+		response.addHeader(HttpHeaders.SET_COOKIE, buildTokenCookie(TokenType.REFRESH, newRefreshToken));
 
 		AuthResponse loginResponse = new AuthResponse(AuthResponse.Status.SUCCESS,
 				"Auth successful. Tokens are created in cookie.");
@@ -80,7 +87,7 @@ public class UserLoginService {
 			UserDetails user = userDetailsService.loadUserByUsername(claims.getSubject());
 			
 			var newAccessToken = jwtTokenProvider.generateAccessToken(user);
-			response.addCookie(buildTokenCookie(TokenType.ACCESS, newAccessToken));
+			response.addHeader(HttpHeaders.SET_COOKIE, buildTokenCookie(TokenType.ACCESS, newAccessToken));
 
 			return ResponseEntity.ok(new AuthResponse(
 					AuthResponse.Status.SUCCESS,
@@ -98,28 +105,32 @@ public class UserLoginService {
 
 		SecurityContextHolder.clearContext();
 
-		response.addCookie(removeTokenCookie(TokenType.ACCESS));
-		response.addCookie(removeTokenCookie(TokenType.REFRESH));
+		response.addHeader(HttpHeaders.SET_COOKIE, removeTokenCookie(TokenType.ACCESS));
+		response.addHeader(HttpHeaders.SET_COOKIE, removeTokenCookie(TokenType.REFRESH));
 
 		return ResponseEntity.ok(
 			new AuthResponse(AuthResponse.Status.SUCCESS, "Logged out successfully")
 		);
 	}
 
-	private Cookie buildTokenCookie(TokenType type, String token) {
-		Cookie cookie = new Cookie(type.cookieName, token);
-		cookie.setMaxAge((int) type.duration.getSeconds());
-		cookie.setHttpOnly(true);
-		cookie.setPath("/");
-		return cookie;
+	private String buildTokenCookie(TokenType type, String token) {
+		return ResponseCookie.from(type.cookieName, token)
+				.httpOnly(true)
+				.secure(this.cookieSecure)
+				.path("/")
+				.maxAge(type.duration)
+				.sameSite(this.cookieSameSite)
+				.build().toString();
 	}
 
-	private Cookie removeTokenCookie(TokenType type){
-		Cookie cookie = new Cookie(type.cookieName, "");
-		cookie.setMaxAge(0);
-		cookie.setHttpOnly(true);
-		cookie.setPath("/");
-		return cookie;
+	private String removeTokenCookie(TokenType type){
+		return ResponseCookie.from(type.cookieName, "")
+				.httpOnly(true)
+				.secure(this.cookieSecure)
+				.path("/")
+				.maxAge(0)
+				.sameSite(this.cookieSameSite)
+				.build().toString();
 	}
 
 	public ResponseEntity<AuthResponse> register(RegisterDTO request) {

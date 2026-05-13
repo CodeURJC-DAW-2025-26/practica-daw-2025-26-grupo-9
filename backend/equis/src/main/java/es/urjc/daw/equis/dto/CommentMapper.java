@@ -13,6 +13,7 @@ public interface CommentMapper {
     // user
     @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "userNickname", source = "user.nickname")
+    @Mapping(target = "likedByCurrentUser", constant = "false")
 
     CommentDTO toDTO(Comment comment);
 }

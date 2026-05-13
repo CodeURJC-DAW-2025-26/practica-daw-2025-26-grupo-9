@@ -29,7 +29,7 @@ public class CategoryRestController {
     @GetMapping
     public ResponseEntity<List<CategoryDTO>> getCategories() {
 
-        return ResponseEntity.ok(mapper.toDTOs(categoryService.findAll()));
+        return ResponseEntity.ok(mapper.toDTOs(categoryService.findAllWithPostCounts()));
     }
 
     @GetMapping("/{id}")

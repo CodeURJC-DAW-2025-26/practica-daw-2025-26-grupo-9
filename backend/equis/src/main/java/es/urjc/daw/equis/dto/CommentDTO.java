@@ -8,5 +8,6 @@ public record CommentDTO(
 
         // user info
         Long userId,
-        String userNickname) {
+        String userNickname,
+        boolean likedByCurrentUser) {
 }
