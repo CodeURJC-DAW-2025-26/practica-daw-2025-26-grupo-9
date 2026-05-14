@@ -1,19 +1,33 @@
-import { Outlet } from "react-router";
+import { useLocation, Outlet } from "react-router";
 import Navbar from "~/components/navbar";
 import GlobalSpinner from "~/components/Spinner";
 
 export default function NewLayout() {
+  const location = useLocation();
+
+  const hideAuthLayout =
+    location.pathname === "/new/login" ||
+    location.pathname === "/new/register";
+
   return (
     <>
       <GlobalSpinner />
-      <div className="row newsfeed-size">
-        <div className="col-md-12 newsfeed-right-side">
-          <Navbar />
-          <div className="row newsfeed-right-side-content mt-3">
-            <Outlet />
+
+      {!hideAuthLayout ? (
+        <div className="row newsfeed-size">
+          <div className="col-md-12 newsfeed-right-side">
+
+            <Navbar />
+
+            <div className="row newsfeed-right-side-content mt-3">
+              <Outlet />
+            </div>
+
           </div>
         </div>
-      </div>
+      ) : (
+        <Outlet />
+      )}
     </>
   );
 }

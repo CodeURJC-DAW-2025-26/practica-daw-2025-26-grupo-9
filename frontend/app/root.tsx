@@ -115,6 +115,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+
   const checkAuth = useAuthStore((s) => s.checkAuth);
   const loading = useAuthStore((s) => s.loading);
 
@@ -124,9 +125,17 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "100vh" }}
+      >
+        <div
+          className="spinner-border text-primary"
+          role="status"
+        >
+          <span className="visually-hidden">
+            Loading...
+          </span>
         </div>
       </div>
     );
