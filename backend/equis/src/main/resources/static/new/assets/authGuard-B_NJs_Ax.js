@@ -1,1 +1,0 @@
-import{D as e}from"./jsx-runtime-DoKZi-7N.js";import{n as t}from"./authStore-BA4pX6eU.js";async function n(n){try{return await n()}catch(n){throw n instanceof t&&n.status===401?e(`/new/login`):n}}export{n as t};

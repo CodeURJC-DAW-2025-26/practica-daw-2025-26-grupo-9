@@ -1,1 +1,0 @@
-import{r as e}from"./authStore-BA4pX6eU.js";async function t(t=0,n=10){return e(`/users?page=${t}&size=${n}`)}async function n(t){return e(`/users/${t}`)}function r(e){return`/api/v1/users/${e}/profile-picture`}export{n,t as r,r as t};

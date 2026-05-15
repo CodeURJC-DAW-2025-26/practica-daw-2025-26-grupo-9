@@ -1,1 +1,0 @@
-import{D as e}from"./jsx-runtime-C63DrJM0.js";import{n as t}from"./authStore-BNLm_Gtm.js";async function n(n){try{return await n()}catch(n){throw n instanceof t&&n.status===401?e(`/new/login`):n}}export{n as t};

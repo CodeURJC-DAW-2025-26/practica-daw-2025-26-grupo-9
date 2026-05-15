@@ -1,0 +1,1 @@
+import{n as e}from"./api-CoPMRGQi.js";async function t(t=0,n=10){return e(`/users?page=${t}&size=${n}`)}async function n(t){return e(`/users/${t}`)}async function r(t){return e(`/users/me`,{method:`PATCH`,body:t})}function i(e){return`/api/v1/users/${e}/profile-picture`}function a(e){return`/api/v1/users/${e}/cover-picture`}export{r as a,t as i,i as n,n as r,a as t};
