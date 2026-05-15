@@ -81,6 +81,7 @@ public class SecurityConfig {
 
                 // PUBLIC USERS
                 .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/users/*").authenticated()
                 .requestMatchers(HttpMethod.GET, "/api/v1/users/*/profile-picture").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/users/*/cover-picture").permitAll()
 
@@ -95,7 +96,6 @@ public class SecurityConfig {
 
                 // ADMIN USERS
                 .requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/api/v1/users/*").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/v1/users/*").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PATCH, "/api/v1/users/*/active").hasRole("ADMIN")
 
