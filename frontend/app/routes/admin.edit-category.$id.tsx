@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { Route } from "./+types/admin.edit-category.$id";
 import { useNavigate, Link } from "react-router";
-import { getCategory, updateCategory } from "~/services/categories.service";
+import { getCategory, updateCategory, updateCategoryImage } from "~/services/categories.service";
 import { requireAuth } from "~/utils/authGuard";
 import { useAuthStore } from "~/store/authStore";
 import Sidebar from "~/components/sidebar";
@@ -21,12 +21,28 @@ export default function EditCategory({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate();
   const [name, setName] = useState(category.name);
   const [description, setDescription] = useState(category.description || "");
+  const [image, setImage] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const existingImageUrl = `/api/v1/categories/${category.id}/image`;
 
   if (!user?.roles?.includes("ROLE_ADMIN")) {
     return <Navigate to="/" replace />;
   }
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    setImage(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => setPreview(reader.result as string);
+      reader.readAsDataURL(file);
+    } else {
+      setPreview(null);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +50,9 @@ export default function EditCategory({ loaderData }: Route.ComponentProps) {
     setSuccess("");
     try {
       await updateCategory(category.id, { name, description });
+      if (image) {
+        await updateCategoryImage(category.id, image);
+      }
       setSuccess("Categor&iacute;a actualizada correctamente");
       setTimeout(() => navigate(p("/admin")), 1500);
     } catch (err: unknown) {
@@ -63,6 +82,16 @@ export default function EditCategory({ loaderData }: Route.ComponentProps) {
                 <label>Descripci&oacute;n</label>
                 <textarea className="form-control" rows={3} placeholder="Describe la categor&iacute;a..."
                   value={description} onChange={(e) => setDescription(e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label>Imagen de la categor&iacute;a</label>
+                <div className="d-flex align-items-center gap-3">
+                  <img src={preview || existingImageUrl}
+                    width="80" height="80" alt="Category" style={{ objectFit: "cover", borderRadius: 8 }}
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                  <input type="file" accept="image/*" className="form-control-file"
+                    onChange={handleImageChange} />
+                </div>
               </div>
               <div className="d-flex justify-content-between align-items-center mt-4">
                 <Link to={p("/admin")} className="btn btn-secondary btn-sm">Cancelar</Link>

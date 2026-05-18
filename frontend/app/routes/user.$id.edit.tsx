@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { Route } from "./+types/user.$id.edit";
 import { useNavigate, Link } from "react-router";
 import { useAuthStore } from "~/store/authStore";
-import { updateProfile, getProfilePictureUrl } from "~/services/users.service";
+import { updateProfile, getProfilePictureUrl, getCoverPictureUrl } from "~/services/users.service";
 import { requireAuth } from "~/utils/authGuard";
 import Sidebar from "~/components/sidebar";
 import { p } from "~/utils/paths";
@@ -19,8 +19,35 @@ export default function EditProfile({ loaderData }: Route.ComponentProps) {
   const [email, setEmail] = useState(user?.email || "");
   const [description, setDescription] = useState(user?.description || "");
   const [password, setPassword] = useState("");
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [profilePreview, setProfilePreview] = useState<string | null>(null);
+  const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: "profile" | "cover") => {
+    const file = e.target.files?.[0] ?? null;
+    if (type === "profile") {
+      setProfileImage(file);
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => setProfilePreview(reader.result as string);
+        reader.readAsDataURL(file);
+      } else {
+        setProfilePreview(null);
+      }
+    } else {
+      setCoverImage(file);
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => setCoverPreview(reader.result as string);
+        reader.readAsDataURL(file);
+      } else {
+        setCoverPreview(null);
+      }
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +60,8 @@ export default function EditProfile({ loaderData }: Route.ComponentProps) {
       formData.append("email", email);
       formData.append("description", description);
       if (password) formData.append("password", password);
+      if (profileImage) formData.append("profileImage", profileImage);
+      if (coverImage) formData.append("coverImage", coverImage);
       await updateProfile(formData);
       setSuccess("Profile updated successfully");
       setTimeout(() => navigate(p(`/users/${user?.id}`)), 1500);
@@ -77,6 +106,25 @@ export default function EditProfile({ loaderData }: Route.ComponentProps) {
                 <label>Nueva contrase&ntilde;a (opcional)</label>
                 <input type="password" className="form-control" placeholder="D&eacute;jalo vac&iacute;o si no quieres cambiarla"
                   value={password} onChange={(e) => setPassword(e.target.value)} />
+              </div>
+              <div className="form-group">
+                <label>Foto de perfil</label>
+                <div className="d-flex align-items-center gap-3">
+                  <img src={profilePreview || getProfilePictureUrl(user?.id || 0)}
+                    className="rounded-circle" width="64" height="64" alt="Profile"
+                    style={{ objectFit: "cover" }} />
+                  <input type="file" accept="image/*" className="form-control-file"
+                    onChange={(e) => handleFileChange(e, "profile")} />
+                </div>
+              </div>
+              <div className="form-group">
+                <label>Foto de portada</label>
+                <div className="d-flex align-items-center gap-3">
+                  <img src={coverPreview || getCoverPictureUrl(user?.id || 0)}
+                    width="120" height="60" alt="Cover" style={{ objectFit: "cover", borderRadius: 6 }} />
+                  <input type="file" accept="image/*" className="form-control-file"
+                    onChange={(e) => handleFileChange(e, "cover")} />
+                </div>
               </div>
               <div className="form-group">
                 <label>Descripci&oacute;n</label>

@@ -30,3 +30,21 @@ export async function updateCategory(id: number, data: { name?: string; descript
 export async function deleteCategory(id: number): Promise<void> {
   await apiFetch(`/categories/${id}`, { method: "DELETE" });
 }
+
+export async function uploadCategoryImage(id: number, image: File): Promise<void> {
+  const formData = new FormData();
+  formData.append("image", image);
+  await apiFetch(`/categories/${id}/image`, {
+    method: "POST",
+    body: formData,
+  });
+}
+
+export async function updateCategoryImage(id: number, image: File): Promise<void> {
+  const formData = new FormData();
+  formData.append("image", image);
+  await apiFetch(`/categories/${id}/image`, {
+    method: "PUT",
+    body: formData,
+  });
+}

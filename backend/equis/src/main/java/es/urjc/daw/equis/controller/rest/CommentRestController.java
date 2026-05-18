@@ -56,7 +56,7 @@ public class CommentRestController {
 
         likeService.toggleCommentLike(user, comment);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")

@@ -27,6 +27,8 @@ export default function PostDetail({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate();
   const [post, setPost] = useState<PostDTO>(initialPost);
   const [commentContent, setCommentContent] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [editCommentContent, setEditCommentContent] = useState("");
   const [error, setError] = useState("");
 
   const isOwner = user?.id === post.userId;
@@ -51,15 +53,48 @@ export default function PostDetail({ loaderData }: Route.ComponentProps) {
     e.preventDefault();
     if (!commentContent.trim() || !user) return;
     try {
-      const newComment = await createComment(post.id, commentContent);
-      setPost((prev) => ({
-        ...prev,
-        comments: [...prev.comments, newComment],
-      }));
+      await createComment(post.id, commentContent);
       setCommentContent("");
       setError("");
+      await refreshPost();
     } catch {
       setError("Failed to add comment");
+    }
+  };
+
+  const startEditComment = (comment: CommentDTO) => {
+    setEditingCommentId(comment.id);
+    setEditCommentContent(comment.content);
+  };
+
+  const cancelEditComment = () => {
+    setEditingCommentId(null);
+    setEditCommentContent("");
+  };
+
+  const saveEditComment = async (commentId: number) => {
+    if (!editCommentContent.trim()) return;
+    try {
+      await apiFetch(`/comments/${commentId}`, {
+        method: "PUT",
+        body: JSON.stringify({ content: editCommentContent }),
+      });
+      setEditingCommentId(null);
+      setEditCommentContent("");
+      await refreshPost();
+    } catch {
+      setError("Failed to edit comment");
+    }
+  };
+
+  const deleteComment = async (commentId: number) => {
+    if (!confirm("¿Eliminar este comentario?")) return;
+    try {
+      await apiFetch(`/comments/${commentId}`, { method: "DELETE" });
+      setError("");
+      await refreshPost();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al eliminar el comentario");
     }
   };
 
@@ -123,28 +158,64 @@ export default function PostDetail({ loaderData }: Route.ComponentProps) {
 
         <h5 className="mb-3 mt-4">Comments ({post.comments?.length || 0})</h5>
 
-        {post.comments?.map((comment: CommentDTO) => (
-          <div className="post border-bottom p-3 bg-white w-shadow" key={comment.id}>
-            <div className="media text-muted pt-3">
-              <Link to={p(`/users/${comment.userId}`)} className="pull-left">
-                <img src={`/api/v1/users/${comment.userId}/profile-picture`}
-                  className="mr-3 post-user-image rounded-circle" width="32" height="32" alt="" />
-              </Link>
-              <div className="media-body pb-3 mb-0 small lh-125">
-                <strong>
-                  <Link to={p(`/users/${comment.userId}`)}>{comment.userNickname}</Link>
-                </strong>
-                <span className="d-block comment-created-time">
-                  {new Date(comment.createdAt).toLocaleDateString()}
-                </span>
-                <p>{comment.content}</p>
-                <a href="#" className="post-card-buttons" onClick={(e) => { e.preventDefault(); handleCommentLike(comment.id); }}>
-                  <i className={`bx ${comment.likedByCurrentUser ? 'bxs-like' : 'bx-like'} mr-1`}></i> {comment.likesCount}
-                </a>
+        {post.comments?.map((comment: CommentDTO) => {
+          const isCommentOwner = user?.id === comment.userId;
+          const canModify = isCommentOwner || isAdmin;
+
+          return (
+            <div className="post border-bottom p-3 bg-white w-shadow" key={comment.id}>
+              <div className="media text-muted pt-3">
+                <Link to={p(`/users/${comment.userId}`)} className="pull-left">
+                  <img src={`/api/v1/users/${comment.userId}/profile-picture`}
+                    className="mr-3 post-user-image rounded-circle" width="32" height="32" alt="" />
+                </Link>
+                <div className="media-body pb-3 mb-0 small lh-125">
+                  <div className="d-flex justify-content-between align-items-start">
+                    <div>
+                      <strong>
+                        <Link to={p(`/users/${comment.userId}`)}>{comment.userNickname}</Link>
+                      </strong>
+                      <span className="d-block comment-created-time">
+                        {new Date(comment.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    {canModify && (
+                      <div className="d-flex gap-2">
+                        {isCommentOwner && (
+                          <button className="btn btn-outline-primary btn-sm"
+                            onClick={() => startEditComment(comment)}>
+                            Editar
+                          </button>
+                        )}
+                        <button className="btn btn-outline-danger btn-sm"
+                          onClick={() => deleteComment(comment.id)}>
+                          Eliminar
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  {editingCommentId === comment.id ? (
+                    <div className="mt-1 d-flex gap-2">
+                      <input type="text" className="form-control form-control-sm"
+                        value={editCommentContent}
+                        onChange={(e) => setEditCommentContent(e.target.value)}
+                        autoFocus />
+                      <button className="btn btn-sm btn-success"
+                        onClick={() => saveEditComment(comment.id)}>Guardar</button>
+                      <button className="btn btn-sm btn-secondary"
+                        onClick={cancelEditComment}>Cancelar</button>
+                    </div>
+                  ) : (
+                    <p className="mb-1">{comment.content}</p>
+                  )}
+                  <a href="#" className="post-card-buttons" onClick={(e) => { e.preventDefault(); handleCommentLike(comment.id); }}>
+                    <i className={`bx ${comment.likedByCurrentUser ? 'bxs-like' : 'bx-like'} mr-1`}></i> {comment.likesCount}
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {user ? (
           <div className="mt-3">

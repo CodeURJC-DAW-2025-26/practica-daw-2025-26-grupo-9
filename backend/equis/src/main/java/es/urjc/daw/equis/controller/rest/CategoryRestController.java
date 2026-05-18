@@ -54,7 +54,7 @@ public class CategoryRestController {
                 .body(bytes);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<CategoryDTO> create(@RequestBody CategoryDTO categoryDTO) {
 
         Category category = mapper.toDomain(categoryDTO);
@@ -112,7 +112,7 @@ public class CategoryRestController {
 
         categoryService.updateCategory(category.getId(), category.getName(), category.getDescription(), image);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

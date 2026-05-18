@@ -128,7 +128,7 @@ public class PostRestController {
 
         postService.edit(post, image, null, null, null);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
@@ -177,7 +177,7 @@ public class PostRestController {
 
         postService.edit(post, image, null, null, null);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
@@ -239,7 +239,7 @@ public class PostRestController {
 
         likeService.togglePostLike(user, post);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{postId}/comments")

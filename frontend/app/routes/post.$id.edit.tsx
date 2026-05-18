@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import type { Route } from "./+types/post.$id.edit";
 import { useNavigate, Link } from "react-router";
 import { getPost, updatePost } from "~/services/posts.service";
 import { getCategories } from "~/services/categories.service";
 import { requireAuth } from "~/utils/authGuard";
+import { apiFetch } from "~/services/api";
 import Sidebar from "~/components/sidebar";
 import { p } from "~/utils/paths";
 
@@ -23,13 +24,52 @@ export default function EditPost({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate();
   const [content, setContent] = useState(post.content);
   const [categoryId, setCategoryId] = useState(post.categoryId?.toString() || "");
+  const [image, setImage] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const existingImage = `/api/v1/posts/${post.id}/image`;
+
+  useEffect(() => {
+    const checkImage = async () => {
+      try {
+        const res = await fetch(existingImage);
+        if (!res.ok) return;
+      } catch {
+        // no existing image
+      }
+    };
+    checkImage();
+  }, [existingImage]);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    setImage(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => setPreview(reader.result as string);
+      reader.readAsDataURL(file);
+    } else {
+      setPreview(null);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     try {
       await updatePost(post.id, content, Number(categoryId));
+
+      if (image) {
+        const formData = new FormData();
+        formData.append("image", image);
+        await apiFetch(`/posts/${post.id}/image`, {
+          method: "PUT",
+          body: formData,
+        });
+      }
+
       navigate(p(`/posts/${post.id}`));
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to update post");
@@ -76,6 +116,18 @@ export default function EditPost({ loaderData }: Route.ComponentProps) {
                   <option key={c.id} value={c.id}>{c.name}</option>
                 ))}
               </select>
+            </div>
+            <div className="form-group">
+              <label className="btn btn-outline-secondary btn-sm">
+                <span>Cambiar imagen</span>
+                <input type="file" accept="image/*" hidden
+                  ref={fileRef} onChange={handleImageChange} />
+              </label>
+              {preview && (
+                <div className="mt-2 d-inline-block position-relative">
+                  <img src={preview} alt="Preview" style={{ maxHeight: 120, borderRadius: 8 }} />
+                </div>
+              )}
             </div>
             <div className="form-group text-right mt-4">
               <button type="submit" className="btn btn-success">Guardar cambios</button>
