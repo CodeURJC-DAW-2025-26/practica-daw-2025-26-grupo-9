@@ -451,37 +451,67 @@ Postman collection (login, logout and register), security jwt, create DTOs and m
 📹 **[Enlace al vídeo en YouTube](URL_del_video)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web.
 
-### **Preparación del Entorno de Desarrollo**
+### **Development Environment Setup**
 
-#### **Requisitos Previos**
-- **Node.js**: versión 18.x o superior
-- **npm**: versión 9.x o superior (se instala con Node.js)
-- **Git**: para clonar el repositorio
+#### **Prerequisites:**
+- **Node.js**:  version 18.x or higher
+- **npm**: version 9.x or higher (installed with Node.js)
+- **Git**: to clone the repository
 
-#### **Pasos para configurar el entorno de desarrollo**
+#### **Steps to Set Up the Development Environment**
 
-1. **Instalar Node.js y npm**
+1. **Install Node.js and npm**
    
-   Descarga e instala Node.js desde [https://nodejs.org/](https://nodejs.org/)
+   Download and install Node.js from: [https://nodejs.org/](https://nodejs.org/)
    
-   Verifica la instalación:
+   Verify the installation:
    ```bash
    node --version
    npm --version
    ```
 
-2. **Clonar el repositorio** (si no lo has hecho ya)
+2. **Clone the repository (if you haven't already):** 
    ```bash
-   git clone https://github.com/[usuario]/[nombre-repositorio].git
-   cd [nombre-repositorio]
+   git clone https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9.git
+   cd practica-daw-2025-26-grupo-9
    ```
 
-3. **Navegar a la carpeta del proyecto React**
+3. **Navigate to the React project folder:**
    ```bash
    cd frontend
    ```
 
-4. **AQUÍ LOS SIGUIENTES PASOS**
+4. **Build the production version:**
+   ```bash
+   npm run build
+   ```
+
+5. **Switch to the backend and run Maven:**
+   ```bash
+   cd ../backend/equis
+   mvn clean install
+   ```
+
+6. **Copy the files from:**
+   ```bash
+   /frontend/build/client
+   ```
+
+   **to:**
+   ```bash
+   /backend/equis/src/main/resources/static/new
+   ```
+
+7. **Run the application:**
+   ```bash
+   mvn spring-boot:run
+   ```
+
+**The SPA will be accessible via this link:**
+   ```bash
+   https://localhost:8443/new/
+   ```
+
 
 ### **SPA Class and Templates Diagram**
 
@@ -505,17 +535,17 @@ Diagram showing React components, custom hooks, services, and their relationship
 
 ---
 
-#### **Alumno 2 - [Nombre Completo]**
+#### **Student 2 - Sergio Rodríguez Gil**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+In addition to general tasks such as fixing backend issues, and creating some DTOs; I was responsible for implementing general functionalities and the logic behind the production version of the web.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Update backend and SpaRoutingConfig added](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/9858eefcd3ca9767087f50dcaf32d02221aa8a39)  | [SpaRoutingConfig.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/config/SpaRoutingConfig.java)   |
+|2| [Update home.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/172fe17468d4941811ecce02cfed8f170e88ce45)  | [home.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/frontend/app/routes/home.tsx)   |
+|3| [Add some components](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/a61eb4901755739dae2530ce3aec20eee76e42e0)  | [new-layout.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/frontend/app/routes/new-layout.tsx)   |
+|4| [Take navbar out of login and register](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/eb46abd7de42088bc3d75cd38d94dc64297512aa)  | [root.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/frontend/app/root.tsx)   |
+|5| [Fix backend issue](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/c23ad74d0ddd86c1e6d814aa3d782a24b229c7a0)  | [SecurityConfig.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/security/SecurityConfig.java)   |
 
 ---
 
