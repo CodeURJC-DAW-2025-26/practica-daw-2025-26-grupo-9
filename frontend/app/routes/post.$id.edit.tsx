@@ -100,7 +100,7 @@ export default function EditPost({ loaderData }: Route.ComponentProps) {
                   {post.userNickname}
                 </Link>
               </div>
-              <span className="d-block">{new Date(post.createdAt).toLocaleDateString()} <i className='bx bx-globe ml-3'></i></span>
+              <span className="d-block">{post.createdAt} <i className='bx bx-globe ml-3'></i></span>
             </div>
           </div>
 

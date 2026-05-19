@@ -138,7 +138,7 @@ export default function PostDetail({ loaderData }: Route.ComponentProps) {
                   </div>
                 )}
               </div>
-              <span className="d-block">{new Date(post.createdAt).toLocaleDateString()} <i className='bx bx-globe ml-3'></i></span>
+              <span className="d-block">{post.createdAt} <i className='bx bx-globe ml-3'></i></span>
               <span className="badge bg-secondary">{post.categoryName}</span>
             </div>
           </div>
@@ -176,7 +176,7 @@ export default function PostDetail({ loaderData }: Route.ComponentProps) {
                         <Link to={p(`/users/${comment.userId}`)}>{comment.userNickname}</Link>
                       </strong>
                       <span className="d-block comment-created-time">
-                        {new Date(comment.createdAt).toLocaleDateString()}
+                        {comment.createdAt}
                       </span>
                     </div>
                     {canModify && (

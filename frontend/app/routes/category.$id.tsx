@@ -50,7 +50,7 @@ export default function CategoryDetail({ loaderData }: Route.ComponentProps) {
                 <div className="card-body">
                   <div className="d-flex justify-content-between">
                     <Link to={p(`/users/${post.userId}`)}><strong>{post.userNickname}</strong></Link>
-                    <span className="text-muted small">{new Date(post.createdAt).toLocaleDateString()}</span>
+                    <span className="text-muted small">{post.createdAt}</span>
                   </div>
                   <Link to={p(`/posts/${post.id}`)} className="text-decoration-none text-dark">
                     <p className="mt-2 mb-2">{post.content}</p>

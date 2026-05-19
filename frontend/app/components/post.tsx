@@ -106,7 +106,7 @@ export default function Post({ post, onLikeToggled }: PostProps) {
               </a>
             </div>
           </div>
-          <span className="d-block">{new Date(post.createdAt).toLocaleDateString()} <i className='bx bx-globe ml-3'></i></span>
+          <span className="d-block">{post.createdAt} <i className='bx bx-globe ml-3'></i></span>
         </div>
       </div>
       <div className="mt-3">
@@ -198,7 +198,7 @@ export default function Post({ post, onLikeToggled }: PostProps) {
                                       <Link to={p(`/users/${comment.userId}`)}>{comment.userNickname}</Link>
                                     </strong>
                                     <span className="d-block comment-created-time">
-                                      {new Date(comment.createdAt).toLocaleDateString()}
+                                      {comment.createdAt}
                                     </span>
                                   </div>
                                   {canModify && (
