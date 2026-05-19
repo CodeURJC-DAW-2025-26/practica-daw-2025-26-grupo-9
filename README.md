@@ -483,11 +483,11 @@ Postman collection (login, logout and register), security jwt, create DTOs and m
 
 4. **AQUÍ LOS SIGUIENTES PASOS**
 
-### **Diagrama de Clases y Templates de la SPA**
+### **SPA Class and Templates Diagram**
 
-Diagrama mostrando los componentes React, hooks personalizados, servicios y sus relaciones:
+Diagram showing React components, custom hooks, services, and their relationships:
 
-![Diagrama de Componentes React](images/spa-classes-diagram.png)
+![React Components Diagram](images/component-diagram.jpg)
 
 ### **Participación de Miembros en la Práctica 3**
 
