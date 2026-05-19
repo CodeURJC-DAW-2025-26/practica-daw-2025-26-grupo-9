@@ -448,7 +448,7 @@ Postman collection (login, logout and register), security jwt, create DTOs and m
 ## 🛠 **Práctica 3: Implementación de la web con arquitectura SPA**
 
 ### **Vídeo de Demostración**
-📹 **[Enlace al vídeo en YouTube](URL_del_video)**
+📹 **[Enlace al vídeo en YouTube](https://youtu.be/K4DLpPKE0Bs)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web.
 
 ### **Development Environment Setup**
@@ -521,17 +521,17 @@ Diagram showing React components, custom hooks, services, and their relationship
 
 ### **Participación de Miembros en la Práctica 3**
 
-#### **Alumno 1 - [Nombre Completo]**
+#### **Alumno 1 - David Paul Limaylla Ticlavilca**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+Backend issues - components - dockerhub - error pages - general funcionalities
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [clean code - autowired, imports, services, repositories](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/0989e6c2d66359d414eb30518db9218c41039642)  | [GlobalControllerAdvice.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/0989e6c2d66359d414eb30518db9218c41039642/backend/equis/src/main/java/es/urjc/daw/equis/config/GlobalControllerAdvice.java)   |
+|2| [components - routing - pages - vite config](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/f06b8cfccf9cb483bb7406f316b3a369a8202335)  | [post.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/f06b8cfccf9cb483bb7406f316b3a369a8202335/frontend/app/components/post.tsx)   |
+|3| [corregir CORS, token expiry, endpoints REST y añadir subida de imágenes + edición/eliminación de comentarios](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/f3a1e6df8a1f6ba53838fee65341e448e5ab0118)  | [post.$id.edit.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/f3a1e6df8a1f6ba53838fee65341e448e5ab0118/frontend/app/routes/post.%24id.edit.tsx)   |
+|4| [Docker updated](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/d91aa7c4825c244e496c865a6aeab936e7a80bcb)  | [Dockerfile](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/d91aa7c4825c244e496c865a6aeab936e7a80bcb/docker/Dockerfile)   |
+|5| [error pages added](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/a30996c3f4aa6a1b2a34bab891e3bede4852ad3c)  | [new-layout.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/a30996c3f4aa6a1b2a34bab891e3bede4852ad3c/frontend/app/routes/new-layout.tsx)   |
 
 ---
 
