@@ -8,8 +8,9 @@ import { deleteCategory } from "~/services/categories.service";
 import type { UserDTO } from "~/dto/UserDTO";
 import type { CategoryDTO } from "~/dto/PostDTO";
 import Sidebar from "~/components/sidebar";
-import { Navigate, Link } from "react-router";
+import { Link, data } from "react-router";
 import { requireAuth } from "~/utils/authGuard";
+import { ApiError } from "~/services/api";
 import { p } from "~/utils/paths";
 
 type AdminData = {
@@ -19,11 +20,18 @@ type AdminData = {
 
 export async function clientLoader(): Promise<AdminData> {
   return requireAuth(async () => {
-    const [usersPage, categories] = await Promise.all([
-      getUsers(0, 50),
-      getCategories(),
-    ]);
-    return { usersPage, categories };
+    try {
+      const [usersPage, categories] = await Promise.all([
+        getUsers(0, 50),
+        getCategories(),
+      ]);
+      return { usersPage, categories };
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 403) {
+        throw data(null, { status: 403, statusText: "Forbidden" });
+      }
+      throw err;
+    }
   });
 }
 
@@ -37,9 +45,6 @@ export default function Admin({ loaderData }: Route.ComponentProps) {
   const [users, setUsers] = useState<UserDTO[]>(initialPage.content);
   const [categories, setCategories] = useState<CategoryDTO[]>(initialCategories);
   const [loading, setLoading] = useState(false);
-
-  const isAdmin = user?.roles?.includes("ROLE_ADMIN");
-  if (!isAdmin) return <Navigate to="/" replace />;
 
   const handleToggleActive = async (userId: number, currentActive: boolean) => {
     const updated = await updateUserStatus(userId, !currentActive);

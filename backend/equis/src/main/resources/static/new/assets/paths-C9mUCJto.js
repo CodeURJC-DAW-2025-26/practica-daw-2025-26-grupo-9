@@ -1,1 +1,0 @@
-var e=`/new`;function t(t){return`${e}${t}`}export{t};

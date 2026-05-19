@@ -15,5 +15,6 @@ export default [
     route("admin/categories/new", "routes/admin.create-category.tsx"),
     route("admin/categories/:id/edit", "routes/admin.edit-category.$id.tsx"),
     route("stats", "routes/stats.tsx"),
+    route("*", "routes/not-found.tsx"),
   ]),
 ] satisfies RouteConfig;

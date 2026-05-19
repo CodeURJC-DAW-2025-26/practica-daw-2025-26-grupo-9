@@ -145,30 +145,39 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let message = "Oops!";
-  let details = "An unexpected error occurred.";
-  let stack: string | undefined;
+  let status = 500;
+  let title = "Error interno del servidor";
+  let icon = "bx-error-circle";
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
+    status = error.status;
+    if (status === 404) {
+      title = "El recurso que estás buscando no se pudo encontrar.";
+      icon = "bx-search-alt-2";
+    } else {
+      title = error.statusText || title;
+    }
   } else if (import.meta.env.DEV && error && error instanceof Error) {
-    details = error.message;
-    stack = error.stack;
+    title = error.message;
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
-      {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
-          <code>{stack}</code>
-        </pre>
-      )}
-    </main>
+    <div className="min-vh-100 d-flex align-items-center justify-content-center">
+      <div className="container-fluid text-center">
+        <div className="mb-5">
+          <i className={`bx ${icon} text-danger`} style={{ fontSize: "140px" }}></i>
+        </div>
+        <h1 className="display-4 text-danger fw-bolder mb-4">
+          Error {status}
+        </h1>
+        <p className="mb-5 fs-4 text-muted">
+          {title}
+        </p>
+        <a href="/new/" className="btn btn-outline-primary btn-lg px-5 py-3 fs-4 d-inline-flex align-items-center">
+          <i className='bx bx-home me-2' style={{ fontSize: "1.2em" }}></i>
+          Volver al inicio
+        </a>
+      </div>
+    </div>
   );
 }
