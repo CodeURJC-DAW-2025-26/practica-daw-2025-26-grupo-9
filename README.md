@@ -451,37 +451,67 @@ Postman collection (login, logout and register), security jwt, create DTOs and m
 📹 **[Enlace al vídeo en YouTube](URL_del_video)**
 > Vídeo mostrando las principales funcionalidades de la aplicación web.
 
-### **Preparación del Entorno de Desarrollo**
+### **Development Environment Setup**
 
-#### **Requisitos Previos**
-- **Node.js**: versión 18.x o superior
-- **npm**: versión 9.x o superior (se instala con Node.js)
-- **Git**: para clonar el repositorio
+#### **Prerequisites:**
+- **Node.js**:  version 18.x or higher
+- **npm**: version 9.x or higher (installed with Node.js)
+- **Git**: to clone the repository
 
-#### **Pasos para configurar el entorno de desarrollo**
+#### **Steps to Set Up the Development Environment**
 
-1. **Instalar Node.js y npm**
+1. **Install Node.js and npm**
    
-   Descarga e instala Node.js desde [https://nodejs.org/](https://nodejs.org/)
+   Download and install Node.js from: [https://nodejs.org/](https://nodejs.org/)
    
-   Verifica la instalación:
+   Verify the installation:
    ```bash
    node --version
    npm --version
    ```
 
-2. **Clonar el repositorio** (si no lo has hecho ya)
+2. **Clone the repository (if you haven't already):** 
    ```bash
-   git clone https://github.com/[usuario]/[nombre-repositorio].git
-   cd [nombre-repositorio]
+   git clone https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9.git
+   cd practica-daw-2025-26-grupo-9
    ```
 
-3. **Navegar a la carpeta del proyecto React**
+3. **Navigate to the React project folder:**
    ```bash
    cd frontend
    ```
 
-4. **AQUÍ LOS SIGUIENTES PASOS**
+4. **Build the production version:**
+   ```bash
+   npm run build
+   ```
+
+5. **Switch to the backend and run Maven:**
+   ```bash
+   cd ../backend/equis
+   mvn clean install
+   ```
+
+6. **Copy the files from:**
+   ```bash
+   /frontend/build/client
+   ```
+
+   **to:**
+   ```bash
+   /backend/equis/src/main/resources/static/new
+   ```
+
+7. **Run the application:**
+   ```bash
+   mvn spring-boot:run
+   ```
+
+**The SPA will be accessible via this link:**
+   ```bash
+   https://localhost:8443/new/
+   ```
+
 
 ### **SPA Class and Templates Diagram**
 
