@@ -505,17 +505,17 @@ Diagram showing React components, custom hooks, services, and their relationship
 
 ---
 
-#### **Alumno 2 - [Nombre Completo]**
+#### **Student 2 - Sergio Rodríguez Gil**
 
-[Descripción de las tareas y responsabilidades principales del alumno en el proyecto]
+In addition to general tasks such as fixing backend issues, and creating some DTOs; I was responsible for implementing general functionalities and the logic behind the production version of the web.
 
 | Nº    | Commits      | Files      |
 |:------------: |:------------:| :------------:|
-|1| [Descripción commit 1](URL_commit_1)  | [Archivo1](URL_archivo_1)   |
-|2| [Descripción commit 2](URL_commit_2)  | [Archivo2](URL_archivo_2)   |
-|3| [Descripción commit 3](URL_commit_3)  | [Archivo3](URL_archivo_3)   |
-|4| [Descripción commit 4](URL_commit_4)  | [Archivo4](URL_archivo_4)   |
-|5| [Descripción commit 5](URL_commit_5)  | [Archivo5](URL_archivo_5)   |
+|1| [Update backend and SpaRoutingConfig added](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/9858eefcd3ca9767087f50dcaf32d02221aa8a39)  | [SpaRoutingConfig.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/config/SpaRoutingConfig.java)   |
+|2| [Update home.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/172fe17468d4941811ecce02cfed8f170e88ce45)  | [home.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/frontend/app/routes/home.tsx)   |
+|3| [Add some components](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/a61eb4901755739dae2530ce3aec20eee76e42e0)  | [new-layout.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/frontend/app/routes/new-layout.tsx)   |
+|4| [Take navbar out of login and register](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/eb46abd7de42088bc3d75cd38d94dc64297512aa)  | [root.tsx](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/frontend/app/root.tsx)   |
+|5| [Fix backend issue](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/commit/c23ad74d0ddd86c1e6d814aa3d782a24b229c7a0)  | [SecurityConfig.java](https://github.com/CodeURJC-DAW-2025-26/practica-daw-2025-26-grupo-9/blob/main/backend/equis/src/main/java/es/urjc/daw/equis/security/SecurityConfig.java)   |
 
 ---
 
